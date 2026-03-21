@@ -1,0 +1,76 @@
+<svg width="560" height="560" viewBox="0 0 560 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景胶囊体 -->
+  <g opacity="0.95">
+    <!-- 调整了 Y 轴，使其完美居中于 280 -->
+    <rect x="88" y="246" width="384" height="68" rx="34" fill="white" fill-opacity="0.58" stroke="#E7EEF9"/>
+    <rect x="224" y="254" width="168" height="52" rx="26" fill="#F8FBFF" fill-opacity="0.88" stroke="#EDF4FF"/>
+  </g>
+
+  <!-- 背景发光效果 (已校准中心点至 280) -->
+  <g filter="url(#glow)">
+    <circle cx="280" cy="280" r="150" fill="url(#halo)"/>
+  </g>
+
+  <!-- ================= 核心环形箭头区域 ================= -->
+  
+  <!-- 顶部深色箭头组 -->
+  <g>
+    <!-- 完美圆弧，半径 170 -->
+    <path
+      d="M 159.8 159.8 A 170 170 0 0 1 400.2 159.8"
+      stroke="#0F172A"
+      stroke-width="28"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <!-- 头部三角形箭头：利用 translate 定位在圆弧终点，rotate(45) 使其顺着切线方向完美指向 -->
+    <path d="M -15 -25 L 30 0 L -15 25 Z" transform="translate(400.2 159.8) rotate(45)" fill="#0F172A"/>
+    <!-- 尾部跟随的小圆点，顺着圆弧轨迹放置 -->
+    <circle cx="133" cy="195" r="10" fill="#0F172A"/>
+  </g>
+
+  <!-- 右侧蓝色箭头组 (顺时针旋转 120 度) -->
+  <g transform="rotate(120 280 280)">
+    <path
+      d="M 159.8 159.8 A 170 170 0 0 1 400.2 159.8"
+      stroke="#3B82F6"
+      stroke-width="28"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <path d="M -15 -25 L 30 0 L -15 25 Z" transform="translate(400.2 159.8) rotate(45)" fill="#3B82F6"/>
+    <circle cx="133" cy="195" r="10" fill="#3B82F6"/>
+  </g>
+
+  <!-- 左侧浅蓝箭头组 (顺时针旋转 240 度) -->
+  <g transform="rotate(240 280 280)">
+    <path
+      d="M 159.8 159.8 A 170 170 0 0 1 400.2 159.8"
+      stroke="#BFDBFE"
+      stroke-width="28"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <path d="M -15 -25 L 30 0 L -15 25 Z" transform="translate(400.2 159.8) rotate(45)" fill="#BFDBFE"/>
+    <circle cx="133" cy="195" r="10" fill="#BFDBFE"/>
+  </g>
+
+  <!-- ================= 内部眼球图形 ================= -->
+  <!-- 统一对齐到完美的物理中心 cy=280 -->
+  <circle cx="280" cy="280" r="76" fill="#0F172A"/>
+  <circle cx="280" cy="280" r="39" fill="white"/>
+  <circle cx="280" cy="280" r="11" fill="#3B82F6"/>
+
+  <defs>
+    <filter id="glow" x="34" y="46" width="492" height="492" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="48" result="effect1_foregroundBlur"/>
+    </filter>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 280) rotate(90) scale(150)">
+      <stop stop-color="#E5F1FF"/>
+      <stop offset="0.58" stop-color="#EEF4FF" stop-opacity="0.84"/>
+      <stop offset="1" stop-color="#F8FBFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>

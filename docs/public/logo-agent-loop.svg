@@ -1,0 +1,43 @@
+<svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 顶部深色箭头 -->
+  <g>
+    <!-- 使用 A (Arc) 指令绘制完美的圆弧，半径为 28，完美贴合圆周 -->
+    <path
+      d="M 20.5 43.5 A 28 28 0 0 1 48 20"
+      stroke="#0F172A"
+      stroke-width="8"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <!-- 重新设计的箭头，刚好包裹住圆弧的端点且指向绝对精准 -->
+    <path d="M 41 11 L 56 20 L 41 29 Z" fill="#0F172A"/>
+  </g>
+
+  <!-- 右侧蓝色箭头 (顺时针旋转 120 度) -->
+  <g transform="rotate(120 48 48)">
+    <path
+      d="M 20.5 43.5 A 28 28 0 0 1 48 20"
+      stroke="#3B82F6"
+      stroke-width="8"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <path d="M 41 11 L 56 20 L 41 29 Z" fill="#3B82F6"/>
+  </g>
+
+  <!-- 左侧浅蓝箭头 (顺时针旋转 240 度) -->
+  <g transform="rotate(240 48 48)">
+    <path
+      d="M 20.5 43.5 A 28 28 0 0 1 48 20"
+      stroke="#BFDBFE"
+      stroke-width="8"
+      stroke-linecap="round"
+      fill="none"
+    />
+    <path d="M 41 11 L 56 20 L 41 29 Z" fill="#BFDBFE"/>
+  </g>
+
+  <!-- 中心圆点保持不变 -->
+  <circle cx="48" cy="48" r="10" fill="#0F172A"/>
+  <circle cx="48" cy="48" r="4" fill="white"/>
+</svg>

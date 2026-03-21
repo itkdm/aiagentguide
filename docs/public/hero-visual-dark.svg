@@ -1,0 +1,39 @@
+<svg width="560" height="560" viewBox="0 0 560 560" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.96">
+    <rect x="88" y="246" width="384" height="68" rx="34" fill="#0F172A" fill-opacity="0.72" stroke="#334155"/>
+    <rect x="224" y="254" width="168" height="52" rx="26" fill="#111827" fill-opacity="0.88" stroke="#1E293B"/>
+  </g>
+  <g filter="url(#glow)">
+    <circle cx="280" cy="280" r="150" fill="url(#halo)"/>
+  </g>
+  <g>
+    <path d="M 159.8 159.8 A 170 170 0 0 1 400.2 159.8" stroke="#E2E8F0" stroke-width="28" stroke-linecap="round" fill="none"/>
+    <path d="M -15 -25 L 30 0 L -15 25 Z" transform="translate(400.2 159.8) rotate(45)" fill="#E2E8F0"/>
+    <circle cx="133" cy="195" r="10" fill="#E2E8F0"/>
+  </g>
+  <g transform="rotate(120 280 280)">
+    <path d="M 159.8 159.8 A 170 170 0 0 1 400.2 159.8" stroke="#60A5FA" stroke-width="28" stroke-linecap="round" fill="none"/>
+    <path d="M -15 -25 L 30 0 L -15 25 Z" transform="translate(400.2 159.8) rotate(45)" fill="#60A5FA"/>
+    <circle cx="133" cy="195" r="10" fill="#60A5FA"/>
+  </g>
+  <g transform="rotate(240 280 280)">
+    <path d="M 159.8 159.8 A 170 170 0 0 1 400.2 159.8" stroke="#67E8F9" stroke-width="28" stroke-linecap="round" fill="none"/>
+    <path d="M -15 -25 L 30 0 L -15 25 Z" transform="translate(400.2 159.8) rotate(45)" fill="#67E8F9"/>
+    <circle cx="133" cy="195" r="10" fill="#67E8F9"/>
+  </g>
+  <circle cx="280" cy="280" r="76" fill="#E2E8F0"/>
+  <circle cx="280" cy="280" r="39" fill="#0F172A"/>
+  <circle cx="280" cy="280" r="11" fill="#38BDF8"/>
+  <defs>
+    <filter id="glow" x="34" y="46" width="492" height="492" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="48" result="effect1_foregroundBlur"/>
+    </filter>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(280 280) rotate(90) scale(150)">
+      <stop stop-color="#2563EB" stop-opacity="0.7"/>
+      <stop offset="0.58" stop-color="#38BDF8" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#0F172A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+</svg>
