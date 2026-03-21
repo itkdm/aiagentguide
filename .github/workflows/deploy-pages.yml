@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -34,8 +34,48 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - name: Setup Pages
+      - name: Check Pages state
+        id: pages-check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo
+
+            try {
+              const response = await github.rest.repos.getPages({ owner, repo })
+              const status = response.data.status || 'unknown'
+              const url = response.data.html_url || ''
+
+              core.notice(`GitHub Pages is enabled. Status: ${status}${url ? `, URL: ${url}` : ''}`)
+              core.setOutput('enabled', 'true')
+            } catch (error) {
+              if (error.status === 404) {
+                core.warning(
+                  'GitHub Pages is not initialized for this repository yet. Open Settings > Pages, keep Source set to "GitHub Actions", save, wait 1-2 minutes, then rerun this workflow.'
+                )
+                core.setOutput('enabled', 'false')
+                return
+              }
+
+              throw error
+            }
+
+      - name: Configure Pages
+        if: ${{ steps.pages-check.outputs.enabled == 'true' }}
         uses: actions/configure-pages@v5
+
+      - name: Configure and enable Pages with PAT
+        if: ${{ steps.pages-check.outputs.enabled != 'true' && secrets.PAGES_ENABLEMENT_TOKEN != '' }}
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+          token: ${{ secrets.PAGES_ENABLEMENT_TOKEN }}
+
+      - name: Stop with setup instructions
+        if: ${{ steps.pages-check.outputs.enabled != 'true' && secrets.PAGES_ENABLEMENT_TOKEN == '' }}
+        run: |
+          echo "::error title=GitHub Pages is not initialized::Open Settings > Pages, set Source to 'GitHub Actions', save, wait 1-2 minutes, then rerun this workflow. If you want the workflow to auto-enable Pages, add a repository secret named PAGES_ENABLEMENT_TOKEN with a PAT that has repository admin access."
+          exit 1
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -44,7 +84,7 @@ jobs:
         run: pnpm docs:build
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: docs/.vitepress/dist
 
