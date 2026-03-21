@@ -64,17 +64,10 @@ jobs:
         if: ${{ steps.pages-check.outputs.enabled == 'true' }}
         uses: actions/configure-pages@v5
 
-      - name: Configure and enable Pages with PAT
-        if: ${{ steps.pages-check.outputs.enabled != 'true' && secrets.PAGES_ENABLEMENT_TOKEN != '' }}
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-          token: ${{ secrets.PAGES_ENABLEMENT_TOKEN }}
-
       - name: Stop with setup instructions
-        if: ${{ steps.pages-check.outputs.enabled != 'true' && secrets.PAGES_ENABLEMENT_TOKEN == '' }}
+        if: ${{ steps.pages-check.outputs.enabled != 'true' }}
         run: |
-          echo "::error title=GitHub Pages is not initialized::Open Settings > Pages, set Source to 'GitHub Actions', save, wait 1-2 minutes, then rerun this workflow. If you want the workflow to auto-enable Pages, add a repository secret named PAGES_ENABLEMENT_TOKEN with a PAT that has repository admin access."
+          echo "::error title=GitHub Pages is not initialized::Open Settings > Pages, set Source to 'GitHub Actions', save, wait 1-2 minutes, then rerun this workflow."
           exit 1
 
       - name: Install dependencies
