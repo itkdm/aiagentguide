@@ -1,0 +1,59 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="1030" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#081225" />
+      <stop offset="0.55" stop-color="#0F2748" />
+      <stop offset="1" stop-color="#164E63" />
+    </linearGradient>
+    <linearGradient id="accent" x1="260" y1="110" x2="820" y2="420" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#38BDF8" />
+      <stop offset="1" stop-color="#F59E0B" />
+    </linearGradient>
+    <filter id="glow" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="38" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" rx="36" fill="url(#bg)" />
+  <circle cx="968" cy="116" r="104" fill="#38BDF8" fill-opacity="0.18" filter="url(#glow)" />
+  <circle cx="190" cy="520" r="132" fill="#F59E0B" fill-opacity="0.15" filter="url(#glow)" />
+
+  <rect x="72" y="72" width="1056" height="486" rx="30" fill="white" fill-opacity="0.05" stroke="white" stroke-opacity="0.12" />
+
+  <g opacity="0.92">
+    <path d="M196 227C196 193.863 222.863 167 256 167H267C300.137 167 327 193.863 327 227V238C327 271.137 353.863 298 387 298H813C846.137 298 873 324.863 873 358V369C873 402.137 846.137 429 813 429H802C768.863 429 742 402.137 742 369V358C742 324.863 715.137 298 682 298H256C222.863 298 196 271.137 196 238V227Z" stroke="url(#accent)" stroke-width="20" stroke-linecap="round" />
+    <path d="M332 267C332 245.461 349.461 228 371 228H381C402.539 228 420 245.461 420 267V276C420 297.539 437.461 315 459 315H735C756.539 315 774 332.461 774 354V363C774 384.539 756.539 402 735 402H725C703.461 402 686 384.539 686 363V354C686 332.461 668.539 315 647 315H371C349.461 315 332 297.539 332 276V267Z" fill="url(#accent)" fill-opacity="0.18" />
+    <circle cx="257" cy="227" r="26" fill="#38BDF8" />
+    <circle cx="814" cy="369" r="26" fill="#F59E0B" />
+  </g>
+
+  <text x="94" y="132" fill="#7DD3FC" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="0.18em">
+    AI AGENT GUIDE
+  </text>
+  <text x="94" y="304" fill="white" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800">
+    Learn AI Agents in Chinese
+  </text>
+  <text x="94" y="370" fill="#D6E9F7" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500">
+    Concepts, principles, frameworks, tools, and practical cases.
+  </text>
+
+  <g fill="#D6E9F7" font-family="Inter, Arial, sans-serif" font-size="24" font-weight="600">
+    <text x="94" y="478">Getting Started</text>
+    <text x="318" y="478">Principles</text>
+    <text x="474" y="478">Frameworks</text>
+    <text x="684" y="478">Projects</text>
+    <text x="824" y="478">Tools</text>
+  </g>
+
+  <g fill="#38BDF8">
+    <circle cx="94" cy="515" r="7" />
+    <circle cx="260" cy="515" r="7" />
+    <circle cx="442" cy="515" r="7" />
+    <circle cx="650" cy="515" r="7" />
+    <circle cx="790" cy="515" r="7" />
+  </g>
+
+  <text x="94" y="552" fill="#9FB8C9" font-family="Inter, Arial, sans-serif" font-size="24">
+    aiagentguide
+  </text>
+</svg>

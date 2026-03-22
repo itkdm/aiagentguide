@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DOCS_BASE: /
+      DOCS_SITE_URL: https://aiagentguide.cn/
 
     steps:
       - name: Checkout
