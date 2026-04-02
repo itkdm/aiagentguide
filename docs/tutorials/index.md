@@ -1,4 +1,17 @@
 ---
+title: AI Agent 实战教程
+summary: 从最小可运行案例出发，逐步学习 AI Agent 的实战搭建、工具调用、状态管理与执行闭环。
+keywords:
+  - AI Agent 实战
+  - Agent 教程
+  - Agent 项目
+  - Agent 开发
+tags:
+  - AI Agent
+  - 实战
+  - 教程
+  - 最小案例
+author: AI Agent Guide
 description: "从最小可运行案例出发，逐步学习 AI Agent 的实战搭建、工具调用、状态管理与执行闭环。"
 ---
 

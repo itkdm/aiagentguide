@@ -1,0 +1,224 @@
+.vp-doc .mermaid-diagram-card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.vp-doc .mermaid-diagram-stage {
+  border-radius: 20px;
+  border: 0;
+  background: transparent;
+}
+
+.vp-doc .mermaid-diagram-canvas {
+  padding-top: 72px;
+}
+
+.vp-doc .mermaid-diagram-toolbar {
+  top: 14px;
+  right: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 6px;
+  backdrop-filter: none;
+}
+
+.vp-doc .mermaid-diagram-toolbar .tool-btn {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.vp-doc .mermaid-diagram-toolbar .tool-btn:hover {
+  background: color-mix(in srgb, var(--vp-c-brand-1) 10%, transparent);
+}
+
+.dark .vp-doc .mermaid-diagram-toolbar .tool-btn:hover {
+  background: color-mix(in srgb, #93c5fd 18%, transparent);
+}
+
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg {
+  filter: none;
+  transition: none;
+  will-change: auto;
+  text-rendering: geometricPrecision;
+  shape-rendering: geometricPrecision;
+}
+
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .flowchart-link,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .relationshipLine,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .messageLine0,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .messageLine1 {
+  stroke-width: 2px;
+}
+
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .edgeLabel rect,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .edgeLabel path {
+  fill: rgba(255, 255, 255, 0.9);
+  stroke: rgba(148, 163, 184, 0.2);
+}
+
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .cluster rect {
+  stroke: rgba(37, 99, 235, 0.16);
+  fill: rgba(37, 99, 235, 0.06);
+}
+
+.mermaid-diagram-lightbox-shell {
+  width: min(1560px, 100%);
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-stage {
+  position: relative;
+  min-height: min(78vh, 920px);
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-stage.dragging {
+  cursor: grabbing;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-canvas {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: min(78vh, 920px);
+  width: 100%;
+  padding: 76px 20px 20px;
+  overflow: hidden;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-canvas > .interactive-diagram-svg,
+.interactive-diagram-lightbox .mermaid-diagram-canvas > svg {
+  display: block;
+  width: min(92vw, 1480px);
+  height: auto;
+  max-width: none;
+  transition: none;
+  will-change: auto;
+  text-rendering: geometricPrecision;
+  shape-rendering: geometricPrecision;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-toolbar {
+  position: absolute;
+  top: 12px;
+  right: 48px;
+  left: auto;
+  transform: none;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-toolbar .tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #e2e8f0;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-toolbar .tool-btn:hover {
+  background: rgba(59, 130, 246, 0.34);
+  border-color: rgba(125, 211, 252, 0.42);
+  color: #f8fafc;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-toolbar .tool-btn:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-toolbar .tool-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.vp-doc .mermaid-diagram-stage-preview {
+  border: 0;
+  background: transparent;
+}
+
+.vp-doc .mermaid-diagram-canvas-preview {
+  padding-top: 68px;
+}
+
+.interactive-diagram-lightbox .mermaid-diagram-canvas-preview > .interactive-diagram-svg {
+  filter: none;
+}
+
+.vp-doc .mermaid-diagram-toolbar-preview {
+  top: 16px;
+  right: 16px;
+}
+
+.dark .vp-doc .mermaid-diagram-card {
+  background: transparent;
+}
+
+.dark .vp-doc .mermaid-diagram-stage {
+  border: 0;
+  background: transparent;
+}
+
+.dark .vp-doc .mermaid-diagram-card .interactive-diagram-svg {
+  filter: none;
+}
+
+.dark .interactive-diagram-lightbox .mermaid-diagram-toolbar .tool-btn:hover {
+  background: rgba(59, 130, 246, 0.4);
+}
+
+@media (max-width: 960px) {
+  .vp-doc .mermaid-diagram-canvas {
+    padding-top: 66px;
+  }
+
+  .mermaid-diagram-lightbox-shell {
+    width: min(100%, 100%);
+  }
+
+  .vp-doc .mermaid-diagram-toolbar-preview {
+    top: 14px;
+    right: 14px;
+  }
+
+  .interactive-diagram-lightbox .mermaid-diagram-canvas {
+    padding-top: 70px;
+  }
+
+  .interactive-diagram-lightbox .mermaid-diagram-canvas > .interactive-diagram-svg,
+  .interactive-diagram-lightbox .mermaid-diagram-canvas > svg {
+    width: min(94vw, 1280px);
+  }
+
+  .interactive-diagram-lightbox .mermaid-diagram-toolbar {
+    top: 12px;
+    right: 44px;
+    left: auto;
+    transform: none;
+  }
+}

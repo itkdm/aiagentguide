@@ -1,188 +1,355 @@
-# 通用 Agent 架构：感知、规划、行动、反思
+# 通用 Agent 原理：Agent 架构
 
-前面的 `s01-s12` 更偏 **Coding Agent / Claude Code-like Agent** 的工程实现。  
-这一篇开始，补的是更广义、更通用的 Agent 原理。
+`入门` 栏目更偏“这是什么”。  
+这一栏开始，重点变成“系统内部到底怎么组织”。
 
-这一篇最重要的一句话是：
+所以这一篇不只讲概念，也会给一个最小 Python 版本，让你看到：
 
-**通用 Agent 不一定长得像代码智能体，但大多数都绕不开“感知 -> 规划 -> 行动 -> 反思”这个基本闭环。**
+- 一个 Agent 系统通常有哪些模块
+- 这些模块在代码里分别长什么样
+- 为什么它不是“一个 prompt + 一个模型调用”就结束
 
-## 为什么要补这一层
+## 这一篇要解决什么问题
 
-如果只看 Coding Agent，你会很容易把这些机制误认为是所有 Agent 的标准配置：
+如果把不同形态的 Agent 都放在一起看，你会发现它们表面差异很大：
 
-- 任务板
-- worktree
-- 队友邮箱
-- 代码目录隔离
+- Coding Agent 会读文件、跑命令、改代码
+- 客服 Agent 会查订单、查规则、发回复
+- 助理 Agent 会读日程、查资料、发提醒
 
-但在更广义的 Agent 系统里，很多场景并不需要这些东西。  
-例如：
+但底层通常都逃不开几个共同模块：
 
-- 旅行规划 Agent
-- 销售线索跟进 Agent
-- 客服处理 Agent
-- 研究摘要 Agent
+- 输入
+- 决策
+- 工具
+- 状态
+- 记忆
+- 输出
+- 安全约束
 
-它们的执行方式可能完全不同，但底层通常仍然共享一套更抽象的结构。
+这就是 Agent 架构。
 
-## 最小通用闭环
+## 先看一张总图
 
-把大多数 Agent 系统抽象到最小层面，通常可以写成：
-
-```text
-感知 -> 规划 -> 行动 -> 反思 -> 再规划
+```mermaid
+flowchart TB
+  U["用户 / 外部事件"] --> I["输入层"]
+  I --> D["决策层"]
+  D --> T["工具层"]
+  T --> E["外部环境"]
+  T --> S["状态层"]
+  M["记忆层"] --> D
+  S --> D
+  G["安全与约束"] --> D
+  G --> T
+  D --> O["输出层"]
+  O --> U
 ```
 
-对应解释可以是：
+先不要急着背名词。  
+你可以把这张图理解成一句话：
 
-- `感知`：读取用户输入、环境信号、外部数据
-- `规划`：决定目标、子目标和下一步策略
-- `行动`：调用工具、执行流程、产出结果
-- `反思`：检查结果是否有效，是否要调整路径
+**Agent 接收任务，结合状态和记忆做决策，必要时调用工具影响外部世界，并在约束下输出结果。**
 
-这比“会不会写代码”更接近普遍意义上的 Agent 原理。
+## 一个最小 Python 版本
 
-## 1. 感知：知道现在发生了什么
+下面这段代码不是生产级框架，只是一个“能看懂骨架”的最小实现。
 
-感知层解决的是：
+```python
+from dataclasses import dataclass, field
+from typing import Any
 
-- 用户到底要什么
-- 当前环境里有哪些可用信息
-- 系统处于什么状态
 
-在不同 Agent 里，感知源可能完全不同：
+@dataclass
+class AgentState:
+    current_task: str | None = None
+    step_count: int = 0
+    last_tool_result: str | None = None
+    done: bool = False
 
-- 聊天输入
-- 表单数据
-- 数据库记录
-- 邮件、网页、文件
-- 监控告警、传感器或业务事件
 
-所以感知不是“看一眼 prompt”这么简单，而是：
+class Memory:
+    def __init__(self) -> None:
+        self.facts: list[str] = []
 
-**把决策所需的上下文先收集起来。**
+    def add(self, fact: str) -> None:
+        self.facts.append(fact)
 
-## 2. 规划：决定接下来要怎么做
+    def get_context(self) -> list[str]:
+        return self.facts[-5:]
 
-规划层解决的是：
 
-- 当前目标怎么拆解
-- 下一步该做什么
-- 是否需要工具
-- 是否需要继续多轮推进
+class ToolRegistry:
+    def __init__(self) -> None:
+        self.tools: dict[str, Any] = {
+            "search_docs": self.search_docs,
+            "send_reply": self.send_reply,
+        }
 
-有些 Agent 的规划很轻：
+    def search_docs(self, query: str) -> str:
+        return f"[docs] 找到与“{query}”相关的 3 条结果"
 
-- 只决定下一步调用哪个 API
+    def send_reply(self, message: str) -> str:
+        return f"[reply] 已发送：{message}"
 
-有些 Agent 的规划很重：
+    def call(self, tool_name: str, **kwargs: Any) -> str:
+        return self.tools[tool_name](**kwargs)
 
-- 先拆成 5 个子目标
-- 再决定哪些并行，哪些串行
 
-所以规划并不等于“长链思维”，而是：
+class Guardrails:
+    def allow(self, tool_name: str) -> bool:
+        blocked_tools = {"delete_user"}
+        return tool_name not in blocked_tools
 
-**把模糊目标转换成可执行路径。**
 
-## 3. 行动：真正改变外部世界
+class Planner:
+    def decide(self, user_input: str, state: AgentState, memory: Memory) -> dict[str, Any]:
+        if "文档" in user_input and state.last_tool_result is None:
+            return {
+                "type": "tool",
+                "tool_name": "search_docs",
+                "args": {"query": user_input},
+            }
 
-行动层是 Agent 和普通聊天模型拉开差距的地方。
+        return {
+            "type": "tool",
+            "tool_name": "send_reply",
+            "args": {"message": "我已经根据资料整理好答案了。"},
+        }
 
-它可以表现为：
 
-- 查询数据库
-- 调用业务 API
-- 发送邮件
-- 写入 CRM
-- 执行浏览器操作
-- 修改文件或代码
+class Agent:
+    def __init__(self) -> None:
+        self.state = AgentState()
+        self.memory = Memory()
+        self.tools = ToolRegistry()
+        self.guardrails = Guardrails()
+        self.planner = Planner()
 
-所以 Agent 的关键不是“更会回答”，而是：
+    def run_once(self, user_input: str) -> str:
+        self.state.current_task = user_input
+        self.state.step_count += 1
 
-**它可以把判断转成动作。**
+        decision = self.planner.decide(user_input, self.state, self.memory)
 
-## 4. 反思：检查结果是否足够好
+        if decision["type"] == "tool":
+            tool_name = decision["tool_name"]
 
-如果没有反思，Agent 往往只能“一次性赌对”。  
-而真正稳定的系统通常会在行动后做检查：
+            if not self.guardrails.allow(tool_name):
+                self.state.done = True
+                return f"工具 {tool_name} 被安全策略拦截"
 
-- 结果是否满足目标
-- 是否触发错误
-- 是否需要补充信息
-- 是否该切换策略
+            result = self.tools.call(tool_name, **decision["args"])
+            self.state.last_tool_result = result
+            self.memory.add(result)
 
-这层有时表现为：
+            if tool_name == "send_reply":
+                self.state.done = True
 
-- 自检
-- 重试
-- 结果验证
-- 人工确认
+            return result
 
-所以反思不是锦上添花，而是：
+        self.state.done = True
+        return "任务结束"
 
-**让 Agent 从单次动作变成可连续修正的系统。**
 
-## 通用架构的常见变体
+agent = Agent()
+print(agent.run_once("请先查一下这个问题对应的文档，再给我答复"))
+print(agent.run_once("继续"))
+```
 
-虽然基础闭环类似，但不同 Agent 会在不同位置重点加强。
+这段代码故意很短，但已经把架构骨架放进去了。
 
-### 1. 规划弱、执行强
+## 这段代码里，每个模块对应什么
 
-例如：
+### 1. `AgentState`：状态层
 
-- 表单处理 Agent
-- CRM 跟进 Agent
+它记录的是系统当前推进到哪里了，比如：
 
-特点是：
+- 当前任务是什么
+- 当前是第几步
+- 上一次工具执行结果是什么
+- 是否已经结束
 
-- 路径相对固定
-- 行动很多
-- 更像“工作流里带一点决策”
+真实系统里，状态通常还会更复杂，比如：
 
-### 2. 规划强、执行弱
+- 当前 owner
+- 当前审批节点
+- 错误次数
+- 重试次数
+- 中间产物 ID
 
-例如：
+但核心思想不变：  
+**状态层负责记录“系统现在处于什么位置”。**
 
-- 研究总结 Agent
-- 战略分析 Agent
+### 2. `Memory`：记忆层
 
-特点是：
+这里用一个最小列表来模拟长期信息。
 
-- 需要大量判断
-- 真正落地动作不多
+真实系统里，记忆可以来自：
 
-### 3. 感知强、反思强
+- 对话摘要
+- 用户偏好
+- 项目知识
+- 向量检索
+- 结构化用户画像
 
-例如：
+它和状态的区别是：
 
-- 监控告警 Agent
-- 客服质检 Agent
+- 状态偏当前任务推进
+- 记忆偏跨轮、跨任务复用的信息
 
-特点是：
+### 3. `ToolRegistry`：工具层
 
-- 要不断读新信号
-- 行动后要反复校验
+这里把工具注册成一个映射表。
 
-## 通用 Agent 和工作流的边界
+这对应真实系统里的：
 
-这也是最容易混淆的地方之一。
+- 函数调用
+- 内部 API
+- 数据库查询
+- 浏览器操作
+- Shell / 代码执行
 
-- `工作流`更偏预设节点和固定顺序
-- `Agent`更偏在边界内动态决定下一步
+模型自己并不真的执行动作。  
+更常见的情况是：模型做决策，应用代码真的去执行工具。
 
-所以更实际的情况通常不是二选一，而是：
+这一点和官方文档里讲的 tool use 很一致。
 
-**工作流提供骨架，Agent 负责其中不确定的感知、规划和反思。**
+### 4. `Guardrails`：安全与约束层
 
-## 这篇真正要理解什么
+很多人一开始会完全忽略这层。  
+但只要 Agent 真的能做事，这层迟早要补。
 
-- 通用 Agent 的核心不是代码能力，而是闭环能力
-- 感知、规划、行动、反思，是很多 Agent 系统共享的抽象骨架
-- Coding Agent 只是这种骨架在“代码任务”上的一种特化形式
+它控制的是：
+
+- 哪些工具能用
+- 哪些操作要拦截
+- 哪些动作要审批
+
+这里为了演示，只做了一个最简单的工具黑名单。
+
+### 5. `Planner`：决策层
+
+这是架构里最核心的一层。
+
+它不负责真正执行动作，而是负责：
+
+- 判断现在该做什么
+- 选择是否调用工具
+- 选择调用哪个工具
+- 决定下一步往哪里走
+
+在真实系统里，这一层通常会连接模型推理。  
+但从架构角度看，重点不是“模型多强”，而是：
+
+**系统里必须有一个明确承担决策职责的地方。**
+
+### 6. `Agent`：编排层
+
+`Agent` 本身更像一个协调者，把前面几个模块串起来。
+
+它做的事包括：
+
+- 接收输入
+- 更新状态
+- 调用决策层
+- 检查安全规则
+- 执行工具
+- 写回状态和记忆
+
+你也可以把它理解成：  
+**Agent 不是单个对象，而是一个把多个模块组织起来的运行壳。**
+
+## 为什么不能只写成“一个大函数”
+
+很多初学者会先写成这样：
+
+```python
+def run_agent(user_input: str) -> str:
+    # 直接让模型判断并返回结果
+    ...
+```
+
+这在 Demo 阶段没问题，但很快就会碰到麻烦：
+
+- 工具越来越多
+- 状态越来越复杂
+- 记忆要单独存
+- 安全规则要插进去
+- 不同场景要复用同一个工具层
+
+这时候如果没有架构分层，所有逻辑就会混在一起。
+
+所以“Agent 架构”的意义，不是让代码看起来更高级，  
+而是让系统在复杂起来之后还能继续维护。
+
+## 一个更贴近真实系统的版本
+
+实际工程里，常见结构会更像这样：
+
+```mermaid
+flowchart LR
+  A["输入"] --> B["上下文组装"]
+  B --> C["决策层 / LLM"]
+  C --> D["工具路由"]
+  D --> E["外部系统"]
+  D --> F["结果回写"]
+  F --> G["状态存储"]
+  F --> H["记忆存储"]
+  G --> C
+  H --> C
+  I["安全 / 审批"] --> C
+  I --> D
+  C --> J["输出"]
+```
+
+相比前面的最小代码，这张图多了几件现实中很常见的事：
+
+- 上下文不是直接拿来就用，而是先做组装
+- 工具执行之后，结果要写回不同容器
+- 安全规则可能同时约束“决策”和“执行”
+- 决策层不只是看用户输入，还会看状态和记忆
+
+## 一个例子：客服 Agent 架构怎么落地
+
+假设用户说：
+
+```text
+我的订单一直没发货，可以退款吗？
+```
+
+这时候各层分工大致会是：
+
+- 输入层：拿到用户消息、订单号、历史会话
+- 决策层：判断先查物流还是先查退款规则
+- 工具层：调用订单系统、物流系统、退款规则服务
+- 状态层：记录目前查到了什么、下一步该走哪
+- 记忆层：保留用户偏好、历史投诉信息
+- 安全层：判断退款是否需要人工审批
+- 输出层：回复用户，或者转人工
+
+这样你就能看清楚：
+
+Agent 不是“一个会聊天的模型”，  
+而是“一个由多个模块配合起来的系统”。
+
+## 这一篇真正要理解什么
+
+- `Agent 架构` 讲的是静态模块分工
+- 通用 Agent 通常至少包含：输入、决策、工具、状态、记忆、输出、安全
+- Python 里的类和对象，只是这些职责的一种落地方式
+- 理解了架构骨架，后面再看 `核心循环`、`规划`、`工具`、`记忆` 会更顺
 
 ## 小结
 
-- 前面的 `s01-s12` 更偏工程化实现
-- 这一篇补的是更广义的 Agent 抽象结构
-- 先抓住“感知 -> 规划 -> 行动 -> 反思”，再看具体实现，会更不容易被某一类 Agent 结构绑死
+- Agent 不是单个大模型调用，而是一组模块协作
+- 决策层是中枢，工具层负责行动，状态和记忆负责信息承载，安全层负责边界
+- 用最小 Python 代码去看架构，比只看抽象概念更容易真正理解
+
+## 参考资料
+
+- [OpenAI: Using tools](https://developers.openai.com/api/docs/guides/tools)
+- [OpenAI: Conversation state](https://developers.openai.com/api/docs/guides/conversation-state)
+- [Anthropic: Tool use with Claude](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview)
+- [Anthropic: How tool use works](https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works)
+- [LangChain Documentation](https://docs.langchain.com/)

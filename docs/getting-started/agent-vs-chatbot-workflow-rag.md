@@ -1,3 +1,20 @@
+---
+title: Agent、聊天机器人、工作流与 RAG
+summary: 解释 Agent、聊天机器人、工作流和 RAG 的边界与分工，帮助你判断不同系统分别适合解决什么问题。
+description: "系统梳理 Agent、聊天机器人、工作流和 RAG 的区别与边界，帮助你判断不同任务更适合哪一种实现方式。"
+keywords:
+  - Agent 和 RAG 区别
+  - Agent 和工作流区别
+  - 聊天机器人和 Agent
+  - AI Agent
+tags:
+  - AI Agent
+  - 工作流
+  - RAG
+  - 聊天机器人
+author: AI Agent Guide
+---
+
 # Agent、聊天机器人、工作流与 RAG
 
 很多人刚接触 AI 时，会把这 4 个词混着用。其实它们关注的是 4 件不同的事：
@@ -6,6 +23,21 @@
 - 工作流：负责“按固定流程执行”
 - RAG：负责“把外部知识找出来给模型”
 - Agent：负责“围绕目标决定下一步，并持续把任务往前推”
+
+<ImageCarousel
+  :images="[
+    {
+      src: 'https://i.postimg.cc/2j46PyJH/doubao-image-1-(7).png',
+      alt: 'Chatbot、Workflow、RAG、Agent 对比示意图 1'
+    },
+    {
+      src: 'https://i.postimg.cc/hGjQnnxv/Chat-GPT-Image-2026nian3yue27ri-01-18-00.png',
+      alt: 'Chatbot、Workflow、RAG、Agent 对比示意图 2'
+    }
+  ]"
+  :autoplay="false"
+  aspect-ratio="16 / 9"
+/>
 
 如果只记一句话，可以记住：
 

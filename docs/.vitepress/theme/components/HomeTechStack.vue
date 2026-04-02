@@ -106,4 +106,26 @@ const techs = [
 .scroller:hover .tech-list {
     animation-play-state: paused;
 }
+
+@media (max-width: 768px) {
+    .tech-stack-section {
+        padding: 20px 0;
+    }
+    .tech-item {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+    .tech-list {
+        gap: 16px;
+        padding: 10px 16px;
+        animation: scroll-mobile 40s linear infinite;
+    }
+}
+
+@keyframes scroll-mobile {
+    to {
+        transform: translateX(calc(-50% - 8px));
+        /* half width + half gap (16px / 2 = 8px) */
+    }
+}
 </style>

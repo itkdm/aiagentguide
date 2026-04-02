@@ -1,15 +1,45 @@
 ---
+title: AI Agent 入门
+summary: 帮助中文开发者建立 AI Agent 的基础认知，理解 Agent 是什么、适合什么任务，以及动手前需要掌握的判断标准。
+keywords:
+  - AI Agent 入门
+  - 智能体入门
+  - Agent 教程
+  - Agent 是什么
+tags:
+  - AI Agent
+  - 入门
+  - 基础概念
+  - 学习路径
+author: AI Agent Guide
 pageClass: getting-started-overview
 description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 Agent 是什么、何时使用，以及开始动手前需要建立的判断标准。"
 ---
 
 # 入门
 
-如果你刚开始接触 <span class="gs-accent">AI Agent</span>，不确定它到底是什么、适不适合你的场景，也不知道应该先看概念、先学框架，还是先做项目，那么这一栏就是为你准备的。
-
-入门栏目面向刚接触 <span class="gs-accent">AI Agent</span>、但已经具备基本编程基础的读者。这里不会一上来堆概念、比框架或讲代码，而是先帮你建立最重要的基础认知：AI Agent 是什么、适合解决什么问题、最基本是怎么运行的，以及在真正动手之前应该先具备哪些判断标准。
-
-很多新手一开始就急着比较框架、看案例、搭 Demo，但在还没分清 <span class="gs-accent">Agent</span>、<span class="gs-accent">聊天机器人</span>、<span class="gs-accent">工作流</span> 和 <span class="gs-accent">RAG</span> 之前，越早动手，越容易陷入概念混乱。这一栏的目标，就是先帮你把这些最基本的判断建立起来。
+<div style="display: flex; flex-wrap: nowrap; align-items: flex-start; gap: 28px; margin: 18px 0 10px;">
+  <div style="flex: 0 0 40%; min-width: 300px;">
+    <div style="border-radius: 14px; overflow: hidden;">
+    <SingleImagePreview
+      src="https://i.postimg.cc/j55rz6wm/doubao-image-1-(12).png"
+      alt="AI Agent 入门栏目概览图"
+      style="width: 100%; margin-bottom: -92px;"
+    />
+    </div>
+  </div>
+  <div style="flex: 1 1 60%; min-width: 360px;">
+    <p style="margin-top: 0;">
+      如果你刚开始接触 <span class="gs-accent">AI Agent</span>，不确定它到底是什么、适不适合你的场景，也不知道应该先看概念、先学框架，还是先做项目，那么这一栏就是为你准备的。
+    </p>
+    <p>
+      入门栏目面向刚接触 <span class="gs-accent">AI Agent</span>、但已经具备基本编程基础的读者。这里不会一上来堆概念、比框架或讲代码，而是先帮你建立最重要的基础认知：AI Agent 是什么、适合解决什么问题、最基本是怎么运行的，以及在真正动手之前应该先具备哪些判断标准。
+    </p>
+    <p>
+      很多新手一开始就急着比较框架、看案例、搭 Demo，但在还没分清 <span class="gs-accent">Agent</span>、<span class="gs-accent">聊天机器人</span>、<span class="gs-accent">工作流</span> 和 <span class="gs-accent">RAG</span> 之前，越早动手，越容易陷入概念混乱。这一栏的目标，就是先帮你把这些最基本的判断建立起来。
+    </p>
+  </div>
+</div>
 
 ## 读完这一栏，你应该能搞清楚什么
 
@@ -26,7 +56,7 @@ description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 A
 
 因为对新手来说，最容易踩的坑，往往不是不会写代码，而是一开始就把问题判断错了。
 
-比如，有些任务其实用普通工作流就够了，不需要 Agent；有些场景真正需要的是 <span class="gs-accent">RAG</span>，不是多轮自主决策；还有一些看起来很“智能”的 Demo，背后并不一定适合真实业务场景。
+比如，有些任务其实用**普通工作流**就够了，不需要**Agent**；有些场景真正需要的是 <span class="gs-accent">RAG</span>，不是多轮自主决策；还有一些看起来很“智能”的 Demo，背后并不一定适合真实业务场景。
 
 如果这些基本判断还没有建立起来，就算你很快学会了某个框架，也很容易在后面遇到这些问题：
 
@@ -49,6 +79,14 @@ description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 A
 如果你是零基础读者，也可以阅读这一栏；只是遇到一些术语或技术细节时，建议配合 AI 或其他资料一起查阅。  
 如果你已经有比较丰富的 Agent 实战经验，这一栏的内容可能会更偏基础，更适合作为查漏补缺或回到整体框架时参考。
 
+<div style="text-align: center; margin: 16px 0 8px;">
+  <SingleImagePreview
+    src="https://i.postimg.cc/vmJbww9W/doubao-image-2-(1).png"
+    alt="入门栏目配图"
+    style="max-width: 600px; width: 100%; margin: 0 auto;"
+  />
+</div>
+
 ## 这一栏不解决什么
 
 为了避免预期错位，也提前说明一下：这一栏不会重点解决下面这些问题：
@@ -58,18 +96,7 @@ description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 A
 - 不会覆盖所有前沿 Agent 话题或最新范式
 - 不会替代后续的框架、实战和工具栏目
 
-它更像是整个学习过程的第一站：先帮你建立地图，再决定往哪里深入。
-
-## 这一栏是怎么组织的
-
-这一栏不是按术语堆砌来组织内容的，而是按一个更适合新手的顺序展开：
-
-先认识 AI Agent 是什么，再学会判断它值不值得用；  
-再进一步理解它最基本的运行方式；  
-最后再补上第一次真正动手前应该知道的准备、误区和下一步学习路径。
-
-这样安排的目的，是尽量避免你一开始就陷入框架太多、工具太杂、概念混在一起的状态里。
-
+因为我们这个栏目的原意就是帮助大家建立对Agent的整体认知，后续栏目还会逐渐深入。
 ## 章节地图
 
 ### 第 1 章：先认识 AI Agent
@@ -78,6 +105,8 @@ description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 A
 
 - [什么是 AI Agent](./what-is-ai-agent.md)
 - [AI Agent 能做什么：6 个典型案例](./ai-agent-cases.md)
+- [什么是 Workflow（工作流）](./what-is-workflow.md)
+- [什么是 RAG](./what-is-rag.md)
 - [Agent、聊天机器人、工作流与 RAG](./agent-vs-chatbot-workflow-rag.md)
 
 ### 第 2 章：先学会判断，别急着做
@@ -148,5 +177,5 @@ description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 A
 - [什么是 AI Agent](./what-is-ai-agent.md)：先建立定义和边界
 - [AI Agent 能做什么：6 个典型案例](./ai-agent-cases.md)：先通过案例建立直觉
 
-如果你更喜欢先把概念讲清楚，建议从《什么是 AI Agent》开始；  
+如果你更喜欢先了解概念，建议从《什么是 AI Agent》开始；  
 如果你更喜欢先看例子、再回头理解定义，建议从《AI Agent 能做什么：6 个典型案例》开始。

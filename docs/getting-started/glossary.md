@@ -1,3 +1,20 @@
+---
+title: AI Agent 术语表
+summary: 收拢 AI Agent 入门阶段最常见的核心术语，帮助你在不同文章之间快速对齐概念，减少理解混乱。
+description: "整理 AI Agent 入门阶段最常见的核心术语，帮助你在不同文章之间快速对齐概念，减少理解混乱。"
+keywords:
+  - AI Agent 术语表
+  - Agent 术语
+  - 智能体概念
+  - Agent 名词解释
+tags:
+  - AI Agent
+  - 术语表
+  - 基础概念
+  - 入门
+author: AI Agent Guide
+---
+
 # 术语表
 
 这一页用于收束入门阶段最常见的术语，避免不同文章之间来回跳转时概念混乱。

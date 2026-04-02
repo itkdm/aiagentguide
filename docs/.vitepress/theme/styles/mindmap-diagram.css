@@ -1,0 +1,199 @@
+.vp-doc .mindmap-diagram-card {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.vp-doc .mindmap-diagram-stage {
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+}
+
+.vp-doc .mindmap-diagram-canvas {
+  padding-top: 72px;
+}
+
+.vp-doc .mindmap-diagram-toolbar {
+  top: 14px;
+  right: 14px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  gap: 6px;
+  backdrop-filter: none;
+}
+
+.vp-doc .mindmap-diagram-toolbar .tool-btn {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.vp-doc .mindmap-diagram-toolbar .tool-btn:hover {
+  background: color-mix(in srgb, var(--vp-c-brand-1) 10%, transparent);
+}
+
+.dark .vp-doc .mindmap-diagram-toolbar .tool-btn:hover {
+  background: color-mix(in srgb, #93c5fd 18%, transparent);
+}
+
+.vp-doc .mindmap-edge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--vp-c-brand-1) 26%, #64748b);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  shape-rendering: geometricPrecision;
+}
+
+.vp-doc .mindmap-node-rect {
+  filter: none;
+  shape-rendering: geometricPrecision;
+}
+
+.vp-doc .mindmap-node-text {
+  font-size: 14px;
+  font-weight: 600;
+  dominant-baseline: middle;
+  text-rendering: geometricPrecision;
+}
+
+.mindmap-diagram-lightbox-shell {
+  width: min(1560px, 100%);
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-stage {
+  position: relative;
+  min-height: min(78vh, 920px);
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-stage.dragging {
+  cursor: grabbing;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-canvas {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: min(78vh, 920px);
+  width: 100%;
+  padding: 76px 20px 20px;
+  overflow: hidden;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-canvas > .mindmap-svg,
+.interactive-diagram-lightbox .mindmap-diagram-canvas > svg {
+  display: block;
+  width: min(84vw, 1280px);
+  height: auto;
+  max-width: none;
+  transition: none;
+  will-change: auto;
+  text-rendering: geometricPrecision;
+  shape-rendering: geometricPrecision;
+}
+
+.interactive-diagram-lightbox .mindmap-edge {
+  fill: none;
+  stroke: color-mix(in srgb, var(--vp-c-brand-1) 26%, #64748b);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  shape-rendering: geometricPrecision;
+}
+
+.interactive-diagram-lightbox .mindmap-node-rect {
+  filter: none;
+  shape-rendering: geometricPrecision;
+}
+
+.interactive-diagram-lightbox .mindmap-node-text {
+  font-size: 14px;
+  font-weight: 600;
+  dominant-baseline: middle;
+  text-rendering: geometricPrecision;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-toolbar {
+  position: absolute;
+  top: 12px;
+  right: 48px;
+  left: auto;
+  transform: none;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-toolbar .tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #e2e8f0;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-toolbar .tool-btn:hover {
+  background: rgba(59, 130, 246, 0.3);
+  color: #f8fafc;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-toolbar .tool-btn:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 2px;
+}
+
+.interactive-diagram-lightbox .mindmap-diagram-toolbar .tool-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 960px) {
+  .vp-doc .mindmap-diagram-canvas {
+    padding-top: 66px;
+  }
+
+  .mindmap-diagram-lightbox-shell {
+    width: min(100%, 100%);
+  }
+
+  .interactive-diagram-lightbox .mindmap-diagram-canvas {
+    padding-top: 70px;
+  }
+
+  .interactive-diagram-lightbox .mindmap-diagram-canvas > .mindmap-svg,
+  .interactive-diagram-lightbox .mindmap-diagram-canvas > svg {
+    width: min(92vw, 1100px);
+  }
+
+  .interactive-diagram-lightbox .mindmap-diagram-toolbar {
+    top: 12px;
+    right: 44px;
+    left: auto;
+    transform: none;
+  }
+}

@@ -1,6 +1,23 @@
+---
+title: 什么任务适合用 Agent
+summary: 解释什么任务真正值得交给 AI Agent，什么任务更适合工作流或普通模型，帮助你先做对实现路径判断。
+description: "解释什么任务真正适合用 AI Agent，什么任务更适合工作流或普通模型，帮助你先做对实现路径判断。"
+keywords:
+  - 什么任务适合用 Agent
+  - AI Agent 适用场景
+  - Agent 和工作流选择
+  - Agent 选型判断
+tags:
+  - AI Agent
+  - 适用场景
+  - 任务判断
+  - 选型
+author: AI Agent Guide
+---
+
 # 什么任务适合用 Agent
 
-这篇是入门栏里最重要的一篇。很多问题不是“能不能用 Agent 做”，而是“值不值得用 Agent 做”。如果这个判断不稳，后面很容易陷入看了很多工具却不知道该怎么选。
+这篇是入门栏里最重要的一篇。很多问题不是“能不能用 Agent 做”，而是“值不值得用 Agent 做”。如果这个判断不稳，而盲目跟风使用Agent，轻则浪费人力物力做无用功，重则把简单流程复杂化，反而拖慢效率、增加成本。
 
 这一篇默认你已经大致理解了 Agent 的基本定义，以及它和聊天机器人、工作流、RAG 的区别。如果这些边界还不稳，建议先回看 [什么是 AI Agent](./what-is-ai-agent.md) 和 [Agent、聊天机器人、工作流与 RAG](./agent-vs-chatbot-workflow-rag.md)。
 
@@ -30,6 +47,21 @@
 - 读一批文件后生成结构化结果
 - 在代码仓库中定位问题、修改文件并验证
 
+<ImageCarousel
+  :images="[
+    {
+      src: 'https://i.postimg.cc/q73wr22w/doubao-image-1-(8).png',
+      alt: '何时使用 Agent 场景示意图 1'
+    },
+    {
+      src: 'https://i.postimg.cc/SQrrmSYP/Chat-GPT-Image-2026nian3yue27ri-01-35-56.png',
+      alt: '何时使用 Agent 场景示意图 2'
+    }
+  ]"
+  :autoplay="false"
+  aspect-ratio="16 / 10"
+/>
+
 ## 什么任务通常不适合用 Agent
 
 如果任务本身非常规则化，Agent 往往不是最优解。
@@ -47,6 +79,21 @@
 - 严格人工审核流程
 
 强行上 Agent，不一定会更先进，只可能更贵、更难调、更不稳定。
+
+<ImageCarousel
+  :images="[
+    {
+      src: 'https://i.postimg.cc/Y943pVZy/doubao-image-1-(10).png',
+      alt: '不适合用 Agent 的任务示意图 1'
+    },
+    {
+      src: 'https://i.postimg.cc/9fQ4t2QV/Chat-GPT-Image-2026nian3yue27ri-01-44-35.png',
+      alt: '不适合用 Agent 的任务示意图 2'
+    }
+  ]"
+  :autoplay="false"
+  aspect-ratio="16 / 10"
+/>
 
 ## 什么时候普通工作流就够了
 
@@ -94,6 +141,21 @@
 - 错误代价很高
 
 那就优先考虑工作流或传统程序，而不是 Agent。
+
+<ImageCarousel
+  :images="[
+    {
+      src: 'https://i.postimg.cc/5yVFZRVy/doubao-image-1-(11).png',
+      alt: '工作流与 Agent 选择示意图 1'
+    },
+    {
+      src: 'https://i.postimg.cc/xCjPzhWB/Chat-GPT-Image-2026nian3yue27ri-01-51-41.png',
+      alt: '工作流与 Agent 选择示意图 2'
+    }
+  ]"
+  :autoplay="false"
+  aspect-ratio="16 / 11"
+/>
 
 ## 一个更容易上手的判断公式
 

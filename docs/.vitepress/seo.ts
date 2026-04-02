@@ -5,17 +5,19 @@ import type { HeadConfig, PageData } from 'vitepress'
 
 const DESCRIPTION_MAX_LENGTH = 140
 const DEFAULT_SOCIAL_IMAGE = 'social-card.svg'
+const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 
 const SECTION_TITLES: Record<string, string> = {
-  'getting-started': '入门',
-  principles: '原理',
-  frameworks: '框架',
-  tutorials: '实战教程',
-  projects: '项目',
-  tools: '工具',
-  news: '精选资讯',
-  resources: '资源'
+  'getting-started': '\u5165\u95e8',
+  principles: '\u539f\u7406',
+  frameworks: '\u6846\u67b6',
+  tutorials: '\u5b9e\u6218\u6559\u7a0b',
+  projects: '\u9879\u76ee',
+  tools: '\u5de5\u5177',
+  resources: '\u8d44\u6e90'
 }
+
+type FrontmatterLike = Record<string, unknown>
 
 function normalizeSiteUrl(rawSiteUrl?: string) {
   if (!rawSiteUrl) {
@@ -76,8 +78,59 @@ function sanitizeMarkdown(source: string) {
 function cleanText(source: string) {
   return source
     .replace(/\s+/g, ' ')
-    .replace(/^[\s:：,，;；/]+/, '')
+    .replace(/^[\s:;,.-]+/, '')
     .trim()
+}
+
+function getFrontmatterRecord(pageData: Pick<PageData, 'frontmatter'>) {
+  return (pageData.frontmatter ?? {}) as FrontmatterLike
+}
+
+function normalizeTextValue(value: unknown) {
+  return cleanText(String(value ?? ''))
+}
+
+function normalizeStringList(value: unknown) {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => normalizeTextValue(item))
+      .filter(Boolean)
+  }
+
+  const normalized = normalizeTextValue(value)
+
+  if (!normalized) {
+    return []
+  }
+
+  return normalized
+    .split(/[,\n]/)
+    .map((item) => cleanText(item))
+    .filter(Boolean)
+}
+
+function normalizeDateValue(value: unknown) {
+  if (!value) {
+    return undefined
+  }
+
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value.toISOString()
+  }
+
+  const normalized = normalizeTextValue(value)
+
+  if (!normalized) {
+    return undefined
+  }
+
+  if (ISO_DATE_PATTERN.test(normalized)) {
+    return new Date(`${normalized}T00:00:00.000Z`).toISOString()
+  }
+
+  const parsed = new Date(normalized)
+
+  return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString()
 }
 
 function truncateDescription(source: string, maxLength = DESCRIPTION_MAX_LENGTH) {
@@ -111,6 +164,17 @@ function extractHtmlParagraph(source: string, classPattern?: RegExp) {
   }
 
   return undefined
+}
+
+function resolveSummary(pageData: Pick<PageData, 'frontmatter'>, source: string) {
+  const frontmatter = getFrontmatterRecord(pageData)
+  const frontmatterSummary = normalizeTextValue(frontmatter.summary)
+
+  if (frontmatterSummary) {
+    return frontmatterSummary
+  }
+
+  return extractHtmlParagraph(source, /summary/i) ?? extractHtmlParagraph(source)
 }
 
 function resolvePlainTitle(pageData: PageData, siteTitle: string) {
@@ -175,7 +239,7 @@ function buildBreadcrumbs(pageData: PageData, siteUrl: string, currentTitle: str
     {
       '@type': 'ListItem',
       position: 1,
-      name: '首页',
+      name: '\u9996\u9875',
       item: siteUrl
     }
   ]
@@ -216,6 +280,56 @@ function resolvePageKind(pageData: PageData) {
   }
 
   return 'detail'
+}
+
+function resolveKeywords(pageData: Pick<PageData, 'frontmatter'>) {
+  const frontmatter = getFrontmatterRecord(pageData)
+  const keywords = normalizeStringList(frontmatter.keywords)
+
+  if (keywords.length) {
+    return keywords
+  }
+
+  return normalizeStringList(frontmatter.tags)
+}
+
+function resolveSocialImagePath(
+  pageData: Pick<PageData, 'frontmatter'>,
+  fallbackSocialImagePath = DEFAULT_SOCIAL_IMAGE
+) {
+  const frontmatter = getFrontmatterRecord(pageData)
+  const candidate = normalizeTextValue(
+    frontmatter.ogImage ?? frontmatter.socialImage ?? frontmatter.image
+  )
+
+  if (!candidate) {
+    return fallbackSocialImagePath
+  }
+
+  return candidate.startsWith('/') ? candidate.slice(1) : candidate
+}
+
+function resolvePublishedTime(pageData: Pick<PageData, 'frontmatter'>) {
+  const frontmatter = getFrontmatterRecord(pageData)
+  return normalizeDateValue(frontmatter.date)
+}
+
+function resolveUpdatedTime(
+  pageData: Pick<PageData, 'frontmatter'>,
+  lastModified?: string
+) {
+  const frontmatter = getFrontmatterRecord(pageData)
+  return normalizeDateValue(frontmatter.lastUpdated) ?? lastModified
+}
+
+function resolveAuthor(pageData: Pick<PageData, 'frontmatter'>) {
+  const frontmatter = getFrontmatterRecord(pageData)
+  return normalizeTextValue(frontmatter.author)
+}
+
+function isNoIndexPage(pageData: Pick<PageData, 'frontmatter' | 'isNotFound'>) {
+  const frontmatter = getFrontmatterRecord(pageData)
+  return pageData.isNotFound || Boolean(frontmatter.draft || frontmatter.noindex)
 }
 
 export function resolveSiteUrl(base: string, explicitSiteUrl?: string, githubRepository?: string) {
@@ -267,17 +381,17 @@ export function resolvePageDescription(
   source: string,
   siteDescription: string
 ) {
-  const frontmatterDescription = cleanText(String(pageData.frontmatter?.description ?? ''))
+  const frontmatter = getFrontmatterRecord(pageData)
+  const frontmatterDescription = normalizeTextValue(frontmatter.description)
 
   if (frontmatterDescription) {
     return truncateDescription(frontmatterDescription)
   }
 
-  const explicitHtmlSummary =
-    extractHtmlParagraph(source, /summary/i) ?? extractHtmlParagraph(source)
+  const summary = resolveSummary(pageData, source)
 
-  if (explicitHtmlSummary) {
-    return truncateDescription(explicitHtmlSummary)
+  if (summary) {
+    return truncateDescription(summary)
   }
 
   const existingDescription = cleanText(pageData.description ?? '')
@@ -336,9 +450,22 @@ export function createSeoHead(options: {
   const pageTitle = resolvePlainTitle(pageData, siteTitle)
   const seoTitle = cleanText(documentTitle || resolveDisplayTitle(pageTitle, siteTitle))
   const pageKind = resolvePageKind(pageData)
-  const isNoIndex = pageData.isNotFound || Boolean(pageData.frontmatter?.draft)
+  const isNoIndex = isNoIndexPage(pageData)
   const robotsContent = isNoIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'
+  const keywords = resolveKeywords(pageData)
+  const author = resolveAuthor(pageData)
+  const publishedTime = resolvePublishedTime(pageData)
+  const updatedTime = resolveUpdatedTime(pageData, lastModified)
+  const resolvedSocialImagePath = resolveSocialImagePath(pageData, socialImagePath)
   const head: HeadConfig[] = [['meta', { name: 'robots', content: robotsContent }]]
+
+  if (keywords.length) {
+    head.push(['meta', { name: 'keywords', content: keywords.join(', ') }])
+  }
+
+  if (author) {
+    head.push(['meta', { name: 'author', content: author }])
+  }
 
   if (isNoIndex) {
     return head
@@ -346,7 +473,7 @@ export function createSeoHead(options: {
 
   const canonicalPath = getPageRoute(pageData.relativePath, cleanUrls)
   const canonicalUrl = siteUrl ? toAbsoluteUrl(siteUrl, canonicalPath) : undefined
-  const socialImageUrl = siteUrl ? toAbsoluteUrl(siteUrl, socialImagePath) : undefined
+  const socialImageUrl = siteUrl ? toAbsoluteUrl(siteUrl, resolvedSocialImagePath) : undefined
 
   if (canonicalUrl) {
     head.push(['link', { rel: 'canonical', href: canonicalUrl }])
@@ -371,8 +498,16 @@ export function createSeoHead(options: {
     head.push(['meta', { name: 'twitter:image:alt', content: seoTitle }])
   }
 
-  if (lastModified) {
-    head.push(['meta', { property: 'article:modified_time', content: lastModified }])
+  if (publishedTime) {
+    head.push(['meta', { property: 'article:published_time', content: publishedTime }])
+  }
+
+  if (updatedTime) {
+    head.push(['meta', { property: 'article:modified_time', content: updatedTime }])
+  }
+
+  for (const keyword of keywords) {
+    head.push(['meta', { property: 'article:tag', content: keyword }])
   }
 
   if (!siteUrl) {
@@ -393,7 +528,7 @@ export function createSeoHead(options: {
       image: socialImageUrl
     })
   } else if (canonicalUrl) {
-    structuredData.push({
+    const webPageData: Record<string, unknown> = {
       '@context': 'https://schema.org',
       '@type': pageKind === 'section' ? 'CollectionPage' : 'WebPage',
       '@id': `${canonicalUrl}#webpage`,
@@ -405,8 +540,25 @@ export function createSeoHead(options: {
         '@id': `${siteUrl}#website`
       },
       image: socialImageUrl,
-      dateModified: lastModified
-    })
+      dateModified: updatedTime
+    }
+
+    if (publishedTime) {
+      webPageData.datePublished = publishedTime
+    }
+
+    if (author) {
+      webPageData.author = {
+        '@type': 'Person',
+        name: author
+      }
+    }
+
+    if (keywords.length) {
+      webPageData.keywords = keywords.join(', ')
+    }
+
+    structuredData.push(webPageData)
 
     structuredData.push({
       '@context': 'https://schema.org',

@@ -3,6 +3,7 @@ import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
 import HomeParticles from './components/HomeParticles.vue'
 import HomeTypewriter from './components/HomeTypewriter.vue'
+import AIOpenMenu from './components/AIOpenMenu.vue'
 
 const { Layout } = DefaultTheme
 const { frontmatter } = useData()
@@ -21,6 +22,12 @@ const { frontmatter } = useData()
         <template #home-hero-info-before>
             <ClientOnly>
                 <HomeTypewriter v-if="frontmatter.layout === 'home'" />
+            </ClientOnly>
+        </template>
+
+        <template #doc-before>
+            <ClientOnly>
+                <AIOpenMenu v-if="frontmatter.layout !== 'home'" />
             </ClientOnly>
         </template>
     </Layout>

@@ -81,4 +81,14 @@ const steps = [
   -webkit-text-fill-color: transparent;
   letter-spacing: -0.5px;
 }
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 24px;
+    margin-bottom: 40px;
+  }
+  .wrapper {
+    padding: 0 16px;
+  }
+}
 </style>

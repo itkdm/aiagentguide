@@ -1,0 +1,20 @@
+﻿
+> aiagentguide@1.0.0 docs:build D:\develop\aiagentguide
+> vitepress build docs
+
+
+  [32m[1mvitepress[22m v1.6.4[39m
+
+node.exe : - building client + server bundles...
+At D:\nodejs\pnpm.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/pnpm/bin/pnpm.cjs" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (- building client + server bundles...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[32m✓[0m building client + server bundles...
+- rendering pages...
+[32m✓[0m rendering pages...
+- generating sitemap...
+[32m✓[0m generating sitemap...
+build complete in 19.65s.

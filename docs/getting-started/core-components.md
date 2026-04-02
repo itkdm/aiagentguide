@@ -1,3 +1,20 @@
+---
+title: Agent 的核心组件
+summary: 拆解 Agent 系统中最常见的核心组件，帮助你理解模型、工具、状态、记忆和执行流程分别在解决什么问题。
+description: "拆解 Agent 系统中的核心组件，帮助你理解模型、工具、状态、记忆和执行流程分别承担什么作用。"
+keywords:
+  - Agent 核心组件
+  - AI Agent 组件
+  - Tool Memory State
+  - Agent 系统设计
+tags:
+  - AI Agent
+  - 核心组件
+  - 工具调用
+  - 状态管理
+author: AI Agent Guide
+---
+
 # Agent 的核心组件
 
 如果把 Agent 只理解成“一个 Prompt 加一个模型”，后面一上手就会卡住。这一篇把最常见的组件拆开，帮助读者理解每一层分别在解决什么问题。

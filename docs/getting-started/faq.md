@@ -1,3 +1,20 @@
+---
+title: AI Agent 入门 FAQ
+summary: 汇总 AI Agent 入门阶段最常反复出现的问题，用短答案快速校准方向，减少在基础判断上来回绕路。
+description: "汇总 AI Agent 入门阶段最常见的问题，用简短清晰的答案帮助你快速校准方向，减少基础判断上的反复绕路。"
+keywords:
+  - AI Agent FAQ
+  - Agent 常见问题
+  - 智能体入门问答
+  - Agent 学习问题
+tags:
+  - AI Agent
+  - FAQ
+  - 入门
+  - 常见问题
+author: AI Agent Guide
+---
+
 # FAQ
 
 这一页集中回答入门阶段最容易反复出现的问题。和正文不同，这里不追求系统展开，而是尽量用短答案把方向先校准。

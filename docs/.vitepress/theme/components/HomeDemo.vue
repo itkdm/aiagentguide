@@ -292,7 +292,17 @@ onMounted(() => {
     border-right: 1px solid rgba(56, 189, 248, 0.1);
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+@media (max-width: 768px) {
+    .editor-pane {
+        padding: 16px;
+        font-size: 12px;
+        border-right: none;
+        border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+    }
 }
 
 .line-numbers {
@@ -425,6 +435,13 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     font-family: 'Fira Code', monospace;
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .terminal-pane {
+        font-size: 12px;
+    }
 }
 
 .terminal-header {
@@ -442,10 +459,18 @@ onMounted(() => {
     font-size: 13px;
     color: #e2e8f0;
     flex: 1;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     background-image: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
     background-size: 100% 2px, 3px 100%;
+}
+
+@media (max-width: 768px) {
+    .terminal-content {
+        padding: 16px;
+        font-size: 11px;
+    }
 }
 
 .term-line {
@@ -500,6 +525,13 @@ onMounted(() => {
 
     50% {
         opacity: 0;
+    }
+}
+
+/* Hide or shrink on mobile to improve UX */
+@media (max-width: 768px) {
+    .home-section.home-demo {
+        display: none;
     }
 }
 </style>

@@ -1,4 +1,18 @@
 ---
+title: Manus
+description: "Manus 是一类强调自主规划、执行和交付结果的通用 AI Agent 产品，适合处理多步骤任务。"
+summary: 介绍 Manus 的产品定位、核心能力、使用方式、订阅结构和适用人群，帮助你快速判断它是否适合自己的任务场景。
+keywords:
+  - Manus
+  - Manus AI
+  - AI Agent 工具
+  - 通用 Agent
+tags:
+  - AI Agent
+  - 工具
+  - Manus
+  - 通用 Agent
+author: AI Agent Guide
 aside: false
 outline: false
 pageClass: tool-detail-page
