@@ -80,7 +80,7 @@ jobs:
         timeout-minutes: 5
         run: |
           rm -rf docs/.vitepress/.temp docs/.vitepress/dist
-          node ./node_modules/vitepress/dist/node/cli.js build docs
+          node ./scripts/build-pages.mjs
 
       - name: Verify build output
         run: |
