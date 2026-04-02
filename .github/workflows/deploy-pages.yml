@@ -77,7 +77,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build site
-        run: pnpm docs:build
+        timeout-minutes: 5
+        run: |
+          rm -rf docs/.vitepress/.temp docs/.vitepress/dist
+          node ./node_modules/vitepress/dist/node/cli.js build docs
+
+      - name: Verify build output
+        run: |
+          test -f docs/.vitepress/dist/index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
