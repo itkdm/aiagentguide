@@ -1,133 +1,139 @@
-# AI Agent Guide
+<p align="center">
+  <h1 align="center">🤖 AI Agent Guide (AI 智能体开发指南)</h1>
+  <p align="center">
+    面向中文开发者的 AI Agent (智能体) 教程、入门指南与实战文档站点。
+  </p>
+  <p align="center">
+    <a href="https://aiagentguide.cn/">🌐 在线阅读 (aiagentguide.cn)</a>
+  </p>
+  <p align="center">
+    <a href="https://aiagentguide.cn/"><img src="https://img.shields.io/badge/website-aiagentguide.cn-0f172a?style=flat-square" alt="Website"></a>
+    <a href="https://vitepress.dev/"><img src="https://img.shields.io/badge/built%20with-VitePress-646cff?style=flat-square" alt="Built with VitePress"></a>
+    <a href="https://github.com/your-org/aiagentguide/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
+  </p>
+</p>
 
-[![Website](https://img.shields.io/badge/website-aiagentguide.cn-0f172a?style=flat-square)](https://aiagentguide.cn/)
-[![Built with VitePress](https://img.shields.io/badge/built%20with-VitePress-646cff?style=flat-square)](https://vitepress.dev/)
+## 🌟 项目简介
 
-面向中文开发者的 AI Agent 教程、AI Agent 入门指南与实战文档。
+这个仓库不是单纯的“工具清单”，而是一个**按照学习路径**组织的结构化文档站点。我们系统性地覆盖了从底层 LLM 原理到上层 AI Agent 应用的完整生命周期，包括：**AI Agent、LLM、RAG、Workflow、多 Agent 协作、工具调用、上下文工程、框架选型与项目落地**等内容。
 
-这个仓库不是单纯的“工具清单”，而是一个按照学习路径组织的文档站点，覆盖 AI Agent、LLM、RAG、Workflow、多 Agent、工具调用、上下文管理、框架选型与项目落地等内容，目标是帮助开发者更系统地理解和构建 AI Agent 应用。
+我们的目标是帮助中文开发者更系统、更透彻地理解并构建 AI Agent 应用。
 
-在线阅读：[https://aiagentguide.cn/](https://aiagentguide.cn/)
+如果你正在搜索寻找以下主题，这个仓库将为你提供极大帮助（这些也是我们的核心内容矩阵）：
 
-如果你在搜索这些主题，这个仓库里的内容会更相关：
+- **基础与概念**：`AI Agent 教程`、`AI 智能体入门`、`什么是 AI Agent`、`大语言模型 (LLM) 应用开发`、`RAG 教程与实践`
+- **原理与机制**：`Workflow 工作流与 Agent 的区别`、`Agentic Workflow 开发`、`Function Calling (工具调用)`、`Agent Memory (上下文记忆)`、`Prompt Engineering 提示词工程`
+- **框架与架构**：`LangChain 教程`、`LangGraph 实践`、`AutoGen 多 Agent 系统`、`CrewAI 框架解析`、`Dify / Coze 智能体搭建`
+- **进阶与落地**：`AI Agent 实战项目`、`Agent 框架对比与技术选型`、`多智能体 (Multi-Agent) 协作系统`、`AI 智能体开发与最佳实践`
 
-- AI Agent 教程
-- AI Agent 入门
-- AI Agent 实战
-- AI Agent 开发
-- LLM 应用开发
-- RAG 教程
-- Workflow 与 Agent 区别
-- LangChain 教程
-- AutoGen 教程
-- 多 Agent 系统
+---
 
-## 为什么做这个项目
+## 🤔 为什么做这个项目？
 
-AI Agent 相关内容增长很快，但常见问题也很明显：
+AI Agent 领域发展迅猛，但也带来了明显的痛点：
+1. **概念混淆**：容易在 Agent、聊天机器人（Chatbot）、工作流（Workflow）、RAG 之间迷失。
+2. **知识碎片化**：听过无数高大上的名词，却难以在脑海中拼凑出完整的技术大图。
+3. **本末倒置**：习惯于直接上手框架和工具（只停留在调用 API 的层面），而不理解底层的 Agent Core Loop 设计逻辑。
 
-- 概念混在一起，容易分不清 Agent、聊天机器人、工作流和 RAG
-- 资料高度碎片化，知道很多名词，却难以形成完整认知
-- 直接追框架和工具，最后会用 API，却不理解背后的设计逻辑
+因此，本项目希望提供一条**扎实、系统、面向实战**的学习路径：**建立评判标准 -> 理解系统原理 -> 掌握框架选型 -> 落地项目实战**。
 
-这个项目希望提供一条更适合中文开发者的学习与实践路径：先建立判断标准，再理解系统原理，最后做框架选型和项目落地。
+---
 
-## 适合谁
+## 🎯 适合哪些读者？
 
-- 想系统入门 AI Agent 的中文开发者
-- 已经看过不少资料，但还缺少完整知识框架的人
-- 准备做 Agent 选型、实战或开源研究的人
+- 👶 **初学者**：想系统、平滑地入门 AI Agent 的中文开发者。
+- 🔍 **进阶者**：看过不少资料与开源项目，但仍缺少全局视野和完整认知框架的人。
+- 🛠️ **实战与布道者**：准备在企业中进行 Agent 选型、落地开发，或热衷于研究开源生态的人。
 
-## 你能在这里看到什么
+---
 
-- AI Agent 基础概念：什么是 Agent、什么时候该用 Agent、Agent 与聊天机器人、Workflow、RAG 的区别
-- AI Agent 系统原理：Agent 循环、工具调用、记忆、上下文工程、多 Agent 协作、可靠性与安全
-- AI Agent 框架与生态：LangChain、LangGraph、AutoGen、CrewAI、Dify、Coze、n8n 等框架或平台的定位与用法
-- AI Agent 项目实践：从最小可运行案例到更接近生产系统的设计思路
-- LLM 与 RAG 知识体系：帮助你把 AI Agent 放回完整的 LLM 应用工程语境中理解
+## 🗺️ 全景内容大纲
 
-## 内容地图
+| 模块 | 核心内容说明 |
+| :--- | :--- |
+| **💡 入门模块** | 认识 Agent 的本质、典型案例、适用边界以及常见的认知误区。 |
+| **⚙️ 原理模块** | 深入剖析 Agent 循环、工具调用（Function Calling）、上下文管理、多 Agent 架构及可靠性工程。 |
+| **🛠️ 框架模块** | 主流 Agent 框架（如 LangChain、LangGraph、AutoGen、CrewAI 等）的定位差异、适用场景与选型。 |
+| **🚀 实战模块** | 手把手教你从最小的 PoC（可运行案例）演进到完整的生产级工作流搭建。 |
+| **📂 项目推荐** | 深度拆解值得研究的 AI Agent 精品开源项目，提供源码学习入口。 |
+| **🧰 工具导航** | 盘点当前热门平台产品与底层开发工具。 |
+| **📰 行业资讯** | 过滤噪音，只做对学习路线、开发实践真正有指导价值的更新解读。 |
+| **📚 资源聚合** | 优质的官方文档与硬核外部阅读资料索引。 |
+| **🧠 LLM/RAG** | 完整涵盖大模型与 RAG 体系，帮你在真实的 LLM 应用级语境下理解 Agent。 |
 
-| 栏目 | 内容说明 |
-| --- | --- |
-| 入门 | 认识 Agent、典型案例、适用场景、常见误区 |
-| 原理 | Agent 循环、工具调用、上下文管理、多 Agent 与工程机制 |
-| 框架 | 主流 Agent 框架的定位差异、适用场景与选型思路 |
-| 实战 | 从最小可运行案例到更完整工作流的搭建过程 |
-| 项目 | 值得研究的 AI Agent 开源项目与学习入口 |
-| 工具 | 热门平台、产品与开发工具导航 |
-| 资讯 | 对学习路线和实践方式真正有影响的更新解读 |
-| 资源 | 官方文档与外部资料入口 |
+> **💡 建议阅读顺序：**
+> `入门 -> 原理 -> 框架 -> 实战 -> 工具 / 项目 / 资讯（按需查阅）`
+> *如果刚开始接触，建议先建立核心认知与判断标准，再做技术选型，这比无脑追热点框架更稳健。*
 
-## 推荐阅读顺序
+---
 
-`入门 -> 原理 -> 框架 -> 实战 -> 工具 / 项目 / 资讯（按需查阅）`
+## 💻 快速开始
 
-如果你刚开始接触 AI Agent，建议先建立判断标准，再做技术选型。这样通常会比直接追热门框架更稳，也更容易形成自己的方法论。
-
-如果你是通过搜索来到这个仓库，推荐先从这些主题开始：
-
-- 想了解 AI Agent 是什么：阅读“入门”
-- 想理解 Agent、Workflow、RAG 的关系：阅读“入门”与“原理”
-- 想看 LangChain、AutoGen 等框架怎么选：阅读“框架”
-- 想直接看 AI Agent 项目实战：阅读“实战”与“项目”
-
-## 快速开始
+本项目站点使用 [VitePress](https://vitepress.dev/) 强力驱动，可轻松在本地运行进行预览及开发。
 
 ### 环境要求
 
-- Node.js 20+
-- pnpm 10+
+- **Node.js**: `20+`
+- **包管理工具**: `pnpm 10+`
 
-### 安装依赖
+### 开发指令
 
 ```bash
+# 1. 安装项目依赖
 pnpm install
-```
 
-### 本地开发
-
-```bash
+# 2. 启动本地开发服务器（支持热更新）
 pnpm docs:dev
-```
 
-### 构建静态站点
-
-```bash
+# 3. 生产环境静态站点构建
 pnpm docs:build
-```
 
-### 本地预览构建结果
-
-```bash
+# 4. 本地预览构建后的结果
 pnpm docs:preview
 ```
 
-## 项目结构
+---
+
+## 📂 项目结构
 
 ```text
-.
-├─ docs/                  # VitePress 站点内容
-│  ├─ .vitepress/         # 站点配置、主题与 SEO
-│  ├─ public/             # 静态资源
-│  ├─ getting-started/    # 入门
-│  ├─ principles/         # 原理
-│  ├─ frameworks/         # 框架
-│  ├─ tutorials/          # 实战
-│  ├─ projects/           # 项目
-│  ├─ tools/              # 工具
-│  ├─ news/               # 资讯
-│  └─ resources/          # 资源导航
-├─ content-plans/         # 内容规划，不直接展示到站点
-├─ .github/workflows/     # GitHub Actions 部署配置
-└─ package.json           # 本地开发脚本
+aiagentguide/
+├─ docs/                  # 📚 VitePress 核心站点内容
+│  ├─ .vitepress/         # VitePress 站点配置、主题与 SEO
+│  ├─ public/             # 静态资源 (图片、默认配置等)
+│  ├─ getting-started/    # 【入】入门指南
+│  ├─ principles/         # 【原】系统原理
+│  ├─ frameworks/         # 【框】框架选型
+│  ├─ tutorials/          # 【实】实战教程
+│  ├─ projects/           # 【项】开源项目解读
+│  ├─ tools/              # 【工】工具导航
+│  ├─ llm/                # 【底】LLM 相关知识体系
+│  ├─ rag/                # 【底】RAG 相关知识体系
+│  ├─ interviews/         # 常见面试与问答
+│  └─ resources/          # 经典资源汇总
+├─ content-plans/         # 内部规划文档（并不直接通过路由对外展示）
+├─ scripts/               # 自动化构建与辅助脚本
+├─ .github/workflows/     # CI/CD (GitHub Actions 部署配置)
+└─ package.json           # 本地依赖及运行脚本
 ```
 
-## 贡献方式
+---
 
-欢迎通过 Issue 或 PR 参与这个项目，例如：
+## 🤝 参与贡献
 
-- 修正文案错误、失效链接和页面结构问题
-- 补充新的 Agent 原理、框架、项目或工具内容
-- 优化教程顺序、学习路径和术语解释
-- 改进 VitePress 主题、SEO 和站点体验
+每一个开源项目都离不开社区的共同维护，我们非常欢迎你通过 `Issue` 或 `Pull Request` 的方式参与进来！
+
+你可以做什么：
+- 🐛 修复错别字、文案语病或已失效的外部链接。
+- 📝 补充最新的 Agent 原理、优质框架、优秀开源项目。
+- 🏗️ 优化教程结构、学习路径和专业术语解释。
+- 🎨 改进 VitePress 主题、增强站点交互体验或完善 SEO。
+
+*注：站点内容编写及参数说明可参考项目根目录的 [CONTENT_README.md](./CONTENT_README.md)。*
+
+---
+
+<p align="center">
+  如果这个项目对你有帮助，请考虑给它一个 ⭐️ Star！
+</p>
+
