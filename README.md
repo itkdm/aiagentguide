@@ -3,11 +3,24 @@
 [![Website](https://img.shields.io/badge/website-aiagentguide.cn-0f172a?style=flat-square)](https://aiagentguide.cn/)
 [![Built with VitePress](https://img.shields.io/badge/built%20with-VitePress-646cff?style=flat-square)](https://vitepress.dev/)
 
-面向中文开发者的 AI Agent 教程与实战指南。
+面向中文开发者的 AI Agent 教程、AI Agent 入门指南与实战文档。
 
-这个仓库不是单纯的“工具清单”，而是一个按照学习路径组织的文档站点，覆盖从概念建立、原理拆解、框架选型到实战落地的完整过程，目标是帮助开发者更系统地理解和构建 AI Agent。
+这个仓库不是单纯的“工具清单”，而是一个按照学习路径组织的文档站点，覆盖 AI Agent、LLM、RAG、Workflow、多 Agent、工具调用、上下文管理、框架选型与项目落地等内容，目标是帮助开发者更系统地理解和构建 AI Agent 应用。
 
 在线阅读：[https://aiagentguide.cn/](https://aiagentguide.cn/)
+
+如果你在搜索这些主题，这个仓库里的内容会更相关：
+
+- AI Agent 教程
+- AI Agent 入门
+- AI Agent 实战
+- AI Agent 开发
+- LLM 应用开发
+- RAG 教程
+- Workflow 与 Agent 区别
+- LangChain 教程
+- AutoGen 教程
+- 多 Agent 系统
 
 ## 为什么做这个项目
 
@@ -24,6 +37,14 @@ AI Agent 相关内容增长很快，但常见问题也很明显：
 - 想系统入门 AI Agent 的中文开发者
 - 已经看过不少资料，但还缺少完整知识框架的人
 - 准备做 Agent 选型、实战或开源研究的人
+
+## 你能在这里看到什么
+
+- AI Agent 基础概念：什么是 Agent、什么时候该用 Agent、Agent 与聊天机器人、Workflow、RAG 的区别
+- AI Agent 系统原理：Agent 循环、工具调用、记忆、上下文工程、多 Agent 协作、可靠性与安全
+- AI Agent 框架与生态：LangChain、LangGraph、AutoGen、CrewAI、Dify、Coze、n8n 等框架或平台的定位与用法
+- AI Agent 项目实践：从最小可运行案例到更接近生产系统的设计思路
+- LLM 与 RAG 知识体系：帮助你把 AI Agent 放回完整的 LLM 应用工程语境中理解
 
 ## 内容地图
 
@@ -43,6 +64,13 @@ AI Agent 相关内容增长很快，但常见问题也很明显：
 `入门 -> 原理 -> 框架 -> 实战 -> 工具 / 项目 / 资讯（按需查阅）`
 
 如果你刚开始接触 AI Agent，建议先建立判断标准，再做技术选型。这样通常会比直接追热门框架更稳，也更容易形成自己的方法论。
+
+如果你是通过搜索来到这个仓库，推荐先从这些主题开始：
+
+- 想了解 AI Agent 是什么：阅读“入门”
+- 想理解 Agent、Workflow、RAG 的关系：阅读“入门”与“原理”
+- 想看 LangChain、AutoGen 等框架怎么选：阅读“框架”
+- 想直接看 AI Agent 项目实战：阅读“实战”与“项目”
 
 ## 快速开始
 
