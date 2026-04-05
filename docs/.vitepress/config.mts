@@ -1,4 +1,4 @@
-﻿import fs from 'node:fs'
+import fs from 'node:fs'
 import path from 'node:path'
 
 import { defineConfig } from 'vitepress'
@@ -45,7 +45,28 @@ export default defineConfig({
   description: siteDescription,
   head: [
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo-agent-loop.svg' }],
-    ['meta', { name: 'theme-color', content: '#0f172a' }]
+    ['meta', { name: 'theme-color', content: '#0f172a' }],
+    [
+      'meta',
+      {
+        name: 'google-site-verification',
+        content: 'CMdmzlOG4rakUeMM0QHuyf3h3ai9pTQgXiJJLJ2DLEY'
+      }
+    ],
+    [
+      'meta',
+      {
+        name: 'baidu-site-verification',
+        content: 'codeva-bKHrKtzpdD'
+      }
+    ],
+    [
+      'meta',
+      {
+        name: 'msvalidate.01',
+        content: '8E7564BB20200ACA8F17F056DFFD9183'
+      }
+    ]
   ],
   sitemap: siteUrl
     ? {

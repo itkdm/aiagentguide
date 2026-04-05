@@ -85,6 +85,8 @@ jobs:
       - name: Verify build output
         run: |
           test -f docs/.vitepress/dist/index.html
+          test -f docs/.vitepress/dist/robots.txt
+          test -f docs/.vitepress/dist/sitemap.xml
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
