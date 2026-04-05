@@ -58,7 +58,7 @@ export default defineConfig({
       'meta',
       {
         name: 'baidu-site-verification',
-        content: 'codeva-bKHrKtzpdD'
+        content: 'codeva-UQBDbSCAOW'
       }
     ],
     [
