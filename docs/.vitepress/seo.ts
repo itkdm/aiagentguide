@@ -590,3 +590,28 @@ export function buildRobotsTxt(siteUrl?: string) {
 
   return lines.join('\n')
 }
+
+function escapeXml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+export function buildSitemapXml(pages: string[], siteUrl: string, cleanUrls = false) {
+  const urls = pages
+    .filter((page) => page !== '404.md')
+    .map((page) => {
+      const route = getPageRoute(page, cleanUrls)
+      return `<url><loc>${escapeXml(toAbsoluteUrl(siteUrl, route))}</loc></url>`
+    })
+
+  return [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ...urls,
+    '</urlset>'
+  ].join('')
+}

@@ -6,6 +6,7 @@ import { useInteractiveDiagramMarkdown } from './markdown/interactive-diagrams'
 
 import {
   buildRobotsTxt,
+  buildSitemapXml,
   createSeoHead,
   getPageLastModified,
   readPageSource,
@@ -68,14 +69,6 @@ export default defineConfig({
       }
     ]
   ],
-  sitemap: siteUrl
-    ? {
-        hostname: siteUrl,
-        transformItems(items) {
-          return items.filter((item) => !item.url.endsWith('/404.html'))
-        }
-      }
-    : undefined,
   transformPageData(pageData, { siteConfig }) {
     const source = readPageSource(siteConfig.srcDir, pageData)
     const description = resolvePageDescription(pageData, source, siteDescription)
@@ -97,6 +90,14 @@ export default defineConfig({
   },
   buildEnd(siteConfig) {
     fs.writeFileSync(path.join(siteConfig.outDir, 'robots.txt'), buildRobotsTxt(siteUrl), 'utf8')
+
+    if (siteUrl) {
+      fs.writeFileSync(
+        path.join(siteConfig.outDir, 'sitemap.xml'),
+        buildSitemapXml(siteConfig.pages, siteUrl, siteConfig.cleanUrls),
+        'utf8'
+      )
+    }
 
     if (siteUrl) {
       fs.writeFileSync(path.join(siteConfig.outDir, 'CNAME'), new URL(siteUrl).hostname, 'utf8')
