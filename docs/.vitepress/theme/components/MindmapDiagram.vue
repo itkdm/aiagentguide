@@ -27,8 +27,10 @@ const props = defineProps<{
 const { isDark } = useData()
 
 const stageRef = ref<HTMLDivElement | null>(null)
+const canvasRef = ref<HTMLDivElement | null>(null)
 const svgRef = ref<SVGSVGElement | null>(null)
 const previewStageRef = ref<HTMLDivElement | null>(null)
+const previewCanvasRef = ref<HTMLDivElement | null>(null)
 const previewSvgRef = ref<SVGSVGElement | null>(null)
 const loading = ref(true)
 const error = ref('')
@@ -36,8 +38,14 @@ const nodes = ref<MindmapNode[]>([])
 const edges = ref<Edge[]>([])
 const viewBox = ref('0 0 1200 720')
 
-const viewport = useSvgViewport(stageRef, svgRef)
-const previewViewport = useSvgViewport(previewStageRef, previewSvgRef)
+const viewport = useSvgViewport(stageRef, svgRef, {
+  minPanRatio: 0.16,
+  viewportRef: canvasRef
+})
+const previewViewport = useSvgViewport(previewStageRef, previewSvgRef, {
+  minPanRatio: 0.12,
+  viewportRef: previewCanvasRef
+})
 const preview = usePreviewOverlay()
 
 function waitForPaint() {
@@ -193,10 +201,12 @@ async function renderMindmap() {
     edges.value = layout.edges
     viewBox.value = layout.viewBox
     await nextTick()
+    viewport.refresh()
     viewport.reset()
 
     if (preview.isOpen.value) {
       await waitForPaint()
+      previewViewport.refresh()
       previewViewport.reset()
     }
   } catch (err) {
@@ -241,6 +251,7 @@ watch(
 
     await nextTick()
     await waitForPaint()
+    previewViewport.refresh()
     previewViewport.reset()
   }
 )
@@ -250,7 +261,7 @@ watch(
   <div class="interactive-diagram-card mindmap-diagram-card">
     <div ref="stageRef" class="interactive-diagram-stage mindmap-diagram-stage"
       :class="{ dragging: viewport.dragging.value }">
-      <div class="interactive-diagram-canvas mindmap-diagram-canvas">
+      <div ref="canvasRef" class="interactive-diagram-canvas mindmap-diagram-canvas">
         <svg ref="svgRef" class="mindmap-svg" :viewBox="viewBox" xmlns="http://www.w3.org/2000/svg">
           <path v-for="(edge, index) in edges" :key="`edge-${index}`" :d="edgePath(edge)" class="mindmap-edge" />
           <g v-for="node in renderedNodes" :key="node.id">
@@ -266,7 +277,7 @@ watch(
       </div>
 
       <div class="interactive-diagram-toolbar mindmap-diagram-toolbar" @pointerdown.stop>
-        <button type="button" class="tool-btn" @click="preview.open" title="Fullscreen Preview"
+        <button type="button" class="tool-btn" @click.stop="preview.open" title="Fullscreen Preview"
           aria-label="Fullscreen Preview">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 3 21 3 21 9"></polyline>
@@ -275,18 +286,18 @@ watch(
             <line x1="3" y1="21" x2="10" y2="14"></line>
           </svg>
         </button>
-        <button type="button" class="tool-btn" @click="viewport.zoomOut" title="Zoom Out">
+        <button type="button" class="tool-btn" @click.stop="viewport.zoomOut" title="Zoom Out">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
         </button>
-        <button type="button" class="tool-btn" @click="viewport.reset" title="Reset View">
+        <button type="button" class="tool-btn" @click.stop="viewport.reset" title="Reset View">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <button type="button" class="tool-btn" @click="viewport.zoomIn" title="Zoom In">
+        <button type="button" class="tool-btn" @click.stop="viewport.zoomIn" title="Zoom In">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -304,8 +315,8 @@ watch(
   </div>
 
   <Teleport to="body">
-    <div v-if="preview.isOpen.value" class="interactive-diagram-lightbox" role="dialog" aria-modal="true"
-      aria-label="Diagram preview" @click.self="preview.close">
+    <div v-if="preview.isOpen.value" class="interactive-diagram-lightbox mindmap-diagram-lightbox" role="dialog"
+      aria-modal="true" aria-label="Diagram preview" @pointerdown.self="preview.close">
       <div class="interactive-diagram-lightbox-shell mindmap-diagram-lightbox-shell">
         <button type="button" class="interactive-diagram-lightbox-close" aria-label="Close preview"
           @click="preview.close">
@@ -315,7 +326,7 @@ watch(
         <div ref="previewStageRef"
           class="interactive-diagram-stage interactive-diagram-stage-preview mindmap-diagram-stage mindmap-diagram-stage-preview"
           :class="{ dragging: previewViewport.dragging.value }">
-          <div
+          <div ref="previewCanvasRef"
             class="interactive-diagram-canvas interactive-diagram-canvas-preview mindmap-diagram-canvas mindmap-diagram-canvas-preview">
             <svg ref="previewSvgRef" class="mindmap-svg" :viewBox="viewBox" xmlns="http://www.w3.org/2000/svg">
               <path v-for="(edge, index) in edges" :key="`preview-edge-${index}`" :d="edgePath(edge)"
@@ -335,7 +346,7 @@ watch(
           <div
             class="interactive-diagram-toolbar interactive-diagram-toolbar-preview mindmap-diagram-toolbar mindmap-diagram-toolbar-preview"
             @pointerdown.stop>
-            <button type="button" class="tool-btn" @click="preview.close" title="Exit Fullscreen"
+            <button type="button" class="tool-btn" @click.stop="preview.close" title="Exit Fullscreen"
               aria-label="Exit Fullscreen">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="4 14 10 14 10 20"></polyline>
@@ -344,18 +355,18 @@ watch(
                 <line x1="3" y1="21" x2="10" y2="14"></line>
               </svg>
             </button>
-            <button type="button" class="tool-btn" @click="previewViewport.zoomOut" title="Zoom Out">
+            <button type="button" class="tool-btn" @click.stop="previewViewport.zoomOut" title="Zoom Out">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
             </button>
-            <button type="button" class="tool-btn" @click="previewViewport.fit" title="Reset View">
+            <button type="button" class="tool-btn" @click.stop="previewViewport.reset" title="Reset View">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="11" cy="11" r="8"></circle>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
               </svg>
             </button>
-            <button type="button" class="tool-btn" @click="previewViewport.zoomIn" title="Zoom In">
+            <button type="button" class="tool-btn" @click.stop="previewViewport.zoomIn" title="Zoom In">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>

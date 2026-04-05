@@ -17,6 +17,7 @@ const previewCanvasRef = ref<HTMLDivElement | null>(null)
 const previewSvgRef = ref<SVGSVGElement | null>(null)
 const loading = ref(true)
 const error = ref('')
+const pendingPreviewOpen = ref(false)
 
 let mermaidModulePromise: Promise<any> | null = null
 
@@ -27,9 +28,25 @@ function getMermaidModule() {
     return mermaidModulePromise
 }
 
-const viewport = useSvgViewport(stageRef, svgRef)
-const previewViewport = useSvgViewport(previewStageRef, previewSvgRef)
+const viewport = useSvgViewport(stageRef, svgRef, { viewportRef: canvasRef })
+const previewViewport = useSvgViewport(previewStageRef, previewSvgRef, { viewportRef: previewCanvasRef })
 const preview = usePreviewOverlay()
+
+function openPreview() {
+    // Queue preview open if SVG is not ready yet.
+    if (!svgRef.value) {
+        pendingPreviewOpen.value = true
+
+        if (!loading.value) {
+            void renderDiagram()
+        }
+        return
+    }
+
+    window.setTimeout(() => {
+        preview.open()
+    }, 0)
+}
 
 function waitForPaint() {
     return new Promise<void>((resolve) => {
@@ -95,10 +112,15 @@ async function renderDiagram() {
         await nextTick()
         viewport.reset()
 
+        if (pendingPreviewOpen.value && !preview.isOpen.value) {
+            pendingPreviewOpen.value = false
+            preview.open()
+        }
+
         if (preview.isOpen.value && previewCanvasRef.value) {
             syncPreviewFromMainSvg()
             await waitForPaint()
-            previewViewport.fit()
+            previewViewport.reset()
         }
     } catch (err) {
         error.value = err instanceof Error ? err.message : 'Mermaid render failed.'
@@ -124,6 +146,15 @@ watch([() => props.code, isDark], () => {
     void renderDiagram()
 })
 
+watch(svgRef, (svg) => {
+    if (!svg || !pendingPreviewOpen.value || preview.isOpen.value) {
+        return
+    }
+
+    pendingPreviewOpen.value = false
+    preview.open()
+})
+
 watch(
     [() => preview.isOpen.value, previewCanvasRef],
     async ([open, previewCanvas]) => {
@@ -131,10 +162,15 @@ watch(
             return
         }
 
+        if (!svgRef.value) {
+            pendingPreviewOpen.value = true
+            return
+        }
+
         await nextTick()
         syncPreviewFromMainSvg()
         await waitForPaint()
-        previewViewport.fit()
+        previewViewport.reset()
     },
     { flush: 'post' }
 )
@@ -147,7 +183,7 @@ watch(
             <div ref="canvasRef" class="interactive-diagram-canvas mermaid-diagram-canvas" />
 
             <div class="interactive-diagram-toolbar mermaid-diagram-toolbar" @pointerdown.stop>
-                <button type="button" class="tool-btn" @click="preview.open" title="Fullscreen Preview"
+                <button type="button" class="tool-btn" @click.stop.prevent="openPreview" title="Fullscreen Preview"
                     aria-label="Fullscreen Preview">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="15 3 21 3 21 9"></polyline>
@@ -156,18 +192,18 @@ watch(
                         <line x1="3" y1="21" x2="10" y2="14"></line>
                     </svg>
                 </button>
-                <button type="button" class="tool-btn" @click="viewport.zoomOut" title="Zoom Out">
+                <button type="button" class="tool-btn" @click.stop="viewport.zoomOut" title="Zoom Out">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
                 </button>
-                <button type="button" class="tool-btn" @click="viewport.reset" title="Reset View">
+                <button type="button" class="tool-btn" @click.stop="viewport.reset" title="Reset View">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                 </button>
-                <button type="button" class="tool-btn" @click="viewport.zoomIn" title="Zoom In">
+                <button type="button" class="tool-btn" @click.stop="viewport.zoomIn" title="Zoom In">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="12" y1="5" x2="12" y2="19"></line>
                         <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -185,8 +221,8 @@ watch(
     </div>
 
     <Teleport to="body">
-        <div v-if="preview.isOpen.value" class="interactive-diagram-lightbox" role="dialog" aria-modal="true"
-            aria-label="Diagram preview" @click.self="preview.close">
+        <div v-if="preview.isOpen.value" class="interactive-diagram-lightbox mermaid-diagram-lightbox" role="dialog"
+            aria-modal="true" aria-label="Diagram preview" @pointerdown.self="preview.close()">
             <div class="interactive-diagram-lightbox-shell mermaid-diagram-lightbox-shell">
                 <button type="button" class="interactive-diagram-lightbox-close" aria-label="Close preview"
                     @click="preview.close">
@@ -201,7 +237,7 @@ watch(
 
                     <div class="interactive-diagram-toolbar interactive-diagram-toolbar-preview mermaid-diagram-toolbar mermaid-diagram-toolbar-preview"
                         @pointerdown.stop>
-                        <button type="button" class="tool-btn" @click="preview.close" title="Exit Fullscreen"
+                        <button type="button" class="tool-btn" @click.stop="preview.close" title="Exit Fullscreen"
                             aria-label="Exit Fullscreen">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
@@ -211,20 +247,20 @@ watch(
                                 <line x1="3" y1="21" x2="10" y2="14"></line>
                             </svg>
                         </button>
-                        <button type="button" class="tool-btn" @click="previewViewport.zoomOut" title="Zoom Out">
+                        <button type="button" class="tool-btn" @click.stop="previewViewport.zoomOut" title="Zoom Out">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                             </svg>
                         </button>
-                        <button type="button" class="tool-btn" @click="previewViewport.fit" title="Reset View">
+                        <button type="button" class="tool-btn" @click.stop="previewViewport.reset" title="Reset View">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             </svg>
                         </button>
-                        <button type="button" class="tool-btn" @click="previewViewport.zoomIn" title="Zoom In">
+                        <button type="button" class="tool-btn" @click.stop="previewViewport.zoomIn" title="Zoom In">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
                                 <line x1="12" y1="5" x2="12" y2="19"></line>

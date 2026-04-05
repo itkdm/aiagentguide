@@ -1,44 +1,28 @@
 ---
-title: AI Agent 面试题库
-summary: 面向读者整理 AI Agent、LLM、RAG、Prompt 与工程化常见面试题，适合系统复习和查漏补缺。
+title: 面试
+summary: 用于整理 AI Agent 方向的面试相关内容，当前以真实面试案例为主，方便你熟悉提问方式和追问节奏。
 keywords:
   - AI Agent 面试
-  - LLM 面试题
-  - RAG 面试题
-  - Prompt 面试题
+  - AI Agent 面试
+  - Agent 面经
 tags:
   - AI Agent
   - 面试
-  - 题库
+  - 案例
 author: AI Agent Guide
-description: "面向读者整理 AI Agent、LLM、RAG、Prompt 与工程化常见面试题，适合系统复习和查漏补缺。"
+description: "用于整理 AI Agent 方向的面试相关内容，当前以真实面试案例为主，方便你熟悉提问方式和追问节奏。"
 ---
 
-# 面试题库
+# 面试
 
-这个栏目用于系统整理 AI Agent 相关高频面试题，适合用来复习基础概念、搭建知识框架，以及准备项目问答。
+这里会整理 AI Agent 方向的面试相关内容，帮助你熟悉真实提问方式、追问路径和项目表达思路。当前这一栏先以面试案例为主，方便你从完整语境里理解一轮面试通常会怎么展开。
 
-## 适合怎么用
+## 适合怎么阅读
 
-- 如果你刚开始准备，先从 [LLM](./llm/) 和 [RAG](./rag/) 看起，建立基础框架
-- 如果你已经做过项目，再看 [Agent](./agent/) 和 [工程化](./engineering/) ，补系统设计与落地能力
-- 如果你想提升表达质量，可以结合 [Prompt](./prompt/) 和 [答题模板](./question-template) 一起练习
-- 如果你想看真实问法和项目语境，可以阅读 [面试案例](./experiences/)
+- 想先感受真实提问方式，可以直接从具体案例开始看
+- 想做复盘，可以重点关注每组问题之间的前后关系和追问路径
+- 想练表达，可以把案例里的问题整理成自己的回答提纲，按顺序反复演练
 
-## 推荐复习顺序
+## 当前内容
 
-1. LLM
-2. RAG
-3. Agent
-4. Prompt
-5. 工程化
-
-## 当前目录
-
-- [答题模板](./question-template)
-- [LLM](./llm/)
-- [RAG](./rag/)
-- [Agent](./agent/)
-- [Prompt](./prompt/)
-- [工程化](./engineering/)
 - [面试案例](./experiences/)

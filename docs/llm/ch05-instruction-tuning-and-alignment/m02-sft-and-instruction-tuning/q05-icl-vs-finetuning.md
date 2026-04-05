@@ -1,0 +1,8 @@
+---
+title: 5.2.5 In-Context Learning 和微调分别适合解决什么问题？
+summary: 围绕“In-Context Learning 和微调分别适合解决什么问题”建立基础理解。
+---
+
+# 5.2.5 In-Context Learning 和微调分别适合解决什么问题？
+
+这篇内容会围绕“In-Context Learning 和微调分别适合解决什么问题”展开，帮助你先建立清晰的基础认识，再逐步理解它在 LLM 体系中的作用、边界和常见实践方式。

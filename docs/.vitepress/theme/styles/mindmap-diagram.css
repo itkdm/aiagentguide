@@ -6,16 +6,52 @@
 }
 
 .vp-doc .mindmap-diagram-stage {
+  position: relative;
+  min-height: 440px;
   border: 0;
   border-radius: 20px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
   background: transparent;
 }
 
+.vp-doc .mindmap-diagram-stage.dragging {
+  cursor: grabbing;
+}
+
 .vp-doc .mindmap-diagram-canvas {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 440px;
+  width: 100%;
   padding-top: 72px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  overflow: hidden;
+}
+
+.vp-doc .mindmap-diagram-canvas > .mindmap-svg,
+.vp-doc .mindmap-diagram-canvas > svg {
+  display: block;
+  width: min(100%, 1280px);
+  height: auto;
+  max-width: none;
+  transition: none;
+  will-change: auto;
+  text-rendering: geometricPrecision;
+  shape-rendering: geometricPrecision;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .vp-doc .mindmap-diagram-toolbar {
+  position: absolute;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
   top: 14px;
   right: 14px;
   padding: 0;
@@ -28,12 +64,24 @@
 }
 
 .vp-doc .mindmap-diagram-toolbar .tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 30px;
   height: 30px;
   border: 0;
   border-radius: 6px;
   background: transparent;
   box-shadow: none;
+  line-height: 1;
+}
+
+.vp-doc .mindmap-diagram-toolbar .tool-btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  pointer-events: none;
 }
 
 .vp-doc .mindmap-diagram-toolbar .tool-btn:hover {
@@ -50,11 +98,13 @@
   stroke-width: 2.4;
   stroke-linecap: round;
   shape-rendering: geometricPrecision;
+  pointer-events: none;
 }
 
 .vp-doc .mindmap-node-rect {
   filter: none;
   shape-rendering: geometricPrecision;
+  pointer-events: none;
 }
 
 .vp-doc .mindmap-node-text {
@@ -62,10 +112,22 @@
   font-weight: 600;
   dominant-baseline: middle;
   text-rendering: geometricPrecision;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
 .mindmap-diagram-lightbox-shell {
   width: min(1560px, 100%);
+}
+
+.mindmap-diagram-lightbox {
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.dark .mindmap-diagram-lightbox {
+  background: rgba(2, 6, 23, 0.8);
 }
 
 .interactive-diagram-lightbox .mindmap-diagram-stage {
@@ -102,6 +164,8 @@
   will-change: auto;
   text-rendering: geometricPrecision;
   shape-rendering: geometricPrecision;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .interactive-diagram-lightbox .mindmap-edge {
@@ -110,11 +174,13 @@
   stroke-width: 2.4;
   stroke-linecap: round;
   shape-rendering: geometricPrecision;
+  pointer-events: none;
 }
 
 .interactive-diagram-lightbox .mindmap-node-rect {
   filter: none;
   shape-rendering: geometricPrecision;
+  pointer-events: none;
 }
 
 .interactive-diagram-lightbox .mindmap-node-text {
@@ -122,6 +188,9 @@
   font-weight: 600;
   dominant-baseline: middle;
   text-rendering: geometricPrecision;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
 .interactive-diagram-lightbox .mindmap-diagram-toolbar {
