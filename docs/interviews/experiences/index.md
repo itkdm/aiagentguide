@@ -1,4 +1,4 @@
----
+﻿---
 title: 面试案例
 summary: 按一轮面试中的连续提问整理案例，方便你按真实语境复习和模拟回答。
 keywords:
@@ -25,3 +25,8 @@ description: "按一轮面试中的连续提问整理案例，方便你按真实
 ## 当前案例
 
 - [AI Agent 二面题目](./niuke-agent-second-round-sample)
+- [某小厂 Agent 面经分享](./niuke-small-company-agent-experience)
+- [阿里淘天 AI Agent 二面面经分享](./niuke-taotian-agent-second-round-experience)
+- [大模型 Agent 校招面经 - 阿里淘天](./niuke-taotian-campus-agent-experience)
+- [A厂 Agent 开发一面面经题目整理](./a-factory-agent-first-round-experience)
+
