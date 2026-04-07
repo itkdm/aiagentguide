@@ -128,7 +128,7 @@ export default defineConfig({
     ],
     footer: {
       message:
-        'AI Agent 实战指南 · <a href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">豫ICP备2025137611号-5</a> · <a href="https://aiagentguide.cn/sitemap.xml" target="_blank" rel="noreferrer">sitemap.xml</a>',
+        '<span class="footer-brand">AI Agent 实战指南</span><span class="footer-sep">·</span><a class="footer-link" href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">豫ICP备2025137611号-5</a><span class="footer-sep">·</span><a class="footer-link" href="https://aiagentguide.cn/sitemap.xml" target="_blank" rel="noreferrer">sitemap.xml</a><span class="footer-sep">·</span><span class="footer-contact">有问题或合作欢迎联系</span><a class="footer-link" href="mailto:hello@aiagentguide.cn">hello@aiagentguide.cn</a>',
       copyright: 'Copyright © 2026 AI Agent Guide'
     },
     sidebar: {
