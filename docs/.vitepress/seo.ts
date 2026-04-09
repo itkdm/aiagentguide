@@ -1,4 +1,4 @@
-import fs from 'node:fs'
+﻿import fs from 'node:fs'
 import path from 'node:path'
 
 import type { HeadConfig, PageData } from 'vitepress'
@@ -138,7 +138,7 @@ function truncateDescription(source: string, maxLength = DESCRIPTION_MAX_LENGTH)
     return source
   }
 
-  return `${source.slice(0, maxLength - 1).trimEnd()}…`
+  return source.slice(0, maxLength - 1).trimEnd() + '...'
 }
 
 function getCandidateBlocks(source: string) {
@@ -182,7 +182,7 @@ function resolvePlainTitle(pageData: PageData, siteTitle: string) {
 }
 
 function resolveDisplayTitle(pageTitle: string, siteTitle: string) {
-  return pageTitle === siteTitle ? siteTitle : `${pageTitle} | ${siteTitle}`
+  return pageTitle === siteTitle ? siteTitle : pageTitle + ' | ' + siteTitle
 }
 
 function getPageRoute(relativePath: string, cleanUrls = false) {
@@ -193,7 +193,8 @@ function getPageRoute(relativePath: string, cleanUrls = false) {
   }
 
   if (normalizedPath.endsWith('/index.md')) {
-    return normalizedPath.slice(0, -'index.md'.length)
+    const folderPath = normalizedPath.slice(0, -'index.md'.length)
+    return cleanUrls ? folderPath : folderPath + 'index.html'
   }
 
   if (cleanUrls) {
@@ -252,12 +253,11 @@ function buildBreadcrumbs(pageData: PageData, siteUrl: string, currentTitle: str
 
   segments.forEach((segment, index) => {
     const isLastSegment = index === segments.length - 1
-    const isIndexPage = pageData.relativePath.endsWith('/index.md')
-    const segmentRoute = isLastSegment && !isIndexPage
+    const segmentRoute = isLastSegment
       ? getPageRoute(pageData.relativePath, cleanUrls)
-      : `${currentRoute}${segment}/`
+      : currentRoute + segment + '/index.html'
 
-    currentRoute = `${currentRoute}${segment}/`
+    currentRoute = currentRoute + segment + '/'
 
     breadcrumbs.push({
       '@type': 'ListItem',
@@ -615,3 +615,7 @@ export function buildSitemapXml(pages: string[], siteUrl: string, cleanUrls = fa
     '</urlset>'
   ].join('')
 }
+
+
+
+

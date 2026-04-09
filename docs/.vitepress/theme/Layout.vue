@@ -1,15 +1,17 @@
-<script setup>
+﻿<script setup>
 import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
 import HomeParticles from './components/HomeParticles.vue'
 import HomeTypewriter from './components/HomeTypewriter.vue'
 import AIOpenMenu from './components/AIOpenMenu.vue'
+import HtmlUrlRedirector from './components/HtmlUrlRedirector.vue'
 
 const { Layout } = DefaultTheme
 const { frontmatter } = useData()
 </script>
 
 <template>
+    <HtmlUrlRedirector />
     <Layout>
         <template #home-hero-before>
             <ClientOnly>

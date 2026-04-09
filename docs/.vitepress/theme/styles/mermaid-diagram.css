@@ -26,7 +26,7 @@
   place-items: center;
   min-height: 440px;
   width: 100%;
-  paqudding-top: 72px;
+  padding-top: 72px;
   padding-right: 20px;
   padding-bottom: 20px;
   padding-left: 20px;
@@ -105,6 +105,19 @@
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+}
+
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg foreignObject {
+  overflow: visible;
+}
+
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .nodeLabel,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .nodeLabel p,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .label,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg .label > span,
+.vp-doc .mermaid-diagram-card .interactive-diagram-svg foreignObject > div {
+  line-height: 1.35;
+  padding-bottom: 0.12em;
 }
 
 .vp-doc .mermaid-diagram-card .interactive-diagram-svg > g,

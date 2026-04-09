@@ -1,6 +1,8 @@
 ﻿<script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
+import { toHtmlAbsoluteUrl } from '../utils/html-url'
+
 type ProviderAction = 'direct' | 'copy_then_open'
 
 type Provider = {
@@ -11,8 +13,6 @@ type Provider = {
   action: ProviderAction
   buildHref: (prompt: string) => string
 }
-
-const SITE_ORIGIN = 'https://aiagentguide.cn'
 
 const providers: Provider[] = [
   {
@@ -50,12 +50,12 @@ const providers: Provider[] = [
 ]
 
 const isOpen = ref(false)
-const currentPath = ref('/')
+const currentPageUrl = ref('')
 const rootRef = ref<HTMLElement | null>(null)
 const copiedProviderId = ref<string | null>(null)
 let copiedTimer: number | undefined
 
-const canonicalPageUrl = computed(() => `${SITE_ORIGIN}${currentPath.value}`)
+const canonicalPageUrl = computed(() => currentPageUrl.value)
 
 const currentPagePrompt = computed(() => {
   return `请阅读这个页面：${canonicalPageUrl.value}，我想基于这个页面内容继续提问。`
@@ -119,7 +119,12 @@ function onDocumentKeydown(event: KeyboardEvent) {
 }
 
 onMounted(() => {
-  currentPath.value = `${window.location.pathname}${window.location.search}${window.location.hash}`
+  currentPageUrl.value = toHtmlAbsoluteUrl(
+    window.location.origin,
+    window.location.pathname,
+    window.location.search,
+    window.location.hash
+  )
   document.addEventListener('click', onDocumentClick)
   document.addEventListener('keydown', onDocumentKeydown)
 })
@@ -168,5 +173,3 @@ onBeforeUnmount(() => {
     </div>
   </div>
 </template>
-
-
