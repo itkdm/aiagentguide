@@ -1,11 +1,13 @@
 ﻿---
 title: 第 12 章 高级 RAG 形态与升级路径
-summary: 待补充。
+summary: 通过多路召回、分层检索与自检机制等高级形态，构建更稳定的检索与生成链路。
 ---
 
 # 第 12 章 高级 RAG 形态与升级路径
 
 本章目标：在掌握基础链路之后，理解多路召回、分层检索、纠错型 RAG、Self-RAG 和 Agent 化检索等高级形态各自解决什么问题。
+
+本章将围绕“多路召回/路由”“分层结构检索”“自检型检索与生成”“Agentic Retrieval”等主题，帮助你把 RAG 从“能用”升级为“更稳定、可控”。citeturn0search2turn0search5turn0search0turn0academia12turn0search1
 
 ## 建议阅读顺序
 
