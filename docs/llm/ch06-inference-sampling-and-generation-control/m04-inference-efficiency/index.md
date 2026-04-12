@@ -1,11 +1,13 @@
 ---
 title: 6.4 推理效率优化
-summary: 待补充。
+summary: 解释 KV Cache、长上下文与长输出对推理成本的影响，并给出工程化控制思路。
 ---
 
 # 6.4 推理效率优化
 
-这部分会回到推理效率和成本，解释 KV Cache、长上下文、长输出这些因素为什么会直接推高延迟与资源消耗。
+先给结论：**推理成本主要被“上下文长度 + 解码步数”决定，KV Cache 能减少重复计算但会增加显存占用。** citeturn0search0turn0search2turn1search0
+
+这一节会解释 KV Cache 的作用、长上下文和长输出为什么贵，以及你在系统层面可以做的控制手段。citeturn0search0turn0search2
 
 ## 这一节会回答什么问题
 
@@ -13,3 +15,9 @@ summary: 待补充。
 - [KV Cache 为什么能提升推理效率？](./q02-why-kv-cache-helps)
 - [为什么长上下文会导致推理成本变高？](./q03-why-long-context-costs-more)
 - [为什么输出越长，延迟和成本通常越高？](./q04-why-longer-output-costs-more)
+
+## 学完后你应该建立的判断
+
+- KV Cache 是“算力换显存”的典型优化
+- 上下文越长，注意力计算越贵
+- 输出越长，解码循环越慢

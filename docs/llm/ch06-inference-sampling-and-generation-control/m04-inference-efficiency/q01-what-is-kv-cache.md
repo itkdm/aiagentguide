@@ -1,8 +1,27 @@
 ---
 title: 6.4.1 什么是 KV Cache？
-summary: 围绕“什么是 KV Cache”建立基础理解。
+summary: 解释 KV Cache 的概念与它在推理中的作用。
 ---
 
 # 6.4.1 什么是 KV Cache？
 
-这篇内容会围绕“什么是 KV Cache”展开，帮助你先建立清晰的基础认识，再逐步理解它在 LLM 体系中的作用、边界和常见实践方式。
+先给结论：**KV Cache 是在自回归解码时缓存注意力中的 key/value，以避免重复计算，从而加速后续 token 的生成。** citeturn0search0turn0search2
+
+## KV Cache 的本质
+
+生成文本时，模型会一轮一轮地预测下一个 token。  
+如果每一轮都重新计算历史 token 的注意力，会产生大量重复计算。citeturn0search0turn0search2
+
+KV Cache 通过缓存历史 token 的 key/value，把“历史部分”复用起来，避免重复算。citeturn0search0turn0search2
+
+## KV Cache 解决的是什么问题
+
+- **减少重复计算**：尤其是长上下文、长输出时的注意力计算
+- **提升吞吐与延迟表现**：让解码阶段更快
+
+## 代价是什么
+
+缓存本身需要显存，占用会随着上下文长度增长。  
+因此 KV Cache 是“算力换显存”的典型优化。citeturn0search0turn0search2
+
+你可以先记住一句话：**KV Cache 让解码更快，但显存更紧。**

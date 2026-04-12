@@ -1,8 +1,80 @@
----
+﻿---
 title: 4.2.3 预训练目标为什么通常是 next token prediction？
-summary: 围绕“预训练目标为什么通常是 next token prediction”建立基础理解。
+summary: 解释 next token prediction 成为主流预训练目标的原因及它的优势和局限。
 ---
 
 # 4.2.3 预训练目标为什么通常是 next token prediction？
 
-这篇内容会围绕“预训练目标为什么通常是 next token prediction”展开，帮助你先建立清晰的基础认识，再逐步理解它在 LLM 体系中的作用、边界和常见实践方式。
+先给结论：
+
+**next token prediction 成为主流预训练目标，是因为它是自监督、统一、可扩展的目标形式，并且与自回归生成天然一致。**
+
+所以这不是“唯一可行”，而是“最方便规模化训练”的目标选择。
+
+## 原因一：自监督，几乎不需要人工标注
+
+next token prediction 的训练信号直接来自文本本身：
+
+- 给定前文
+- 预测下一个 token
+
+不需要人工标注，也不需要特定任务数据。
+
+这让它可以直接吃下海量开放语料，从而支撑大规模预训练。citeturn0search0turn0search3
+
+## 原因二：目标统一，适合规模化训练
+
+无论是新闻、小说、论文还是对话，
+
+next token prediction 都是同一种目标形式。
+
+这意味着：
+
+- 不需要切换训练头
+- 不需要任务特定标签
+- 更容易用统一 pipeline 扩展
+
+这是大模型时代非常关键的工程优势。citeturn0search3turn0search4
+
+## 原因三：与生成方式天然一致
+
+推理阶段的 LLM 本质上是逐 token 生成。
+
+如果预训练目标就是 next token prediction，
+
+那么训练目标和推理过程天然一致。
+
+这减少了训练-推理不一致带来的偏差。citeturn0search0turn0search3
+
+## 原因四：支持任务迁移和 in-context learning
+
+当模型在大规模语料中学到“如何预测下一步”时，它实际学到的是大量语言模式和任务结构。
+
+这些模式可以在下游任务中被激活：
+
+- zero-shot
+- few-shot
+- prompt-based tasking
+
+这也是为什么它能在没有显式监督标签的情况下完成很多任务。citeturn0search3
+
+## 这类目标的局限
+
+next token prediction 也有明确局限：
+
+- 它并不保证事实正确
+- 它不天然对齐用户意图
+- 它不会自动学会安全和约束
+
+所以预训练之后还需要：
+
+- 指令微调
+- 对齐训练
+- 工具调用 / RAG 等系统组合
+
+## 你可以先这样记住
+
+- next token prediction 是最易规模化的自监督目标
+- 它与生成方式一致，训练-推理闭环清晰
+- 它能带来通用能力，但不直接保证可靠性
+- 预训练目标只是能力起点，后续还需要对齐和系统补强

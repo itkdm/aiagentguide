@@ -1,8 +1,28 @@
 ---
 title: 7.3.2 什么是 lost in the middle？
-summary: 围绕“什么是 lost in the middle”建立基础理解。
+summary: 解释“中间丢失”现象，并说明它对长上下文任务的影响。
 ---
 
 # 7.3.2 什么是 lost in the middle？
 
-这篇内容会围绕“什么是 lost in the middle”展开，帮助你先建立清晰的基础认识，再逐步理解它在 LLM 体系中的作用、边界和常见实践方式。
+先给结论：**lost in the middle 指的是：模型更容易利用开头和结尾的信息，而对中间位置的信息利用显著下降。** citeturn0search6turn0search3
+
+## 现象描述
+
+在长上下文任务中，把关键信息放在中间位置时，模型性能明显下降；  
+把关键信息放到开头或结尾时，表现更好。citeturn0search6turn0search3
+
+## 这意味着什么
+
+这说明长上下文“可见”不等于“有效利用”。  
+模型对信息位置存在明显偏好。citeturn0search6turn0search3
+
+## 工程上的直接启示
+
+- 把关键约束与答案线索放在靠前或靠后的位置  
+- 不要把关键指令埋在长背景中间  
+- 把长文档拆分并用检索定位关键信息  
+
+## 结论收束
+
+**lost in the middle 是长上下文落地时最需要被正视的能力缺口之一。** citeturn0search6turn0search3
