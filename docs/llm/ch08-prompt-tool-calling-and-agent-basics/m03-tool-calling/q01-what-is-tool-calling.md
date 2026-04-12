@@ -1,8 +1,37 @@
 ---
 title: 8.3.1 什么是 Function Calling / Tool Calling？
-summary: 围绕“什么是 Function Calling / Tool Calling”建立基础理解。
+summary: 给出工具调用的工程化定义，并说明它在系统中的工作方式。
 ---
 
 # 8.3.1 什么是 Function Calling / Tool Calling？
 
-这篇内容会围绕“什么是 Function Calling / Tool Calling”展开，帮助你先建立清晰的基础认识，再逐步理解它在 LLM 体系中的作用、边界和常见实践方式。
+先给结论：**Tool Calling / Function Calling 是让模型输出结构化调用意图，由外部程序真正执行工具，再把结果返回给模型继续处理。** citeturn0search0
+
+## 它不是“模型自己会执行”
+
+模型本身不会真的访问数据库、打开网页或调用 API。  
+它做的是：
+
+1. 判断当前任务是否需要工具  
+2. 生成工具名和参数  
+3. 由外部系统执行工具  
+4. 再根据工具结果继续回答
+
+所以工具调用本质上是“模型决策 + 程序执行”的分工。citeturn0search0turn0search3
+
+## 一个最小示意
+
+```json
+{"tool": "search_docs", "arguments": {"query": "RAG chunk overlap best practices"}}
+```
+
+模型输出的不是最终答案，而是调用意图。  
+真正的执行由你的应用层完成。
+
+## 工程上的关键价值
+
+工具调用把“生成语言”和“执行动作”分开，这样系统更容易控制、记录和校验。
+
+## 结论收束
+
+**工具调用不是让模型变成程序，而是让模型学会指挥程序。**
