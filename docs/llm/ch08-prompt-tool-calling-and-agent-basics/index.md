@@ -1,11 +1,13 @@
 ---
 title: 第 8 章 Prompt、工具调用与 Agent 基础
-summary: 待补充。
+summary: 解释 Prompt 的真实作用、工具调用的意义，以及模型如何从文本生成器变成可用系统组件。
 ---
 
 # 第 8 章 Prompt、工具调用与 Agent 基础
 
-本章目标：理解 LLM 如何从“纯文本生成器”变成“可用系统组件”。
+先给结论：**Prompt 决定的是“当前任务如何组织和表达”，工具调用解决的是“模型能力边界之外的动作与数据访问”，Agent 则是在此基础上把模型接成一个可执行流程。** citeturn0search0turn0search4turn0search2
+
+这一章的重点不是把 Prompt 神化，而是让你建立一个更准确的判断：Prompt 能显著影响输出，但不能替代知识更新、工具能力或系统设计。citeturn0search0turn0search4
 
 ## 建议阅读顺序
 
