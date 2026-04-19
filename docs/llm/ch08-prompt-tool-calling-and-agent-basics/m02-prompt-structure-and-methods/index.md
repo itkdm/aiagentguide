@@ -5,9 +5,9 @@ summary: 解释消息角色分工、zero-shot/few-shot/CoT 等常见方法，以
 
 # 8.2 Prompt 的结构与常见方法
 
-先给结论：**Prompt 不是一段随意文本，而是有结构的任务输入。不同角色分工和不同提示方法，会直接改变模型如何理解任务、如何组织输出。** citeturn0search4turn0search0turn0search1turn0search2
+先给结论：**Prompt 不是一段随意文本，而是有结构的任务输入。不同角色分工和不同提示方法，会直接改变模型如何理解任务、如何组织输出。** 
 
-这部分会介绍常见 Prompt 结构和方法，帮助你理解为什么不同任务类型需要不同的提示方式。citeturn0search0turn0search1turn0search2
+这部分会介绍常见 Prompt 结构和方法，帮助你理解为什么不同任务类型需要不同的提示方式。
 
 ## 这一节会回答什么问题
 

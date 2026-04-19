@@ -5,7 +5,7 @@ summary: 解释 Prompt Engineering 的核心目标，并说明它主要优化什
 
 # 8.1.2 Prompt Engineering 的本质是什么？
 
-先给结论：**Prompt Engineering 的本质不是“发明神奇咒语”，而是通过任务拆解、上下文组织和格式约束，让模型更稳定地完成目标任务。** citeturn0search0turn0search1turn0search3
+先给结论：**Prompt Engineering 的本质不是“发明神奇咒语”，而是通过任务拆解、上下文组织和格式约束，让模型更稳定地完成目标任务。** 
 
 ## 它真正优化的是什么
 
@@ -15,7 +15,7 @@ Prompt Engineering 主要优化三类东西：
 - **输出稳定性**：减少跑偏、遗漏和格式失控
 - **推理路径**：在复杂任务里，通过分步提示提升完成率
 
-比如 few-shot、chain-of-thought、zero-shot reasoning，本质上都在做“更好的任务组织”。citeturn0search0turn0search1turn0search2turn0search3
+比如 few-shot、chain-of-thought、zero-shot reasoning，本质上都在做“更好的任务组织”。
 
 ## 它不能替代什么
 
@@ -26,7 +26,7 @@ Prompt Engineering 不能替代：
 - 检索系统
 - 模型本身能力上限
 
-如果模型没有相关知识、没有访问外部系统的能力，Prompt 再好也不能凭空补出来。citeturn0search4
+如果模型没有相关知识、没有访问外部系统的能力，Prompt 再好也不能凭空补出来。
 
 ## 一个更务实的理解
 

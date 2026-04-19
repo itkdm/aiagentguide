@@ -5,9 +5,9 @@ summary: 解释 SFT、Instruction Tuning 与 In-Context Learning 的区别，并
 
 # 5.2 SFT 与 Instruction Tuning
 
-先给结论：**SFT 是用有监督数据微调模型，Instruction Tuning 是以“指令-任务”为核心的 SFT 形态，而 In-Context Learning 是不更新参数、靠提示完成迁移的能力。** citeturn2view0turn2view2turn2view4turn1search58
+先给结论：**SFT 是用有监督数据微调模型，Instruction Tuning 是以“指令-任务”为核心的 SFT 形态，而 In-Context Learning 是不更新参数、靠提示完成迁移的能力。** 
 
-这一节会把三者拆开，讲清它们分别解决什么问题、什么时候更合适，以及为什么 instruction tuning 往往能显著改善零样本或少样本表现。citeturn2view0turn2view4turn1search58
+这一节会把三者拆开，讲清它们分别解决什么问题、什么时候更合适，以及为什么 instruction tuning 往往能显著改善零样本或少样本表现。
 
 ## 本节会回答的问题
 

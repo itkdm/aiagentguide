@@ -5,14 +5,14 @@ summary: 解释 KV Cache 的概念与它在推理中的作用。
 
 # 6.4.1 什么是 KV Cache？
 
-先给结论：**KV Cache 是在自回归解码时缓存注意力中的 key/value，以避免重复计算，从而加速后续 token 的生成。** citeturn0search0turn0search2
+先给结论：**KV Cache 是在自回归解码时缓存注意力中的 key/value，以避免重复计算，从而加速后续 token 的生成。** 
 
 ## KV Cache 的本质
 
 生成文本时，模型会一轮一轮地预测下一个 token。  
-如果每一轮都重新计算历史 token 的注意力，会产生大量重复计算。citeturn0search0turn0search2
+如果每一轮都重新计算历史 token 的注意力，会产生大量重复计算。
 
-KV Cache 通过缓存历史 token 的 key/value，把“历史部分”复用起来，避免重复算。citeturn0search0turn0search2
+KV Cache 通过缓存历史 token 的 key/value，把“历史部分”复用起来，避免重复算。
 
 ## KV Cache 解决的是什么问题
 
@@ -22,6 +22,6 @@ KV Cache 通过缓存历史 token 的 key/value，把“历史部分”复用起
 ## 代价是什么
 
 缓存本身需要显存，占用会随着上下文长度增长。  
-因此 KV Cache 是“算力换显存”的典型优化。citeturn0search0turn0search2
+因此 KV Cache 是“算力换显存”的典型优化。
 
 你可以先记住一句话：**KV Cache 让解码更快，但显存更紧。**

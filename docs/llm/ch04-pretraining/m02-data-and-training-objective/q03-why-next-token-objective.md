@@ -1,4 +1,4 @@
-﻿---
+---
 title: 4.2.3 预训练目标为什么通常是 next token prediction？
 summary: 解释 next token prediction 成为主流预训练目标的原因及它的优势和局限。
 ---
@@ -20,7 +20,7 @@ next token prediction 的训练信号直接来自文本本身：
 
 不需要人工标注，也不需要特定任务数据。
 
-这让它可以直接吃下海量开放语料，从而支撑大规模预训练。citeturn0search0turn0search3
+这让它可以直接吃下海量开放语料，从而支撑大规模预训练。
 
 ## 原因二：目标统一，适合规模化训练
 
@@ -34,7 +34,7 @@ next token prediction 都是同一种目标形式。
 - 不需要任务特定标签
 - 更容易用统一 pipeline 扩展
 
-这是大模型时代非常关键的工程优势。citeturn0search3turn0search4
+这是大模型时代非常关键的工程优势。
 
 ## 原因三：与生成方式天然一致
 
@@ -44,7 +44,7 @@ next token prediction 都是同一种目标形式。
 
 那么训练目标和推理过程天然一致。
 
-这减少了训练-推理不一致带来的偏差。citeturn0search0turn0search3
+这减少了训练-推理不一致带来的偏差。
 
 ## 原因四：支持任务迁移和 in-context learning
 
@@ -56,7 +56,7 @@ next token prediction 都是同一种目标形式。
 - few-shot
 - prompt-based tasking
 
-这也是为什么它能在没有显式监督标签的情况下完成很多任务。citeturn0search3
+这也是为什么它能在没有显式监督标签的情况下完成很多任务。
 
 ## 这类目标的局限
 
