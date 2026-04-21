@@ -30,6 +30,10 @@ date: 2026-03-24
 lastUpdated: 2026-03-24
 author: AI Agent Guide
 ogImage: /social/example.png
+status: draft
+assets: missing
+reviewed: false
+sourceType: original
 draft: false
 noindex: false
 ---
@@ -42,6 +46,10 @@ noindex: false
 - `keywords`：优先使用 `keywords`；未填写时回退到 `tags`
 - `lastUpdated`：优先使用 frontmatter；未填写时回退到文件修改时间
 - `ogImage`：优先使用 frontmatter；未填写时回退到全站默认分享图
+- `status`：用于区分页面当前所处状态，方便批量审计和排期
+- `assets`：用于标记图片、图表等静态资源是否齐备
+- `reviewed`：用于标记页面是否经过人工审校
+- `sourceType`：用于区分原创、重写、翻译、整理等来源类型
 - `draft` 或 `noindex`：任一为 `true` 时输出 `noindex, nofollow`
 
 使用建议：
@@ -53,6 +61,119 @@ noindex: false
 - `date` 适合教程、解读、项目分析等明确有发布时间语义的页面
 - `lastUpdated` 适合长期维护的知识页
 - `ogImage` 建议用于首页、栏目页、重点专题页或高传播页面
+- `status` 建议使用固定枚举：`idea | outline | draft | review | published`
+- `assets` 建议使用固定枚举：`none | missing | ready`
+- `reviewed` 只在页面经过完整复读和结构检查后设为 `true`
+- `sourceType` 建议使用固定枚举：`original | rewrite | translation | curated`
+
+最小正式内容模板建议：
+
+```yaml
+---
+title: 页面标题
+description: 搜索结果描述
+summary: 站内摘要
+keywords:
+  - 关键词 1
+tags:
+  - 标签 1
+status: draft
+assets: missing
+reviewed: false
+sourceType: original
+author: AI Agent Guide
+draft: false
+noindex: false
+---
+```
+
+## 内容状态约定
+
+建议把页面状态控制在下面这套固定语义里：
+
+- `idea`：只有选题，还不适合生成正式页面
+- `outline`：已经有结构或问题列表，但正文未完成
+- `draft`：已有正文初稿，可以继续补图补例子
+- `review`：内容基本写完，等待统一审校
+- `published`：已达到对外长期保留标准
+
+`assets` 建议这样理解：
+
+- `none`：这页不依赖图片、图表或额外静态资源
+- `missing`：计划有图，但现在还没配齐
+- `ready`：图片、图表、封面等资源已齐备
+
+建议配合审计脚本定期检查：
+
+```bash
+pnpm content:audit
+```
+
+这样能快速看到：
+
+- 哪些页面还没有 `description` / `summary`
+- 哪些页面还没补 `status` / `assets`
+- 哪些栏目仍有大量骨架页或待配图页面
+
+## 图片与静态资源规范
+
+默认策略：**图片优先进入仓库，统一放在 `docs/public/` 下；只有体积大、复用高、替换频繁的资源再考虑迁到 OSS。**
+
+目录约定：
+
+```text
+docs/public/
+  getting-started/
+  principles/
+  frameworks/
+  tutorials/
+  llm/
+  rag/
+  tools/
+  interviews/
+  shared/
+  social/
+```
+
+放置规则：
+
+- 单篇文章的图片尽量跟页面 slug 对齐
+- 共享图片、公共图标、通用示意图统一放到 `docs/public/shared/`
+- 分享卡片和社交传播图统一放到 `docs/public/social/`
+- 图源文件如果需要长期维护，例如 `.drawio`，也尽量和导出的 `.svg` 放在同一路径
+
+推荐路径示例：
+
+```text
+docs/public/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag.svg
+docs/public/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag.drawio
+```
+
+命名规则：
+
+- 不使用 `image1.png`、`截图(1).png` 这类无语义名称
+- 文件名尽量与页面 slug 对齐，例如 `rag-overview.svg`
+- 同页多图可使用 `q01-rag-step-1.svg`、`q01-rag-step-2.svg`
+
+格式建议：
+
+- 优先使用 `svg` 表达结构图、流程图、逻辑图
+- 截图类资源优先压缩后使用 `webp`
+- 只有在透明背景或兼容性明确需要时再使用 `png`
+- 单图体积超过 `300KB` 时，先压缩；如果后续还会高频替换，再考虑外置 OSS
+
+Markdown 引用规则：
+
+```md
+![RAG 流程图](/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag.svg)
+```
+
+约束：
+
+- 页面内统一使用站内绝对路径
+- 不混用一部分相对路径、一部分绝对路径
+- 不把图片直接散落在 Markdown 同级目录
+- 不把“未来可能会换”的大图资源直接塞进多个不同目录的副本里
 
 ## 页面层级建议
 
