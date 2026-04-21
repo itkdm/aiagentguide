@@ -79,7 +79,7 @@ function parseFrontmatter(source) {
 
 function normalizeSection(relativePath) {
   const parts = relativePath.split(path.sep)
-  return parts[0] || 'root'
+  return parts.length === 1 ? 'root' : parts[0]
 }
 
 function increment(map, key) {
