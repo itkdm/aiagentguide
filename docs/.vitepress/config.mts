@@ -48,6 +48,21 @@ export default defineConfig({
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo-agent-loop.svg' }],
     ['meta', { name: 'theme-color', content: '#0f172a' }],
     [
+      'script',
+      {
+        async: '',
+        src: 'https://www.googletagmanager.com/gtag/js?id=G-XVLTZZW9QV'
+      }
+    ],
+    [
+      'script',
+      {},
+      `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XVLTZZW9QV');`
+    ],
+    [
       'meta',
       {
         name: 'google-site-verification',
