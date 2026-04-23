@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="680" viewBox="0 0 1200 680" role="img" aria-labelledby="title desc">
+  <title id="title">为什么经常需要 RAG</title>
+  <desc id="desc">展示模型边界如何推动 RAG 方案出现。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#5b6472"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#c7d0db" flood-opacity="0.24"/>
+    </filter>
+    <style>
+      .label { font: 700 20px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .sub { font: 500 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #556274; }
+      .tiny { font: 600 12px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #64748b; }
+      .card { filter: url(#shadow); }
+      .line { stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <rect width="1200" height="680" fill="#ffffff"/>
+
+  <g class="card">
+    <rect x="70" y="120" width="240" height="100" rx="18" fill="#eef6ff" stroke="#7ea3d8" stroke-width="2.5"/>
+    <text x="190" y="160" text-anchor="middle" class="label">知识有时效</text>
+    <text x="190" y="187" text-anchor="middle" class="tiny">训练后知识不会自动更新</text>
+  </g>
+
+  <g class="card">
+    <rect x="70" y="240" width="240" height="100" rx="18" fill="#f0fbf7" stroke="#7dc4a6" stroke-width="2.5"/>
+    <text x="190" y="280" text-anchor="middle" class="label">私有数据</text>
+    <text x="190" y="307" text-anchor="middle" class="tiny">模型默认拿不到内部资料</text>
+  </g>
+
+  <g class="card">
+    <rect x="70" y="360" width="240" height="100" rx="18" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="190" y="400" text-anchor="middle" class="label">依据不足</text>
+    <text x="190" y="427" text-anchor="middle" class="tiny">答案需要和证据绑定</text>
+  </g>
+
+  <g class="card">
+    <rect x="70" y="480" width="240" height="100" rx="18" fill="#f6effc" stroke="#a985cf" stroke-width="2.5"/>
+    <text x="190" y="520" text-anchor="middle" class="label">更新成本高</text>
+    <text x="190" y="547" text-anchor="middle" class="tiny">重训不如更新知识库</text>
+  </g>
+
+  <g class="card">
+    <rect x="430" y="210" width="320" height="260" rx="26" fill="#fffdf4" stroke="#dfba62" stroke-width="3"/>
+    <text x="590" y="268" text-anchor="middle" class="label" style="font-size:24px;">RAG</text>
+    <text x="590" y="306" text-anchor="middle" class="sub">外部知识 + 检索 + 生成</text>
+    <text x="590" y="348" text-anchor="middle" class="tiny">把“回答”建立在当前资料上</text>
+    <text x="590" y="378" text-anchor="middle" class="tiny">降低幻觉</text>
+    <text x="590" y="404" text-anchor="middle" class="tiny">支持引用</text>
+    <text x="590" y="430" text-anchor="middle" class="tiny">支持更新</text>
+  </g>
+
+  <g class="line" fill="none" stroke="#5b6472" stroke-width="2.5">
+    <path d="M310 170 L430 255" marker-end="url(#arrow)"/>
+    <path d="M310 290 L430 285" marker-end="url(#arrow)"/>
+    <path d="M310 410 L430 315" marker-end="url(#arrow)"/>
+    <path d="M310 530 L430 345" marker-end="url(#arrow)"/>
+  </g>
+</svg>

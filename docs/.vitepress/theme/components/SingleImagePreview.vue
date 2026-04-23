@@ -23,40 +23,18 @@ const props = withDefaults(
 
 const isLightboxOpen = ref(false)
 const hasFailed = ref(false)
-const stageMinHeight = ref('360px')
 
 const stageStyle = computed(() =>
   props.aspectRatio
     ? {
-        minHeight: stageMinHeight.value,
         aspectRatio: props.aspectRatio
       }
-    : {
-        minHeight: stageMinHeight.value
-      }
+    : {}
 )
 
 const useCoverLayout = computed(() => props.fit === 'cover' && Boolean(props.aspectRatio))
 const resolvedAlt = computed(() => props.alt || props.title || 'preview image')
 const openHref = computed(() => props.href || props.src)
-
-function updateStageMinHeight() {
-  if (typeof window === 'undefined') {
-    return
-  }
-
-  if (window.innerWidth <= 640) {
-    stageMinHeight.value = '220px'
-    return
-  }
-
-  if (window.innerWidth <= 960) {
-    stageMinHeight.value = '300px'
-    return
-  }
-
-  stageMinHeight.value = '360px'
-}
 
 function openLightbox() {
   if (!props.src || hasFailed.value) {
@@ -77,14 +55,11 @@ function onKeydown(event: KeyboardEvent) {
 }
 
 onMounted(() => {
-  updateStageMinHeight()
   window.addEventListener('keydown', onKeydown)
-  window.addEventListener('resize', updateStageMinHeight)
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
-  window.removeEventListener('resize', updateStageMinHeight)
 })
 </script>
 

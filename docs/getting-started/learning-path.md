@@ -12,6 +12,14 @@
 
 ## 推荐学习顺序
 
+<div style="display: flex; justify-content: center; margin: 18px 0 22px;">
+  <SingleImagePreview
+    src="./assets/getting-started-learning-roadmap.png"
+    alt="AI Agent 入门学习路线图"
+    style="width: min(980px, 100%);"
+  />
+</div>
+
 1. 先理解 Agent 是什么
 2. 再分清 Agent、聊天机器人、工作流和 RAG
 3. 再判断什么任务值得用 Agent

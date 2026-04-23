@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 适用场景判断</title>
+  <desc id="desc">展示是否适合使用 RAG 的判断流程。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#5b6472"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#c7d0db" flood-opacity="0.24"/>
+    </filter>
+    <style>
+      .label { font: 700 18px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .sub { font: 500 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #556274; }
+      .tiny { font: 600 12px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #64748b; }
+      .card { filter: url(#shadow); }
+      .line { stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <rect width="1200" height="760" fill="#ffffff"/>
+
+  <g class="card">
+    <rect x="470" y="40" width="260" height="60" rx="18" fill="#eef6ff" stroke="#7ea3d8" stroke-width="2.5"/>
+    <text x="600" y="77" text-anchor="middle" class="label">问题场景</text>
+  </g>
+
+  <g class="card">
+    <polygon points="600,150 690,220 600,290 510,220" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="600" y="220" text-anchor="middle" class="label">依赖外部资料?</text>
+  </g>
+
+  <g class="card">
+    <rect x="780" y="185" width="230" height="70" rx="18" fill="#dff2d9" stroke="#82b366" stroke-width="2.5"/>
+    <text x="895" y="226" text-anchor="middle" class="label">纯模型 / 规则 / 工具</text>
+  </g>
+
+  <g class="card">
+    <polygon points="600,360 690,430 600,500 510,430" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="600" y="430" text-anchor="middle" class="label">资料会变化?</text>
+  </g>
+
+  <g class="card">
+    <polygon points="600,540 690,610 600,680 510,610" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="600" y="610" text-anchor="middle" class="label">需要引用?</text>
+  </g>
+
+  <g class="card">
+    <rect x="780" y="555" width="260" height="90" rx="20" fill="#fffdf4" stroke="#dfba62" stroke-width="3"/>
+    <text x="910" y="600" text-anchor="middle" class="label">RAG</text>
+    <text x="910" y="625" text-anchor="middle" class="tiny">检索 + 生成</text>
+  </g>
+
+  <g class="card">
+    <rect x="130" y="555" width="260" height="90" rx="20" fill="#f0fbf7" stroke="#7dc4a6" stroke-width="2.5"/>
+    <text x="260" y="600" text-anchor="middle" class="label">搜索 / KB 问答</text>
+    <text x="260" y="625" text-anchor="middle" class="tiny">需要自己判断原文</text>
+  </g>
+
+  <g class="line" fill="none" stroke="#5b6472" stroke-width="2.5">
+    <path d="M600 100 L600 150" marker-end="url(#arrow)"/>
+    <path d="M690 220 L780 220" marker-end="url(#arrow)"/>
+    <path d="M600 290 L600 360" marker-end="url(#arrow)"/>
+    <path d="M600 500 L600 540" marker-end="url(#arrow)"/>
+    <path d="M690 610 L780 610" marker-end="url(#arrow)"/>
+    <path d="M510 430 L390 610" marker-end="url(#arrow)"/>
+  </g>
+</svg>

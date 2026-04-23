@@ -29,6 +29,14 @@ author: AI Agent Guide
 
 ## 第一个 Agent 应该选什么题目
 
+<div style="display: flex; justify-content: center; margin: 18px 0 22px;">
+  <SingleImagePreview
+    src="./assets/getting-started-first-agent-scope.png"
+    alt="第一个 Agent 选题范围示意图"
+    style="width: min(980px, 100%);"
+  />
+</div>
+
 第一个 Agent 题目选得对不对，几乎决定了你是会建立信心，还是会直接被劝退。
 
 一个适合入门的题目，通常有这几个特征：
@@ -73,6 +81,14 @@ author: AI Agent Guide
 入门阶段最关键的，不是把所有词都接进来，而是先做出一个你自己能完整解释的最小系统。
 
 ## 低代码平台和代码框架怎么选
+
+<div style="display: flex; justify-content: center; margin: 18px 0 22px;">
+  <SingleImagePreview
+    src="./assets/getting-started-lowcode-vs-code.png"
+    alt="低代码平台与代码框架对比图"
+    style="width: min(980px, 100%);"
+  />
+</div>
 
 这是很多人真正的第一道选择题。
 

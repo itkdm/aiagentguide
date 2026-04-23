@@ -32,7 +32,6 @@ const isPaused = ref(false)
 const isLightboxOpen = ref(false)
 const touchStartX = ref(0)
 const lightboxTouchStartX = ref(0)
-const stageMinHeight = ref('360px')
 const failedImages = ref<Record<string, boolean>>({})
 
 let timer: ReturnType<typeof setInterval> | null = null
@@ -55,12 +54,9 @@ const activeImage = computed(() => normalizedImages.value[currentIndex.value])
 const stageStyle = computed(() =>
   props.aspectRatio
     ? {
-        minHeight: stageMinHeight.value,
         aspectRatio: props.aspectRatio
       }
-    : {
-        minHeight: stageMinHeight.value
-      }
+    : {}
 )
 const useCoverLayout = computed(() => props.fit === 'cover' && Boolean(props.aspectRatio))
 
@@ -83,24 +79,6 @@ function markImageFailed(src?: string) {
     ...failedImages.value,
     [key]: true
   }
-}
-
-function updateStageMinHeight() {
-  if (typeof window === 'undefined') {
-    return
-  }
-
-  if (window.innerWidth <= 640) {
-    stageMinHeight.value = '220px'
-    return
-  }
-
-  if (window.innerWidth <= 960) {
-    stageMinHeight.value = '300px'
-    return
-  }
-
-  stageMinHeight.value = '360px'
 }
 
 function stopAutoplay() {
@@ -219,16 +197,13 @@ watch(
 )
 
 onMounted(() => {
-  updateStageMinHeight()
   startAutoplay()
   window.addEventListener('keydown', onKeydown)
-  window.addEventListener('resize', updateStageMinHeight)
 })
 
 onBeforeUnmount(() => {
   stopAutoplay()
   window.removeEventListener('keydown', onKeydown)
-  window.removeEventListener('resize', updateStageMinHeight)
 })
 </script>
 

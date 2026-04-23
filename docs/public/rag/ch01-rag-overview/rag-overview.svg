@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 全景图</title>
+  <desc id="desc">展示 RAG 的查询链路、知识准备链路与系统边界。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#596579"/>
+    </marker>
+    <marker id="arrowSoft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#9b7b45"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#b7c3d1" flood-opacity="0.25"/>
+    </filter>
+    <style>
+      .title { font: 700 26px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2a37; }
+      .subtitle { font: 400 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #607086; }
+      .section { font: 700 15px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #273444; }
+      .label { font: 600 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .small { font: 600 12px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #3b4a5a; }
+      .node { filter: url(#shadow); }
+      .stroke { stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="760" fill="url(#bg)"/>
+
+  <text x="60" y="58" class="title">RAG 全景图</text>
+  <text x="60" y="84" class="subtitle">先看清链路，再谈切块、索引、检索和生成</text>
+
+  <rect x="30" y="108" width="1140" height="232" rx="18" fill="#f6fbff" stroke="#c6d4e5" stroke-width="2"/>
+  <text x="50" y="136" class="section">查询链路</text>
+
+  <rect x="30" y="348" width="700" height="210" rx="18" fill="#f9fbf5" stroke="#d7e3be" stroke-width="2"/>
+  <text x="50" y="376" class="section">知识准备</text>
+
+  <rect x="760" y="348" width="410" height="210" rx="18" fill="#fff8f2" stroke="#f0cfac" stroke-width="2"/>
+  <text x="780" y="376" class="section">系统边界</text>
+
+  <g class="node">
+    <ellipse cx="108" cy="212" rx="48" ry="27" fill="#ffe8cc" stroke="#f4a259" stroke-width="2"/>
+    <text x="108" y="208" text-anchor="middle" class="label">用户问题</text>
+  </g>
+
+  <g class="node">
+    <rect x="190" y="177" width="130" height="70" rx="12" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+    <text x="255" y="205" text-anchor="middle" class="label">问题理解</text>
+    <text x="255" y="224" text-anchor="middle" class="label">/ 改写</text>
+  </g>
+
+  <g class="node">
+    <rect x="360" y="177" width="120" height="70" rx="12" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+    <text x="420" y="211" text-anchor="middle" class="label">检索召回</text>
+  </g>
+
+  <g class="node">
+    <rect x="520" y="177" width="120" height="70" rx="12" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+    <text x="580" y="205" text-anchor="middle" class="label">重排</text>
+    <text x="580" y="224" text-anchor="middle" class="label">与筛选</text>
+  </g>
+
+  <g class="node">
+    <rect x="680" y="177" width="130" height="70" rx="12" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+    <text x="745" y="205" text-anchor="middle" class="label">上下文构建</text>
+  </g>
+
+  <g class="node">
+    <rect x="850" y="177" width="130" height="70" rx="12" fill="#e1d5e7" stroke="#9673a6" stroke-width="2"/>
+    <text x="915" y="205" text-anchor="middle" class="label">LLM</text>
+    <text x="915" y="224" text-anchor="middle" class="label">生成答案</text>
+  </g>
+
+  <g class="node">
+    <ellipse cx="1072" cy="212" rx="48" ry="27" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+    <text x="1072" y="216" text-anchor="middle" class="label">返回结果</text>
+  </g>
+
+  <g class="node">
+    <rect x="70" y="395" width="220" height="80" rx="12" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+    <text x="180" y="427" text-anchor="middle" class="label">数据接入</text>
+    <text x="180" y="448" text-anchor="middle" class="label">/ 清洗 / 切块 / 标注</text>
+  </g>
+
+  <g class="node">
+    <path d="M330 408 C330 392 500 392 500 408 L500 462 C500 478 330 478 330 462 Z" fill="#e1f5fe" stroke="#0277bd" stroke-width="2"/>
+    <ellipse cx="415" cy="408" rx="85" ry="16" fill="#f4fbff" stroke="#0277bd" stroke-width="2"/>
+    <ellipse cx="415" cy="462" rx="85" ry="16" fill="#d6f0ff" stroke="#0277bd" stroke-width="2"/>
+    <text x="415" y="445" text-anchor="middle" class="label">知识库 / 索引</text>
+  </g>
+
+  <g class="node">
+    <rect x="800" y="395" width="120" height="42" rx="12" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+    <text x="860" y="421" text-anchor="middle" class="small">权限</text>
+  </g>
+  <g class="node">
+    <rect x="950" y="395" width="120" height="42" rx="12" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+    <text x="1010" y="421" text-anchor="middle" class="small">版本</text>
+  </g>
+  <g class="node">
+    <rect x="800" y="460" width="120" height="42" rx="12" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+    <text x="860" y="486" text-anchor="middle" class="small">时效</text>
+  </g>
+  <g class="node">
+    <rect x="950" y="460" width="120" height="42" rx="12" fill="#fff2cc" stroke="#d6b656" stroke-width="2"/>
+    <text x="1010" y="486" text-anchor="middle" class="small">监控 / 排障</text>
+  </g>
+
+  <g class="stroke" fill="none" stroke="#596579" stroke-width="2">
+    <path d="M156 212 L190 212" marker-end="url(#arrow)"/>
+    <path d="M320 212 L360 212" marker-end="url(#arrow)"/>
+    <path d="M480 212 L520 212" marker-end="url(#arrow)"/>
+    <path d="M640 212 L680 212" marker-end="url(#arrow)"/>
+    <path d="M810 212 L850 212" marker-end="url(#arrow)"/>
+    <path d="M980 212 L1025 212" marker-end="url(#arrow)"/>
+    <path d="M290 435 L330 435" marker-end="url(#arrow)"/>
+    <path d="M500 435 L700 435" marker-end="url(#arrow)"/>
+  </g>
+
+  <g class="stroke" fill="none" stroke="#9b7b45" stroke-width="2" stroke-dasharray="6 6">
+    <path d="M860 437 L860 420 L500 420" marker-end="url(#arrowSoft)"/>
+    <path d="M1010 437 L1010 420 L500 420" marker-end="url(#arrowSoft)"/>
+    <path d="M860 502 L860 510 L745 510 L745 247" marker-end="url(#arrowSoft)"/>
+    <path d="M1010 502 L1010 520 L915 520 L915 247" marker-end="url(#arrowSoft)"/>
+  </g>
+
+</svg>

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 是什么</title>
+  <desc id="desc">展示 RAG 从外部知识到答案生成的最小链路。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#5b6472"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#c7d0db" flood-opacity="0.24"/>
+    </filter>
+    <style>
+      .label { font: 700 20px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .sub { font: 500 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #556274; }
+      .small { font: 600 12px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #607086; }
+      .card { filter: url(#shadow); }
+      .line { stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <rect width="1200" height="560" fill="#ffffff"/>
+
+  <g class="card">
+    <rect x="60" y="320" width="220" height="110" rx="18" fill="#eef6ff" stroke="#7ea3d8" stroke-width="2.5"/>
+    <text x="170" y="364" text-anchor="middle" class="label">外部知识</text>
+    <text x="170" y="389" text-anchor="middle" class="small">文档 / 网页 / FAQ / 数据库</text>
+  </g>
+
+  <g class="card">
+    <path d="M330 332 C330 316 500 316 500 332 L500 388 C500 404 330 404 330 388 Z" fill="#f0fbf7" stroke="#7dc4a6" stroke-width="2.5"/>
+    <ellipse cx="415" cy="332" rx="85" ry="14" fill="#f9fffb" stroke="#7dc4a6" stroke-width="2.5"/>
+    <ellipse cx="415" cy="388" rx="85" ry="14" fill="#dff6ea" stroke="#7dc4a6" stroke-width="2.5"/>
+    <text x="415" y="372" text-anchor="middle" class="label">知识库 / 索引</text>
+  </g>
+
+  <g class="card">
+    <rect x="535" y="200" width="150" height="120" rx="18" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="610" y="247" text-anchor="middle" class="label">检索</text>
+    <text x="610" y="275" text-anchor="middle" class="sub">找到相关资料</text>
+  </g>
+
+  <g class="card">
+    <rect x="740" y="200" width="170" height="120" rx="18" fill="#eef6ff" stroke="#7ea3d8" stroke-width="2.5"/>
+    <text x="825" y="247" text-anchor="middle" class="label">上下文</text>
+    <text x="825" y="275" text-anchor="middle" class="sub">问题 + 资料</text>
+  </g>
+
+  <g class="card">
+    <rect x="960" y="200" width="150" height="120" rx="18" fill="#f6effc" stroke="#a985cf" stroke-width="2.5"/>
+    <text x="1035" y="247" text-anchor="middle" class="label">LLM</text>
+    <text x="1035" y="275" text-anchor="middle" class="sub">基于资料作答</text>
+  </g>
+
+  <g class="card">
+    <ellipse cx="1090" cy="360" rx="66" ry="32" fill="#dff2d9" stroke="#82b366" stroke-width="2.5"/>
+    <text x="1090" y="365" text-anchor="middle" class="label" style="font-size:18px;">答案</text>
+  </g>
+
+  <g class="line" fill="none" stroke="#5b6472" stroke-width="2.5">
+    <path d="M280 375 L330 375" marker-end="url(#arrow)"/>
+    <path d="M500 375 L535 260" marker-end="url(#arrow)"/>
+    <path d="M685 260 L740 260" marker-end="url(#arrow)"/>
+    <path d="M910 260 L960 260" marker-end="url(#arrow)"/>
+    <path d="M1035 320 L1090 328" marker-end="url(#arrow)"/>
+  </g>
+</svg>

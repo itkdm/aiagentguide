@@ -9,6 +9,8 @@ RAG 很有用，但不是所有大模型应用都应该上 RAG。
 
 判断是否适合，最关键的不是看“这个技术火不火”，而是看你的问题是否真的依赖**外部知识检索**。
 
+<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/q04-rag.svg" alt="RAG 适用场景判断" />
+
 ## 哪些场景适合用 RAG
 
 适合用 RAG 的场景，通常有一个共同点：**回答时必须参考外部资料，而且这些资料对答案质量影响很大。**

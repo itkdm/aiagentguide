@@ -29,6 +29,14 @@ author: AI Agent Guide
 
 ## 一个典型 Agent 的执行链路
 
+<div style="display: flex; justify-content: center; margin: 18px 0 22px;">
+  <SingleImagePreview
+    src="./assets/getting-started-agent-execution-loop.png"
+    alt="Agent 执行闭环示意图"
+    style="width: min(980px, 100%);"
+  />
+</div>
+
 如果把一个 Agent 的运行过程压缩成最常见的形态，通常会经历下面这条链路：
 
 1. 接收用户目标

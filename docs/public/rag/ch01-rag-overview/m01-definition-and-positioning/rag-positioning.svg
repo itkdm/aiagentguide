@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 定义与定位</title>
+  <desc id="desc">展示搜索、知识库问答、RAG 与 Agent 的位置关系。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#5b6472"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#c7d0db" flood-opacity="0.24"/>
+    </filter>
+    <style>
+      .label { font: 700 22px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .sub { font: 500 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #556274; }
+      .card { filter: url(#shadow); }
+      .line { stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="420" fill="#ffffff"/>
+
+  <g class="card">
+    <rect x="60" y="120" width="225" height="150" rx="22" fill="#eef6ff" stroke="#7ea3d8" stroke-width="2.5"/>
+    <text x="172.5" y="168" text-anchor="middle" class="label">搜索</text>
+    <text x="172.5" y="197" text-anchor="middle" class="sub">找资料</text>
+  </g>
+
+  <g class="card">
+    <rect x="340" y="120" width="225" height="150" rx="22" fill="#f0fbf7" stroke="#7dc4a6" stroke-width="2.5"/>
+    <text x="452.5" y="168" text-anchor="middle" class="label">知识库问答</text>
+    <text x="452.5" y="197" text-anchor="middle" class="sub">基于固定知识库回答</text>
+  </g>
+
+  <g class="card">
+    <rect x="620" y="120" width="225" height="150" rx="22" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="732.5" y="168" text-anchor="middle" class="label">RAG</text>
+    <text x="732.5" y="197" text-anchor="middle" class="sub">检索 + 生成</text>
+  </g>
+
+  <g class="card">
+    <rect x="900" y="120" width="225" height="150" rx="22" fill="#f6effc" stroke="#a985cf" stroke-width="2.5"/>
+    <text x="1012.5" y="168" text-anchor="middle" class="label">Agent</text>
+    <text x="1012.5" y="197" text-anchor="middle" class="sub">规划 + 工具</text>
+  </g>
+
+  <g class="line" fill="none" stroke="#5b6472" stroke-width="2.5">
+    <path d="M285 195 L340 195" marker-end="url(#arrow)"/>
+    <path d="M565 195 L620 195" marker-end="url(#arrow)"/>
+    <path d="M845 195 L900 195" marker-end="url(#arrow)"/>
+  </g>
+
+  <g class="line" fill="none" stroke="#c8cfd9" stroke-width="2">
+    <path d="M60 314 L1125 314"/>
+  </g>
+</svg>

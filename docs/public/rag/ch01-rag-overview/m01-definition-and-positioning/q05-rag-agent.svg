@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
+  <title id="title">RAG、知识库问答、搜索、Agent 的边界</title>
+  <desc id="desc">展示搜索、知识库问答、RAG 和 Agent 的职责边界。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#5b6472"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#c7d0db" flood-opacity="0.24"/>
+    </filter>
+    <style>
+      .label { font: 700 20px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .sub { font: 500 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #556274; }
+      .tiny { font: 600 12px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #64748b; }
+      .card { filter: url(#shadow); }
+      .line { stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <rect width="1200" height="620" fill="#ffffff"/>
+
+  <g class="card">
+    <rect x="70" y="170" width="225" height="150" rx="22" fill="#eef6ff" stroke="#7ea3d8" stroke-width="2.5"/>
+    <text x="182.5" y="218" text-anchor="middle" class="label">搜索</text>
+    <text x="182.5" y="248" text-anchor="middle" class="sub">找资料</text>
+  </g>
+
+  <g class="card">
+    <rect x="340" y="170" width="225" height="150" rx="22" fill="#f0fbf7" stroke="#7dc4a6" stroke-width="2.5"/>
+    <text x="452.5" y="218" text-anchor="middle" class="label">知识库问答</text>
+    <text x="452.5" y="248" text-anchor="middle" class="sub">围绕知识范围回答</text>
+  </g>
+
+  <g class="card">
+    <rect x="610" y="170" width="225" height="150" rx="22" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="722.5" y="218" text-anchor="middle" class="label">RAG</text>
+    <text x="722.5" y="248" text-anchor="middle" class="sub">检索 + 生成</text>
+  </g>
+
+  <g class="card">
+    <rect x="880" y="170" width="225" height="150" rx="22" fill="#f6effc" stroke="#a985cf" stroke-width="2.5"/>
+    <text x="992.5" y="218" text-anchor="middle" class="label">Agent</text>
+    <text x="992.5" y="248" text-anchor="middle" class="sub">规划 + 工具</text>
+  </g>
+
+  <g class="line" fill="none" stroke="#5b6472" stroke-width="2.5">
+    <path d="M295 245 L340 245" marker-end="url(#arrow)"/>
+    <path d="M565 245 L610 245" marker-end="url(#arrow)"/>
+    <path d="M835 245 L880 245" marker-end="url(#arrow)"/>
+  </g>
+
+  <g class="card">
+    <rect x="140" y="390" width="920" height="160" rx="24" fill="#fafafa" stroke="#d7dce3" stroke-width="2"/>
+    <text x="600" y="435" text-anchor="middle" class="label">职责边界</text>
+    <text x="600" y="468" text-anchor="middle" class="tiny">搜索：把资料找出来</text>
+    <text x="600" y="492" text-anchor="middle" class="tiny">知识库问答：围绕知识范围回答</text>
+    <text x="600" y="516" text-anchor="middle" class="tiny">RAG：先检索，再生成</text>
+    <text x="600" y="540" text-anchor="middle" class="tiny">Agent：规划、决策、调用工具</text>
+  </g>
+</svg>

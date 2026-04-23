@@ -145,22 +145,22 @@ description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 A
 ## 建议阅读顺序
 
 <div class="gs-path-flow">
-  <a class="gs-path-step" href="./index.md">
+  <a class="gs-path-step" href="./">
     <span class="gs-path-name">入门</span>
     <span class="gs-path-desc">建立整体认知，先分清核心概念和判断标准</span>
   </a>
   <span class="gs-path-arrow" aria-hidden="true">→</span>
-  <a class="gs-path-step" href="../frameworks/index.md">
+  <a class="gs-path-step" href="../frameworks/">
     <span class="gs-path-name">框架</span>
     <span class="gs-path-desc">解决技术选型问题，判断不同框架适合什么场景</span>
   </a>
   <span class="gs-path-arrow" aria-hidden="true">→</span>
-  <a class="gs-path-step" href="../tutorials/index.md">
+  <a class="gs-path-step" href="../tutorials/">
     <span class="gs-path-name">实战</span>
     <span class="gs-path-desc">解决怎么动手的问题，把认知落到最小可运行案例里</span>
   </a>
   <span class="gs-path-arrow" aria-hidden="true">→</span>
-  <a class="gs-path-step" href="../tools/index.md">
+  <a class="gs-path-step" href="../tools/">
     <span class="gs-path-name">工具（按需查）</span>
     <span class="gs-path-desc">按需查产品、平台和工具生态，不需要一开始全部系统阅读</span>
   </a>

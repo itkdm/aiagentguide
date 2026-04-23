@@ -7,6 +7,8 @@ summary: 帮助读者先建立对 RAG 的基本认识，理解它的定义、价
 
 这部分会先帮你建立对 RAG 的基本认识，回答它是什么、为什么重要，以及它和搜索、知识库问答、微调、Agent 之间到底是什么关系。
 
+<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/rag-positioning.svg" alt="RAG 定义与定位" />
+
 这一节最重要的任务，不是先讲实现细节，而是先帮你把几个最容易混淆的概念拆开：
 
 - RAG 到底是不是一种“模型能力”

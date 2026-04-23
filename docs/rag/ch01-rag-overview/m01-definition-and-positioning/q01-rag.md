@@ -11,6 +11,8 @@ RAG 是 `Retrieval-Augmented Generation` 的缩写，中文通常叫“检索增
 
 **让模型在回答之前，先查资料，再基于资料作答。**
 
+<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag.svg" alt="RAG 是什么" />
+
 这件事之所以重要，是因为大模型本身的知识主要来自训练阶段。训练完成后，模型的内部知识就基本固定了。它可能不知道最新信息，也不知道你的私有文档、内部流程、产品细节和业务术语。RAG 的作用，就是把这部分“模型原本不知道，或者知道得不够准”的信息，在回答时临时补进来。
 
 ## RAG 的核心组成是什么

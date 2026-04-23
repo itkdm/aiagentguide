@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">RAG 和微调的区别</title>
+  <desc id="desc">并排展示 RAG 与微调在知识进入方式、更新方式和适用场景上的差异。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#5b6472"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#c7d0db" flood-opacity="0.22"/>
+    </filter>
+    <style>
+      .title { font: 700 24px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .label { font: 700 22px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #1f2937; }
+      .sub { font: 500 15px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #556274; }
+      .small { font: 600 14px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .tiny { font: 500 13px "Inter", "PingFang SC", "Microsoft YaHei", sans-serif; fill: #64748b; }
+      .card { filter: url(#shadow); }
+      .line { stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </defs>
+  <rect width="1200" height="760" fill="#ffffff"/>
+
+  <text x="600" y="72" text-anchor="middle" class="title">RAG 和微调的区别</text>
+
+  <g class="card">
+    <rect x="110" y="150" width="360" height="170" rx="24" fill="#fff8ea" stroke="#dfba62" stroke-width="2.5"/>
+    <text x="290" y="215" text-anchor="middle" class="label">RAG</text>
+    <text x="290" y="248" text-anchor="middle" class="sub">外部知识 + 检索 + 生成</text>
+  </g>
+
+  <g class="card">
+    <rect x="730" y="150" width="360" height="170" rx="24" fill="#f0fbf7" stroke="#7dc4a6" stroke-width="2.5"/>
+    <text x="910" y="215" text-anchor="middle" class="label">微调</text>
+    <text x="910" y="248" text-anchor="middle" class="sub">训练数据 + 参数更新 + 生成</text>
+  </g>
+
+  <g class="card">
+    <rect x="220" y="390" width="760" height="90" rx="20" fill="#fafafa" stroke="#d7dce3" stroke-width="2"/>
+    <text x="600" y="445" text-anchor="middle" class="small">知识如何进入系统</text>
+  </g>
+
+  <g class="card">
+    <rect x="240" y="505" width="300" height="110" rx="20" fill="#fffdf4" stroke="#d9b65a" stroke-width="2"/>
+    <text x="390" y="548" text-anchor="middle" class="small">RAG：实时接入</text>
+    <text x="390" y="574" text-anchor="middle" class="tiny">可按来源更新</text>
+  </g>
+
+  <g class="card">
+    <rect x="660" y="505" width="300" height="110" rx="20" fill="#f4fcf8" stroke="#75be9e" stroke-width="2"/>
+    <text x="810" y="548" text-anchor="middle" class="small">微调：更新参数</text>
+    <text x="810" y="574" text-anchor="middle" class="tiny">改写模型能力</text>
+  </g>
+
+  <line x1="290" y1="320" x2="600" y2="390" class="line" stroke="#5b6472" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="910" y1="320" x2="600" y2="390" class="line" stroke="#5b6472" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="600" y1="480" x2="390" y2="505" class="line" stroke="#d9b65a" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <line x1="600" y1="480" x2="810" y2="505" class="line" stroke="#75be9e" stroke-width="2.5" marker-end="url(#arrow)"/>
+</svg>
