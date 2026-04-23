@@ -31,7 +31,7 @@ author: AI Agent Guide
 
 <div style="display: flex; justify-content: center; margin: 18px 0 22px;">
   <SingleImagePreview
-    src="./assets/getting-started-first-agent-scope.png"
+    src="/assets/getting-started/getting-started-first-agent-scope.png"
     alt="第一个 Agent 选题范围示意图"
     style="width: min(980px, 100%);"
   />
@@ -84,7 +84,7 @@ author: AI Agent Guide
 
 <div style="display: flex; justify-content: center; margin: 18px 0 22px;">
   <SingleImagePreview
-    src="./assets/getting-started-lowcode-vs-code.png"
+    src="/assets/getting-started/getting-started-lowcode-vs-code.png"
     alt="低代码平台与代码框架对比图"
     style="width: min(980px, 100%);"
   />

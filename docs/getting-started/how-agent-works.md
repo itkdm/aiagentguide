@@ -31,7 +31,7 @@ author: AI Agent Guide
 
 <div style="display: flex; justify-content: center; margin: 18px 0 22px;">
   <SingleImagePreview
-    src="./assets/getting-started-agent-execution-loop.png"
+    src="/assets/getting-started/getting-started-agent-execution-loop.png"
     alt="Agent 执行闭环示意图"
     style="width: min(980px, 100%);"
   />

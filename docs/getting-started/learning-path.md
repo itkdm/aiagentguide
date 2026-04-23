@@ -14,7 +14,7 @@
 
 <div style="display: flex; justify-content: center; margin: 18px 0 22px;">
   <SingleImagePreview
-    src="./assets/getting-started-learning-roadmap.png"
+    src="/assets/getting-started/getting-started-learning-roadmap.png"
     alt="AI Agent 入门学习路线图"
     style="width: min(980px, 100%);"
   />
