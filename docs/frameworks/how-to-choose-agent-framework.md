@@ -1,6 +1,8 @@
 ---
 title: 如何选择合适的 AI Agent 框架
-summary: 基于官方文档、技术团队文章和社区实践，总结 LangChain、LangGraph、AutoGen、CrewAI、LangChain4j、Spring AI 等框架的选型方法。
+description: 如何选择合适的 AI Agent 框架，基于最新各框架官方文档与发布信息，整理 LangChain、LangGraph、AutoGen、CrewAI、LangChain4j、Spring AI、Spring AI Alibaba、AgentScope Java 的选型方法。
+summary: 本文详细介绍了如何选择合适的AI Agent框架，给出选型方法和指导建议！
+
 keywords:
   - AI Agent 框架选型
   - LangChain
@@ -9,304 +11,441 @@ keywords:
   - CrewAI
   - LangChain4j
   - Spring AI
+  - Spring AI Alibaba
+  - AgentScope Java
 tags:
   - AI Agent
   - 框架
   - 选型
+date: 2026-04-30
+lastUpdated: 2026-04-30
+status: published
+assets: none
+reviewed: false
+sourceType: curated
 author: AI Agent Guide
-description: "基于官方文档、技术团队文章和社区实践，总结 LangChain、LangGraph、AutoGen、CrewAI、LangChain4j、Spring AI 等框架的选型方法。"
+draft: false
+noindex: false
 ---
 
 # 如何选择合适的 AI Agent 框架
 
-这篇文章不是按“谁最火”来排名，而是回答一个更实际的问题：你的团队、技术栈和业务目标，适合哪一类框架。这里的判断基于官方文档、框架团队博客、AWS 等技术团队文章，以及部分社区技术总结；截至 **2026 年 4 月 2 日**，结论是一个很明确的方向：先按语言和系统约束缩小范围，再按控制力、多 Agent 协作、状态持久化和工程化要求做选择，比直接在框架名字之间横向 PK 更可靠。
+选 AI Agent 框架，最容易犯的错不是“选错技术”，而是“先按热度选，再倒推业务”。真正决定成败的通常不是谁最火，而是下面这几件事：
+
+- 你的主语言是 Python 还是 Java
+- 你要的是“快速做出一个能跑的 Agent”，还是“长期维护的工作流系统”
+- 你到底需要单 Agent、带状态的工作流，还是多 Agent 协作
+- 你对持久化、恢复执行、可观测性、企业集成的要求有多高
 
 ## 先给结论
 
-如果你要一个最快能上手、生态最广、教程最多的 Python 方案，优先看 **LangChain**。  
-如果你要的是可控流程、状态机、长链路、多分支和可恢复执行，优先看 **LangGraph**。  
-如果你要研究型或协作型的多 Agent 系统，尤其是更强调 agent-to-agent 对话、角色分工和事件驱动，优先看 **AutoGen**，但要同时关注微软后续的 **Microsoft Agent Framework** 方向。  
-如果你想用更高层的方式快速表达“团队协作型 Agent”，可以看 **CrewAI**。  
-如果你的主战场是 Java，优先在 **LangChain4j** 和 **Spring AI** 之间做判断：前者更像 Java 版 LLM/Agent 开发框架，后者更适合已有 Spring 体系、想把 AI 能力稳定接入企业应用的团队。
+如果你只想先有一个靠谱起点，可以先按这个顺序判断：
 
-## 第一步：先按语言和现有系统做第一轮筛选
+- Python 团队想快速起步，优先看 **LangChain**
+- Python 团队要复杂状态流、恢复执行、人机介入，优先看 **LangGraph**
+- Python 团队的核心问题就是多 Agent 协作机制，重点看 **AutoGen** 或 **CrewAI**
+- Java 团队想保留接近 LangChain 的开发体验，优先看 **LangChain4j**
+- Java 团队要和 Spring Boot、Advisors、MCP、企业数据源稳妥集成，优先看 **Spring AI**
+- Java 团队要更完整的 Agent Framework、图式工作流、A2A、上下文工程和可视化平台，重点看 **Spring AI Alibaba**
+- Java 团队想以“Agent 本身”为中心构建 ReAct、多 Agent、计划、记忆和工具协作，重点看 **AgentScope Java**
 
-很多团队一开始就陷入“LangChain 还是 AutoGen”的讨论，但如果你的后端主栈是 Java，这个问题其实应该先变成“是不是应该优先考虑 LangChain4j 或 Spring AI”。语言和运行环境决定了工程摩擦成本，也决定了后面接入监控、认证、数据库、消息系统、发布流程时要付出的代价。
+这里没有“绝对最优框架”，只有“当前问题更适合哪一层抽象”。
 
-### Python 阵营更适合这些情况
+## 第一步：先按语言和组织约束筛掉一半选项
 
-- 团队已经大量使用 Python 做数据、AI、评估和实验
-- 你要快速验证 Agent 流程、RAG、工具调用和多 Agent 协作
-- 你希望优先使用社区里最新的 Agent 能力和第三方集成
-- 你接受“先快跑，再补工程化”的节奏
+很多团队一上来就在比较 LangChain、CrewAI、AutoGen，但如果你的线上主系统本来就是 Java / Spring，这个比较顺序往往就不对。
 
-这时主要候选通常是 **LangChain、LangGraph、AutoGen、CrewAI**。
+### 更适合从 Python 框架开始的情况
 
-### Java 阵营更适合这些情况
+- 团队已经用 Python 做模型实验、评测、RAG 或数据工作流
+- 目标是快速验证 Agent、工具调用、多 Agent、研究型流程
+- 可以接受“先把原型做出来，再逐步工程化”
 
-- 线上核心系统本来就是 Java / Spring
-- 你更关心和企业系统、服务治理、权限、审计、观测体系的整合
-- 团队更熟悉面向接口、依赖注入、测试和稳定发布流程
-- 你不想把核心业务拆到 Python 再跨语言维护
+这时通常先在 **LangChain、LangGraph、AutoGen、CrewAI** 之间选。
 
-这时主要候选通常是 **LangChain4j、Spring AI**。
+### 更适合从 Java 框架开始的情况
 
-## 第二步：判断你要“更快搭起来”，还是“更强控制力”
+- 核心业务系统已经在 Java / Spring 上
+- 更关心权限、审计、网关、事务、监控、服务治理的整合成本
+- 不想把 AI 部分拆成独立 Python 服务再跨语言维护
 
-这是选型里最容易被忽略的一步。很多框架都能做工具调用、多轮对话和简单工作流，但它们的抽象层次差异很大。
+这时通常应优先在 **LangChain4j、Spring AI、Spring AI Alibaba、AgentScope Java** 之间比较。
 
-### 更偏高层抽象，优先开发效率
+这一步非常重要。因为语言不是“实现细节”，而是部署方式、团队能力、监控体系和长期维护成本的一部分。
 
-如果你想尽快把应用做出来，通常会偏向这些框架：
+## 第二步：先分清楚你要的是哪一类系统
 
-- **LangChain**：组件丰富，工具、模型、memory、RAG、structured output、middleware 等拼装速度快
-- **CrewAI**：擅长把“角色 + 任务 + 流程”写得比较直观
-- **LangChain4j**：`AI Services` 这层抽象对 Java 团队很友好
+“AI Agent 框架”其实覆盖了三类差异很大的东西：
 
-这类框架的优势是学习曲线更平滑、样例更多、上手更快；代价是当流程复杂、状态很多、恢复逻辑很重时，你可能会希望拥有更底层的状态控制。
+### 1. 单 Agent + 工具调用
 
-### 更偏低层控制，优先可预测性和复杂流程
+这类系统的核心是一个主 Agent，根据上下文决定何时调用工具、何时返回结果。
 
-如果你需要的是以下能力：
+典型场景：
+
+- 助手类问答
+- RAG + 工具查询
+- 表单处理
+- 简单业务自动化
+
+适合优先看：
+
+- **LangChain**
+- **LangChain4j**
+- **Spring AI**
+
+### 2. 带状态的工作流 / Agentic Workflow
+
+这类系统比“一个 Agent 调工具”更复杂，通常需要：
 
 - 明确的节点和边
-- 分支、循环、人工介入
+- 条件分支
+- 循环
+- 持久化状态
 - 中断后恢复
-- 长时间运行任务
-- 更稳定的状态持久化
+- human-in-the-loop
 
-那就应该重点看 **LangGraph**。AWS 在介绍 LangGraph 与 DynamoDB 的文章里，明确把它放在“durable AI agents”和生产级状态持久化的语境下；LangGraph 官方文档也一直强调它适合需要循环、分支、持久化和人工介入的 agent 工作流。
+适合优先看：
 
-## 第三步：判断你是真正需要“多 Agent”，还是只是“一个 Agent + 多工具”
+- **LangGraph**
+- **Spring AI Alibaba**
 
-很多项目口头上说要做多 Agent，最后真正落地的却是一个主 Agent 调多个工具。这两者的技术选择并不一样。
+如果你已经知道自己需要“长链路执行”和“恢复能力”，那就不要只盯着高层 Agent API。
 
-### 如果本质还是单 Agent 编排
+### 3. 多 Agent 协作系统
 
-你大概率不需要为了“多 Agent”三个字引入更复杂的协作框架。下面这些情况，更适合从单 Agent 开始：
+这类系统的难点不再是“怎么调一个工具”，而是：
 
-- 主要任务是问答、检索、总结、表单处理
-- 工具数量不少，但主控逻辑并不复杂
-- 你更需要稳定性，而不是多个角色之间的讨论过程
+- 角色怎么分工
+- Agent 之间怎么通信
+- 谁来调度、谁来收敛结果
+- 是否需要事件驱动或分布式运行时
 
-这时 **LangChain**、**LangGraph**、**LangChain4j**、**Spring AI** 往往就够了。
+适合优先看：
 
-### 如果你真的需要角色分工和 Agent 协作
+- **AutoGen**
+- **CrewAI**
+- **AgentScope Java**
+- 某些场景下的 **LangGraph** 或 **Spring AI Alibaba**
 
-下面这些场景更适合多 Agent 框架：
+一个很实用的判断标准是：如果你的问题本质上仍然是“一个主 Agent 调多个工具”，就先别急着上多 Agent。
 
-- 规划 Agent、执行 Agent、审查 Agent 分工明确
-- 需要专家角色之间来回协作
-- 需要异步事件流或更自然的 agent-to-agent 通信
-- 你要研究不同协作范式对结果的影响
+## 第三步：判断你要的是“快”，还是“可控”
 
-这时可以重点比较 **AutoGen、CrewAI、LangGraph**：
+这是很多选型文章讲得不够清楚的地方。
 
-- **AutoGen** 更偏研究型和可扩展协作型架构，微软文档里强调 event-driven、multi-agent、distributed 系统能力
-- **CrewAI** 更偏面向业务表达的多 Agent 编排，上手门槛通常低于自己从底层搭多 Agent 协议
-- **LangGraph** 则更适合“多 Agent 也是图中的节点和状态迁移”的思路
+### 更偏快速搭建
 
-## 第四步：把“生产要求”单独拎出来看
+如果你的目标是：
 
-很多教程只对比“能不能做出来”，但真正决定长期维护成本的是生产要求。
+- 尽快做出第一个版本
+- 借助现成抽象减少样板代码
+- 先验证业务价值，再逐步补稳定性
 
-### 如果你需要可恢复执行和持久化状态
+更偏向这些框架：
 
-优先看 **LangGraph**。它在官方定位里就强调 durable execution、human-in-the-loop、stateful workflows，这些能力天然适合客服流程、审批流、研究助手、长任务编排等场景。
+- **LangChain**
+- **CrewAI**
+- **LangChain4j**
+- 在企业集成语境下的 **Spring AI**
 
-### 如果你需要企业系统集成
+它们的共同点是：更容易起步，更适合原型和第一阶段业务落地。
 
-优先看 **Spring AI** 或 **LangChain4j**：
+### 更偏流程控制和状态治理
 
-- **Spring AI** 更适合已有 Spring Boot、Spring Security、Spring Data、Micrometer、企业网关和内部平台体系的团队
-- **LangChain4j** 更适合想在 Java 中获得比较完整的 LLM/Agent 开发体验，同时保留更轻量接入方式的团队
+如果你的目标是：
 
-### 如果你需要大量现成集成和社区案例
+- 明确控制执行路径
+- 管理复杂状态
+- 做持久化和恢复
+- 支持长时间运行
+- 对接人机协作节点
 
-优先看 **LangChain**。从资料数量、第三方集成、教程密度和社区可搜索性来看，它依然是最容易找到参考实现的框架之一。
+更偏向这些框架：
 
-## 各框架怎么选
+- **LangGraph**
+- **Spring AI Alibaba Graph / Agent Framework**
+- **AutoGen Core**
+
+这类框架不会自动让事情更简单，但会在系统变复杂后更可控。
+
+## 第四步：把生产要求单独拿出来评估
+
+框架在 demo 阶段差异没有那么大，但到了生产环境，差异会明显放大。
+
+### 如果你重视持久化和恢复执行
+
+官方定位最明确的是 **LangGraph**。LangChain 官方文档把它定义为面向长期运行、有状态 Agent 的低层编排框架，强调 durable execution、streaming 和 human-in-the-loop。
+
+在 Java 生态里，**Spring AI Alibaba** 也明显往这个方向走。它把 Graph 作为底层运行时，把 Agent Framework 建在 Graph 之上，强调持久化、工作流编排、流式处理、上下文工程和内置多 Agent 模式。
+
+### 如果你重视企业系统整合
+
+优先比较：
+
+- **Spring AI**
+- **Spring AI Alibaba**
+- **LangChain4j**
+
+其中：
+
+- **Spring AI** 的强项是 Spring 风格的统一抽象，例如 `ChatClient`、Advisors、Tools、MCP、向量库、可观测性
+- **Spring AI Alibaba** 的强项是在 Spring AI 之上继续补 Agent Framework、Graph、A2A、可视化平台和阿里云 / 通义生态实践
+- **LangChain4j** 更像“Java 版 LLM/Agent 应用开发工具箱”，而不是整个企业平台层
+
+### 如果你重视多 Agent 研究或复杂协作机制
+
+优先比较：
+
+- **AutoGen**
+- **CrewAI**
+- **AgentScope Java**
+
+其中：
+
+- **AutoGen** 更强调 event-driven、distributed、scalable multi-agent systems
+- **CrewAI** 更强调 Crew 和 Flow 的组合，偏业务表达
+- **AgentScope Java** 更强调 ReAct、多 Agent 模式、计划、记忆、工具和消息协作
+
+## 各框架该怎么理解
 
 ## LangChain
 
-适合人群：
+适合谁：
 
-- 想最快进入 Agent 开发
-- 需要丰富集成和大量教程
-- 业务以工具调用、RAG、结构化输出、简单到中等复杂流程为主
+- 需要最快上手 Python Agent 开发
+- 想先把工具调用、RAG、结构化输出做起来
+- 需要大量社区案例和生态集成
 
-优点：
+怎么理解它：
 
-- 生态最成熟之一
-- 上手成本低于图式编排框架
-- 从 demo 到业务原型非常快
+LangChain 现在的定位比早期更清晰。官方文档把它描述成“带预构建 Agent 架构和大量集成的开源框架”，强调 **快速起步**，同时把更底层、强控制的需求引导到 LangGraph。LangChain v1 也进一步把重点收敛到 agent、middleware、structured output 这些生产常用能力上。
 
-注意点：
+适合什么时候选：
 
-- 如果流程越来越复杂，往往会自然过渡到 LangGraph
-- 不要把所有复杂控制逻辑都硬塞进链式抽象里
-
-一句话判断：**先做出来，再逐步复杂化**，LangChain 通常是最稳妥的起点。
+- 你先要做出第一个可用版本
+- 流程还不算特别复杂
+- 你想保留后续迁移到 LangGraph 的空间
 
 ## LangGraph
 
-适合人群：
+适合谁：
 
-- 需要更强控制力
-- 要处理复杂工作流、长链路状态、分支和回退
-- 已经明确知道系统会走向生产化
+- 已经明确要做有状态工作流
+- 需要恢复执行、长链路、分支、循环、人机介入
+- 希望把 Agent 看成图中的节点，而不是黑盒调用
 
-优点：
+怎么理解它：
 
-- 状态和流程控制能力强
-- 非常适合 agent workflow、durable execution、human-in-the-loop
-- 比“高层封装全包”更容易做复杂治理
+LangGraph 官方现在把自己定位得很直接：**低层编排框架和运行时**，面向长期运行、有状态 Agent。官方明确说，如果你只是刚开始做 Agent，应该先看 LangChain；如果你需要 durable execution、human-in-the-loop、persistence 等底层能力，再上 LangGraph。
 
-注意点：
+适合什么时候选：
 
-- 建模成本高于 LangChain
-- 对团队抽象能力和流程设计要求更高
-
-一句话判断：**当 Agent 不再是 demo，而是一个持续运行的业务系统时，LangGraph 的价值会明显上升。**
+- 你已经知道系统不是简单问答或工具调用
+- 你需要长期维护复杂流程
+- 你愿意为控制力付出建模成本
 
 ## AutoGen
 
-适合人群：
+适合谁：
 
-- 重点关注多 Agent 协作
-- 做研究型系统、实验型系统、复杂角色协同
-- 愿意接受更偏框架机制和事件驱动的编程模型
+- 重点研究或实现多 Agent 协作
+- 需要事件驱动和可扩展运行时
+- 需要把单 Agent、AgentChat、Core、Extensions 分层使用
 
-优点：
+怎么理解它：
 
-- 多 Agent 协作能力强
-- 微软文档强调事件驱动、分布式、跨语言和可扩展的 agent runtime
-- 对需要 agent-to-agent interaction 的场景很自然
+AutoGen 现在已经不是单一抽象，而是分成 **AgentChat、Core、Extensions、Studio**。其中 AgentChat 适合做对话式单 / 多 Agent 应用，Core 则明确定位为 event-driven 的可扩展多 Agent 框架。
 
-注意点：
+适合什么时候选：
 
-- 截至 **2026 年 4 月 2 日**，微软公开文档已经将 **Microsoft Agent Framework** 描述为 **AutoGen 与 Semantic Kernel 的直接继任方向**，而且处于 public preview；如果你是全新项目，并且本来就在微软技术栈上，应该把这个演进方向一起纳入评估，而不是只看旧版 AutoGen
-- 如果业务核心不是多 Agent 协作，AutoGen 可能不是最省成本的方案
-
-一句话判断：**当“多个 Agent 如何协作”是核心问题时，再优先考虑 AutoGen。**
+- “多个 Agent 怎么协作”本身就是核心问题
+- 你愿意接受更底层、更框架化的建模方式
 
 ## CrewAI
 
-适合人群：
+适合谁：
 
-- 需要快速定义多个角色协作
-- 更看重业务表达清晰度，而不是底层流程控制细节
-- 希望团队更快把多 Agent 概念落成代码
+- 想快速表达“多角色团队协作”
+- 需要 Flows + Crews 的组合
+- 希望多 Agent 系统更贴近业务语言
 
-优点：
+怎么理解它：
 
-- 角色、任务、流程表达直接
-- 对业务同学和应用开发同学更容易解释
-- 很适合“多角色团队协作”的产品原型
+CrewAI 官方现在把体系拆成两层：**Flows** 负责状态、事件和控制流，**Crews** 负责自治协作。这个定位比“纯多 Agent 框架”更容易落地，因为它实际上在回答一个很现实的问题：哪些地方该由流程控制，哪些地方该交给一组 Agent。
 
-注意点：
+适合什么时候选：
 
-- 当系统需要更强状态机、恢复机制和底层控制时，可能不如 LangGraph 灵活
-- 需要关注其在你目标规模下的工程化边界
-
-一句话判断：**如果你想快速验证“一个 Agent 团队怎么协作”，CrewAI 是很实用的高层选择。**
+- 你想更快验证多 Agent 团队协作
+- 你不想从底层事件系统开始搭
 
 ## LangChain4j
 
-适合人群：
+适合谁：
 
-- Java 团队想用更自然的方式构建 LLM/Agent 应用
-- 希望保留 Java 工程习惯，同时获得完整 AI 开发体验
-- 需要 tools、RAG、memory、structured output 等能力
+- Java 团队想获得接近 LangChain 的开发体验
+- 需要 AI Services、Tools、RAG、Memory、Structured Output 等 Java 友好抽象
+- 不一定深度绑定 Spring 体系
 
-优点：
+怎么理解它：
 
-- 面向 Java 的抽象更自然
-- `AI Services` 显著降低了接入门槛
-- 在 Java 生态中，学习资料和样例已经足够形成稳定起点
+LangChain4j 的官方文档一直很明确：它的目标是**简化 LLM 集成到 Java 应用中的工作**。它既有低层 primitives，也有高层 `AI Services` 抽象，并且对 Spring Boot、Quarkus、Micronaut、Helidon 都有整合。
 
-注意点：
+适合什么时候选：
 
-- 如果你高度依赖 Spring 全家桶和平台治理，也要同时评估 Spring AI
-- 某些最新 Agent 范式的迭代速度，可能没有 Python 生态快
-
-一句话判断：**想在 Java 里获得接近 LangChain 级别的开发体验，LangChain4j 是最值得优先评估的候选。**
+- 你是 Java 团队
+- 你要的是“通用 Java LLM/Agent 框架”
+- 你更看重开发体验，而不是完整的企业平台集成
 
 ## Spring AI
 
-适合人群：
+适合谁：
 
-- 已有大量 Spring Boot 服务
-- 更关心企业集成、服务治理、可观测性和稳定落地
-- 希望 AI 能力以“企业应用能力”的方式进入现有系统
+- 已有 Spring Boot 业务系统
+- 需要统一接模型、向量库、工具、MCP、RAG 和可观测性
+- 想把 AI 能力作为企业应用能力引入，而不是单独搭一套 AI 平台
 
-优点：
+怎么理解它：
 
-- 与 Spring 生态整合自然
-- 适合接企业数据源、网关、鉴权、监控和服务体系
-- 对 Java 企业团队来说，迁移成本低
+Spring AI 的核心不是“替你定义一整套 Agent 世界观”，而是把常见 AI 能力用 Spring 风格统一起来。官方参考文档强调的重点包括 `ChatClient`、Advisors、Tools / Function Calling、MCP、向量库、观测和评测。根据 Spring 官方在 **2026 年 4 月 27 日** 的发布信息，Spring AI 当时最新可用版本为 **1.0.6、1.1.5 和 2.0.0-M5**。
 
-注意点：
+适合什么时候选：
 
-- 它的优势不在“最炫的 Agent 抽象”，而在“把 AI 能力稳定地接入现有企业系统”
-- 如果你主要在做复杂 Agent workflow，本身也要和 LangGraph、LangChain4j 等方案一起对比
+- 你首先在做 Spring 应用
+- 你希望 AI 成为现有架构的一部分
+- 你需要稳定的企业整合能力
 
-一句话判断：**如果你的问题不是“从零设计一个 AI 实验框架”，而是“如何把 AI 能力安全接进现有 Spring 系统”，Spring AI 会更合适。**
+## Spring AI Alibaba
 
-## 一张表看懂怎么选
+适合谁：
 
-| 框架 | 语言 | 更适合的核心问题 | 更适合谁 |
+- Java / Spring 团队不仅要接入模型，还要做更完整的 Agent Framework
+- 需要 Graph、Workflow、多 Agent、A2A、上下文工程和可视化平台
+- 希望尽量沿着 Spring AI 路线继续往上搭
+
+怎么理解它：
+
+从官方仓库和文档看，Spring AI Alibaba 不是简单的“Spring AI 中文扩展包”。它已经拆成比较清晰的几层：
+
+- **Agent Framework**：面向快速开发 Agent，内置 Context Engineering 和 Human In The Loop
+- **Graph**：底层运行时，负责持久化、工作流编排、流式处理等能力
+- **Admin / Studio**：偏平台化和可视化调试
+- **A2A + Nacos 集成**：支持分布式 Agent 协作
+
+如果你是在 Java 企业场景里做多 Agent、工作流和平台化，这个方向比单独使用 Spring AI 更值得重点评估。
+
+## AgentScope Java
+
+适合谁：
+
+- 想在 Java 里直接构建“以 Agent 为中心”的系统
+- 需要 ReAct、工具、记忆、计划、多 Agent 模式
+- 想要比单纯 `ChatClient + Tools` 更强的 Agent 运行时语义
+
+怎么理解它：
+
+AgentScope Java 的官方文档和仓库都很强调“agent-oriented programming”。它提供开箱即用的 `ReActAgent`，支持：
+
+- 工具调用，包括并行工具调用和 MCP 集成
+- 短期记忆和长时记忆
+- PlanNotebook
+- MsgHub、Subagents、Handoffs、Agent as Tool 等多 Agent 模式
+
+如果你要的是“Java 世界里的 Agent 原生框架”，而不是先从通用企业 AI 抽象开始，那么它是一个很值得补进候选集的选项。
+
+## Java 生态怎么选
+
+### 选 LangChain4j
+
+当你要的是：
+
+- Java 友好的 LLM / Agent 开发体验
+- 高层 `AI Services` 抽象
+- 跨框架整合，不只限于 Spring
+
+### 选 Spring AI
+
+当你要的是：
+
+- Spring Boot 风格统一抽象
+- 模型、向量库、MCP、Tools、Advisors 的企业整合
+- 把 AI 能力平滑接进现有应用
+
+### 选 Spring AI Alibaba
+
+当你要的是：
+
+- 在 Spring AI 之上再往上走一层
+- Agent Framework + Graph + A2A + 上下文工程
+- 更完整的 Java Agent 平台化能力
+
+### 选 AgentScope Java
+
+当你要的是：
+
+- 以 Agent 运行时为中心
+- ReAct、多 Agent 模式、计划、记忆、消息协作
+- 更直接地建模 Agent 行为与协作关系
+
+一句话概括：
+
+- **LangChain4j** 更像 Java LLM/Agent 开发框架
+- **Spring AI** 更像 Spring 生态的 AI 基础设施层
+- **Spring AI Alibaba** 更像建立在 Spring AI 之上的 Agent 平台与工作流框架
+- **AgentScope Java** 更像 Java 世界的 Agent 原生运行时框架
+
+## 一张表快速看懂
+
+| 框架 | 主语言 | 更适合解决的问题 | 更适合谁 |
 | --- | --- | --- | --- |
-| LangChain | Python | 快速搭建 Agent、RAG、工具调用应用 | 想快速起步的个人和团队 |
-| LangGraph | Python | 复杂流程、状态控制、持久化、多分支 | 要走生产化的 Agent 系统 |
-| AutoGen | Python | 多 Agent 协作、事件驱动、研究型系统 | 需要复杂协同机制的团队 |
-| CrewAI | Python | 角色分工、任务协作、多 Agent 业务表达 | 想快速验证 Agent 团队协作 |
-| LangChain4j | Java | Java 里的 LLM/Agent 应用开发 | 想保留 Java 工程体验的团队 |
-| Spring AI | Java | 企业集成、Spring 体系落地、平台化接入 | 已有 Spring 基建的企业团队 |
+| LangChain | Python | 快速搭建 Agent、工具调用、RAG | 想快速起步的个人和团队 |
+| LangGraph | Python | 状态流、持久化、恢复执行、复杂编排 | 要长期维护 Agent 工作流的团队 |
+| AutoGen | Python | 多 Agent 协作、事件驱动、可扩展运行时 | 研究型或复杂协作系统团队 |
+| CrewAI | Python | Crews + Flows，多角色协作与业务编排 | 想快速验证多 Agent 团队协作 |
+| LangChain4j | Java | Java 中的通用 LLM / Agent 开发 | 想保留 Java 开发体验的团队 |
+| Spring AI | Java | 企业级 AI 集成、MCP、Advisors、RAG | 已有 Spring 基建的团队 |
+| Spring AI Alibaba | Java | Agent Framework、Graph、A2A、上下文工程 | 想做 Java 多 Agent / 平台化能力的团队 |
+| AgentScope Java | Java | ReAct、多 Agent、记忆、计划、运行时协作 | 想在 Java 中直接构建 Agent 系统的团队 |
 
-## 一套实用的决策顺序
+## 推荐的决策顺序
 
-你可以按下面这个顺序做判断：
+按这个顺序判断，通常会比“直接比谁更强”更实用：
 
-1. 先看主语言。Python 优先从 LangChain / LangGraph / AutoGen / CrewAI 开始，Java 优先从 LangChain4j / Spring AI 开始。
-2. 再看复杂度。如果只是工具调用和 RAG，先别急着上多 Agent。
-3. 再看控制力需求。如果你需要状态、分支、恢复和人工介入，优先 LangGraph。
-4. 再看协作模式。如果“多 Agent 协作”是核心问题，再认真评估 AutoGen 或 CrewAI。
-5. 再看企业落地。如果你在 Java 企业环境里，要重点考虑 Spring AI 和 LangChain4j 与现有系统的耦合成本。
-6. 最后看生态和团队经验。框架能力接近时，团队熟悉度、资料密度和维护成本通常比抽象优雅更重要。
+1. 先看主语言和部署环境。Python 和 Java 的选择会直接改变工程成本。
+2. 再看系统类型。是单 Agent、工作流，还是多 Agent。
+3. 再看控制力要求。只是先做出来，还是一开始就要做强状态治理。
+4. 再看生产要求。是否需要持久化、恢复执行、观测、评测、权限和平台整合。
+5. 最后看团队经验。两个框架能力接近时，团队熟悉度通常比抽象是否优雅更重要。
 
 ## 常见误区
 
-- 误区一：热门框架一定最适合自己。实际上，团队语言和现有系统约束往往比热度更重要。
-- 误区二：多 Agent 一定比单 Agent 高级。很多业务问题，一个主 Agent 加工具就够了。
-- 误区三：先做复杂编排再找业务场景。正确顺序应该是从业务链路反推框架能力。
-- 误区四：只看 demo，不看持久化、可观测性和恢复机制。真正上线后，后者才是成本大头。
+- 误区一：最火的框架一定最适合自己。实际上语言栈和现有系统约束更重要。
+- 误区二：多 Agent 一定比单 Agent 高级。很多业务问题，一个主 Agent 加工具已经足够。
+- 误区三：先上最复杂的编排框架更稳妥。很多团队反而会被过早建模拖慢。
+- 误区四：只看 demo，不看恢复机制、可观测性和治理能力。上线后真正拉开差距的往往是后者。
 
-## 推荐的实际做法
+## 实用建议
 
-如果你还没有明确方向，可以这样试：
+如果你还没有明确方向，可以用一个很现实的起步方式：
 
-1. Python 团队先用 **LangChain** 做第一个可运行版本。
-2. 一旦出现复杂状态、分支和恢复需求，就把核心流程迁到 **LangGraph**。
-3. 只有在“多 Agent 协作”确实成为核心能力时，再评估 **AutoGen** 或 **CrewAI**。
-4. Java 团队优先在 **LangChain4j** 和 **Spring AI** 中二选一，不要默认把核心逻辑拆到 Python。
+- Python 团队先从 **LangChain** 起步
+- 一旦出现复杂状态流，再迁到 **LangGraph**
+- 只有在多 Agent 协作真的是核心问题时，再认真评估 **AutoGen** 或 **CrewAI**
+- Java 团队先在 **LangChain4j / Spring AI / Spring AI Alibaba / AgentScope Java** 里做小范围 PoC，不要默认把 AI 部分拆去 Python
 
-这个顺序的好处是：它贴近大多数团队的真实演进路径，而不是一开始就选最复杂的框架。
+这个顺序的好处是：它更贴近真实团队的演进路径，而不是一开始就把自己锁进最重的抽象里。
 
 ## 参考资料
 
-下面这些资料直接影响了本文判断，覆盖官方文档、框架团队博客和技术团队文章：
-
 1. [LangChain Overview](https://docs.langchain.com/oss/python/langchain/overview)
-2. [LangGraph Overview](https://docs.langchain.com/oss/python/langgraph/overview)
-3. [LangChain 1.0](https://blog.langchain.com/langchain-1dot0/)
-4. [AutoGen Core User Guide](https://microsoft.github.io/autogen/stable/user-guide/core-user-guide/index.html)
-5. [AutoGen Studio](https://microsoft.github.io/autogen/stable/user-guide/autogenstudio-user-guide/index.html)
-6. [Microsoft Agent Framework overview](https://learn.microsoft.com/en-us/agent-framework/overview)
-7. [CrewAI Introduction](https://docs.crewai.com/introduction)
-8. [LangChain4j Documentation](https://docs.langchain4j.dev/)
-9. [LangChain4j AI Services Tutorial](https://docs.langchain4j.dev/tutorials/ai-services)
-10. [Spring AI Reference](https://docs.spring.io/spring-ai/reference/)
-11. [Spring AI 1.0 GA released](https://spring.io/blog/2025/05/20/spring-ai-1-0-GA-released)
-12. [Build durable AI agents with LangGraph and Amazon DynamoDB](https://aws.amazon.com/blogs/database/build-durable-ai-agents-with-langgraph-and-amazon-dynamodb/)
-13. [Build multi-agent systems with LangGraph and Amazon Bedrock](https://aws.amazon.com/blogs/machine-learning/build-multi-agent-systems-with-langgraph-and-amazon-bedrock/)
+2. [What's new in LangChain v1](https://docs.langchain.com/oss/python/releases/langchain-v1)
+3. [LangGraph Overview](https://docs.langchain.com/oss/python/langgraph/overview)
+4. [AutoGen Official Docs](https://microsoft.github.io/autogen/stable/index.html)
+5. [CrewAI Introduction](https://docs.crewai.com/en/introduction)
+6. [LangChain4j Introduction](https://docs.langchain4j.dev/intro/)
+7. [Spring AI Reference](https://docs.spring.io/spring-ai/reference/)
+8. [Spring AI 1.0.6, 1.1.5, 2.0.0-M5 Available Now](https://spring.io/blog/2026/04/27/spring-ai-1-0-6-1-1-5-2-0-0-M5-available-now)
+9. [Spring AI Alibaba GitHub](https://github.com/alibaba/spring-ai-alibaba)
+10. [Spring AI Alibaba Graph Quick Start](https://java2ai.com/en/docs/frameworks/graph-core/quick-start)
+11. [AgentScope Java Quick Start](https://java.agentscope.io/en/quickstart/agent.html)
+12. [AgentScope Java Multi-Agent Overview](https://java.agentscope.io/en/multi-agent/overview.html)
