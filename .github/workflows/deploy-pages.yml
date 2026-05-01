@@ -99,8 +99,59 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
+    env:
+      INDEXNOW_KEY: 91444b8270a94408a74c1a2538765240
+      INDEXNOW_SITE_URL: https://aiagentguide.cn/
+      INDEXNOW_KEY_LOCATION: https://aiagentguide.cn/91444b8270a94408a74c1a2538765240.txt
 
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Checkout repository
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Collect changed documentation files
+        if: ${{ github.event_name == 'push' }}
+        id: changed-files
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const before = context.payload.before
+
+            if (!before || /^0+$/.test(before)) {
+              core.notice('Skipping IndexNow submission because no previous commit SHA is available.')
+              core.setOutput('files', '')
+              return
+            }
+
+            const { owner, repo } = context.repo
+            const basehead = `${before}...${context.sha}`
+            const response = await github.rest.repos.compareCommitsWithBasehead({
+              owner,
+              repo,
+              basehead
+            })
+
+            const files = (response.data.files || [])
+              .map((file) => file.filename)
+              .filter((file) => file.startsWith('docs/'))
+
+            if (!files.length) {
+              core.notice('No documentation changes detected for IndexNow submission.')
+              core.setOutput('files', '')
+              return
+            }
+
+            core.notice(`Collected ${files.length} changed documentation file(s) for IndexNow submission.`)
+            core.setOutput('files', files.join('\n'))
+
+      - name: Submit changed URLs to IndexNow
+        if: ${{ github.event_name == 'push' && steps.changed-files.outputs.files != '' }}
+        env:
+          INDEXNOW_FILE_PATHS: ${{ steps.changed-files.outputs.files }}
+        run: node ./scripts/indexnow-submit.mjs
