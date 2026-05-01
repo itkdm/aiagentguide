@@ -11,7 +11,7 @@ export const frameworksSidebar: DefaultTheme.Sidebar = {
   },
   {
     text: 'LangChain',
-    collapsed: false,
+    collapsed: true,
     items: [
       { text: '概览', link: '/frameworks/langchain/' },
       {

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Article Illustration Planner"
+  short_description: "Plan section-consistent images for aiagentguide articles."
+  default_prompt: "Analyze the current aiagentguide article, recommend suitable illustration insertion points, and produce style-consistent image prompts with minimal on-image text."

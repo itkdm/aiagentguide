@@ -1,12 +1,17 @@
 node_modules/
+content-plans/
 
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+.vitepress/
 
 pnpm-debug.log*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.log
+*.out.log
+*.err.log
 build*.log
 build*.txt
 clean-build*.log
@@ -14,3 +19,4 @@ clean-build*.txt
 
 .DS_Store
 Thumbs.db
+Agent.md
