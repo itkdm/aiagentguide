@@ -33,6 +33,7 @@ noindex: false
 ## 已收录框架
 
 - [LangChain](/frameworks/langchain/)
+- [Spring AI Alibaba](/frameworks/spring-ai-alibaba/)
 
 ## 你会在这里看到什么
 

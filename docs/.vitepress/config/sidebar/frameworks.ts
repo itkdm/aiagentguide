@@ -135,6 +135,29 @@ export const frameworksSidebar: DefaultTheme.Sidebar = {
         ]
       }
     ]
+  },
+  {
+    text: 'Spring AI Alibaba',
+    collapsed: true,
+    items: [
+      { text: '概览', link: '/frameworks/spring-ai-alibaba/' },
+      {
+        text: '入门',
+        collapsed: false,
+        items: [
+          { text: '前置条件', link: '/frameworks/spring-ai-alibaba/get-started/preconditions' },
+          { text: '快速开始', link: '/frameworks/spring-ai-alibaba/get-started/quickstart' },
+          { text: '版本说明', link: '/frameworks/spring-ai-alibaba/get-started/versions' }
+        ]
+      },
+      {
+        text: '核心组件',
+        collapsed: false,
+        items: [
+          { text: 'Agents', link: '/frameworks/spring-ai-alibaba/core-components/agents' }
+        ]
+      }
+    ]
   }
 ],
 }
