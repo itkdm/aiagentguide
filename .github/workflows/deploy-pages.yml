@@ -76,6 +76,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Verify external tool links
+        run: node ./scripts/check-tool-links.mjs
+
       - name: Build site
         timeout-minutes: 5
         run: |

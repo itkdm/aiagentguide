@@ -19,6 +19,4 @@ description: "收录当前值得优先关注的 AI Agent 工具，持续补充�
 
 # 工具导航
 
-## 热门智能体
-
 <ToolsDirectory />

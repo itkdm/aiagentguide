@@ -7,8 +7,10 @@
     "docs:dev": "vitepress dev docs",
     "docs:build": "node scripts/build-pages.mjs",
     "docs:preview": "vitepress preview docs",
+    "tools:links": "node scripts/check-tool-links.mjs",
     "content:audit": "node scripts/content-audit.mjs",
-    "indexnow:test": "node --test scripts/indexnow-submit.test.mjs"
+    "indexnow:test": "node --test scripts/indexnow-submit.test.mjs",
+    "tools:links:test": "node --test scripts/check-tool-links.test.mjs"
   },
   "repository": {
     "type": "git",

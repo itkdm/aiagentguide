@@ -1,23 +1,30 @@
-﻿import type { DefaultTheme } from 'vitepress'
+import type { DefaultTheme } from 'vitepress'
+import { toolCatalog, toolCategoryOrder } from '../../../tool-catalog'
 
 export const toolsSidebar: DefaultTheme.Sidebar = {
-'/tools/': [
-  {
-    text: '工具导航',
-    link: '/tools/'
-  },
-  {
-    text: '热门智能体',
-    items: [
-      { text: 'Manus', link: '/tools/manus' },
-      { text: 'Genspark', link: '/tools/genspark' },
-      { text: 'Flowith', link: '/tools/flowith' },
-      { text: '扣子', link: '/tools/coze' },
-      { text: 'AstronClaw', link: '/tools/astronclaw' },
-      { text: 'QoderWork', link: '/tools/qoderwork' },
-      { text: 'ChatGPT 智能体', link: '/tools/operator' },
-      { text: 'Skywork', link: '/tools/skywork' }
-    ]
-  }
-]
+  '/tools/': [
+    {
+      text: '工具导航',
+      link: '/tools/'
+    },
+    ...toolCategoryOrder
+      .map((category) => {
+        const items = toolCatalog
+          .filter((tool) => tool.category === category)
+          .map((tool) => ({
+            text: tool.name,
+            link: tool.href
+          }))
+
+        if (items.length === 0) {
+          return null
+        }
+
+        return {
+          text: category,
+          items
+        }
+      })
+      .filter(Boolean)
+  ]
 }
