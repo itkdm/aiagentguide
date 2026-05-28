@@ -49,6 +49,7 @@ const siteUrl = resolveSiteUrl(
 export default defineConfig({
   lang: 'zh-CN',
   base,
+  outDir: '../.vitepress/dist',
   title: siteTitle,
   description: siteDescription,
   head: siteHead,
