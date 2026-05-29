@@ -82,19 +82,19 @@ jobs:
       - name: Build site
         timeout-minutes: 5
         run: |
-          rm -rf docs/.vitepress/.temp docs/.vitepress/dist
+          rm -rf docs/.vitepress/.temp .vitepress/dist
           node ./scripts/build-pages.mjs
 
       - name: Verify build output
         run: |
-          test -f docs/.vitepress/dist/index.html
-          test -f docs/.vitepress/dist/robots.txt
-          test -f docs/.vitepress/dist/sitemap.xml
+          test -f .vitepress/dist/index.html
+          test -f .vitepress/dist/robots.txt
+          test -f .vitepress/dist/sitemap.xml
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: docs/.vitepress/dist
+          path: .vitepress/dist
 
   deploy:
     environment:
