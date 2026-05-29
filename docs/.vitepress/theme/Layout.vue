@@ -1,4 +1,5 @@
 ﻿<script setup>
+import { computed } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
 import HomeParticles from './components/HomeParticles.vue'
@@ -8,6 +9,20 @@ import HtmlUrlRedirector from './components/HtmlUrlRedirector.vue'
 
 const { Layout } = DefaultTheme
 const { frontmatter } = useData()
+
+const shouldShowAIOpenMenu = computed(() => {
+    if (frontmatter.value.layout === 'home') {
+        return false
+    }
+
+    const pageClass = frontmatter.value.pageClass
+    if (typeof pageClass !== 'string') {
+        return true
+    }
+
+    const pageClasses = pageClass.split(/\s+/)
+    return !pageClasses.includes('tools-directory') && !pageClasses.includes('tool-detail-page')
+})
 </script>
 
 <template>
@@ -29,7 +44,7 @@ const { frontmatter } = useData()
 
         <template #doc-before>
             <ClientOnly>
-                <AIOpenMenu v-if="frontmatter.layout !== 'home'" />
+                <AIOpenMenu v-if="shouldShowAIOpenMenu" />
             </ClientOnly>
         </template>
     </Layout>
