@@ -1,6 +1,14 @@
 ---
 title: 3.1 Transformer 为什么成为主流架构
+description: "围绕“Transformer 为什么重要”解释它为什么成为现代大模型的基础架构，帮助理解并行建模、上下文理解与规模化训练的关键变化。"
 summary: 帮助你理解 Transformer 为什么成为 LLM 时代的主流架构，以及它相较 RNN 等传统序列模型在大规模训练和长上下文建模上的关键优势。
+keywords:
+  - Transformer 为什么重要
+  - Transformer 是什么
+  - 为什么大模型都用 Transformer
+  - Transformer 改变了什么
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 3.1 Transformer 为什么成为主流架构

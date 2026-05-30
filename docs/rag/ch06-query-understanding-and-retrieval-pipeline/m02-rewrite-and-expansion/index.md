@@ -1,8 +1,15 @@
 ---
 title: 6.2 Query Rewrite 与 Query Expansion
+description: "Query Rewrite 和 Query Expansion 有什么用，什么时候该改写问题、什么时候该扩展关键词，这一页先讲清用法。"
 summary: 说明问题改写和查询扩写分别在解决什么问题，以及它们在多轮对话和复杂检索里的价值。
+keywords:
+  - "Query Rewrite 有什么用"
+  - "Query Expansion 有什么用"
+  - "什么时候该改写问题"
+  - "什么时候该扩展关键词"
+lastUpdated: 2026-05-30
+status: published
 ---
-
 # 6.2 Query Rewrite 与 Query Expansion
 
 这一节要讨论的是查询理解里最常见、也最容易被混在一起的两类动作：

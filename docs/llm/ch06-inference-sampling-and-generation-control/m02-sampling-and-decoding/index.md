@@ -1,6 +1,14 @@
 ---
 title: 6.2 采样与解码策略
+description: "围绕“采样和解码是什么”解释 temperature、top-k、top-p 等策略如何影响输出，帮助理解模型为什么会更稳或更发散。"
 summary: 解释温度、top-k、top-p 与贪心解码的差异，并说明如何影响输出风格。
+keywords:
+  - 采样和解码是什么
+  - temperature 是什么
+  - top p 和 top k 是什么
+  - 模型输出为什么会不一样
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 6.2 采样与解码策略

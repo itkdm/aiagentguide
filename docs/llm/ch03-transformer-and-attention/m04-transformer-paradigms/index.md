@@ -1,6 +1,14 @@
 ---
 title: 3.4 三种 Transformer 结构范式
+description: "围绕“Transformer 有哪些结构范式”讲清 encoder、decoder 与 encoder-decoder 的差异，帮助理解不同模型为什么适合不同任务。"
 summary: 帮助你区分 Encoder-only、Decoder-only、Encoder-Decoder 三类结构，理解它们各自适合的任务类型，以及为什么主流 LLM 多选择 Decoder-only。
+keywords:
+  - Transformer 有哪些结构
+  - encoder 和 decoder 有什么区别
+  - encoder-decoder 是什么
+  - 不同 Transformer 范式怎么选
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 3.4 三种 Transformer 结构范式

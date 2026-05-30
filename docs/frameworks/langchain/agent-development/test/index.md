@@ -1,6 +1,14 @@
 ---
 title: Test
-description: 测试 LangChain Agent 的策略，包括单元测试、集成测试和轨迹评估。
+description: 如果你在找 LangChain Agent 怎么测试、单元测试和集成测试怎么分工、Evals 该放在哪一层，这页适合作为测试入口。
+keywords:
+  - LangChain Agent 怎么测试
+  - LangChain 单元测试和集成测试怎么分
+  - LangChain Evals 是什么
+  - LangChain 测试策略怎么设计
+  - LangChain Agent 测试入口
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # Test

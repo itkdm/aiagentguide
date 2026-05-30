@@ -1,6 +1,14 @@
 ---
 title: Middleware 概览
-description: 在 Agent 执行的每一步控制并定制行为
+description: 想了解 LangChain middleware 是什么、什么时候该用中间件控制 Agent 行为、怎样插入日志重试和 guardrails，可以先看这页。
+keywords:
+  - LangChain middleware 是什么
+  - LangChain middleware 适合哪些场景
+  - LangChain middleware 怎么控制 Agent 行为
+  - LangChain middleware 怎么做日志和重试
+  - LangChain middleware 和 guardrails 什么关系
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # Middleware 概览

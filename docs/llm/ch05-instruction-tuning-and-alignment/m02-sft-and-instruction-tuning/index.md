@@ -1,6 +1,14 @@
 ---
 title: 5.2 SFT 与 Instruction Tuning
+description: "围绕“SFT 是什么”讲清监督微调如何让模型更会按指令回答，帮助理解 instruction tuning 的数据形式、目标与常见作用。"
 summary: 解释 SFT、Instruction Tuning 与 In-Context Learning 的区别，并给出工程选型的判断路径。
+keywords:
+  - SFT 是什么
+  - 监督微调是什么
+  - instruction tuning 是什么
+  - 大模型为什么要做 SFT
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 5.2 SFT 与 Instruction Tuning

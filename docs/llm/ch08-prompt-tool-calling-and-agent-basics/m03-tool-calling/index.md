@@ -1,6 +1,14 @@
 ---
 title: 8.3 工具调用
+description: "围绕“Tool Calling 是什么”讲清模型为什么需要调用函数和外部工具，帮助理解函数调用如何把模型回答扩展成真实操作能力。"
 summary: 解释工具调用的本质、边界与价值，并说明为什么很多能力应该交给工具而不是让模型硬猜。
+keywords:
+  - Tool Calling 是什么
+  - 函数调用是什么
+  - 大模型为什么要调用工具
+  - function calling 有什么用
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 8.3 工具调用

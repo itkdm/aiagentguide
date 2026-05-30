@@ -1,6 +1,14 @@
 ---
 title: 5.4 RLHF 与 DPO
+description: "围绕“RLHF 和 DPO 有什么区别”解释两种主流对齐方法的训练路径、数据依赖与工程取舍，帮助理解它们为什么会带来不同体验。"
 summary: 解释 RLHF 与 DPO 的基本原理、工程路径与适用场景，并说明它们为何会改变模型体验。
+keywords:
+  - RLHF 和 DPO 有什么区别
+  - RLHF 是什么
+  - DPO 是什么
+  - 对齐方法怎么选
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 5.4 RLHF 与 DPO

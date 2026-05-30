@@ -1,6 +1,14 @@
 ---
 title: 8.4 Agent 基础
+description: "围绕“Agent 是什么”讲清它和普通问答模型的差异，帮助理解任务分解、工具使用与闭环执行为什么构成 agent 的基础。"
 summary: 解释 Agent 与聊天机器人、Workflow 的边界，并说明什么情况下根本不该做 Agent。
+keywords:
+  - Agent 是什么
+  - AI Agent 是什么
+  - Agent 和普通大模型有什么区别
+  - Agent 为什么要调用工具
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 8.4 Agent 基础

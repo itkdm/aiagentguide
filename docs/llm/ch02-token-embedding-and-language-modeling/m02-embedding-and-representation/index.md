@@ -1,6 +1,14 @@
 ---
 title: 2.2 Embedding 与文本表示
+description: "围绕“Embedding 是什么”解释文本如何被映射成向量表示，帮助理解 embedding 在语义表示、相似度计算和模型理解中的作用。"
 summary: 帮助你理解 embedding 在模型中的作用，弄清 token 为什么要变成向量、向量表示为什么有意义，以及它和 RAG 中 embedding 的关系与区别。
+keywords:
+  - Embedding 是什么
+  - 文本向量表示是什么
+  - 为什么模型要做 embedding
+  - embedding 有什么用
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 2.2 Embedding 与文本表示

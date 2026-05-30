@@ -1,6 +1,14 @@
 ---
 title: 13.2 RAG 与 Agent 的关系
+description: "围绕“RAG 和 Agent 有什么区别”讲清检索增强与任务执行的边界，帮助理解有检索能力并不等于系统已经具备 agent 能力。"
 summary: 讲清楚 RAG 和 Agent 的核心差别，以及为什么“有检索”不等于“有 Agent”。
+keywords:
+  - RAG 和 Agent 有什么区别
+  - 为什么有 RAG 不等于有 Agent
+  - 检索增强和任务执行怎么区分
+  - 什么时候该从 RAG 升级到 Agent
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 13.2 RAG 与 Agent 的关系

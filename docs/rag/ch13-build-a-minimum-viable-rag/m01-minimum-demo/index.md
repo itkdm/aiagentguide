@@ -1,8 +1,15 @@
 ---
 title: 13.1 最小 Demo 版 RAG
+description: "最小可用的 RAG Demo 应该包含哪些部分，先搭什么最有学习价值，才能避免一开始就做得过重。"
 summary: 给出最小 RAG Demo 的关键步骤、链路组织方式与优先级。
+keywords:
+  - "最小可用的 RAG Demo 应该包含哪些部分"
+  - "RAG 入门先搭什么"
+  - "RAG 最小系统怎么设计"
+  - "怎么避免一开始把 RAG 做得过重"
+lastUpdated: 2026-05-30
+status: published
 ---
-
 # 13.1 最小 Demo 版 RAG
 
 先给结论：*最小 RAG Demo 不是“功能齐全”，而是“链路闭环”。你需要确保从文档到答案的路径能稳定跑通，而不是一开始就堆复杂度。*

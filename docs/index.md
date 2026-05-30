@@ -2,12 +2,11 @@
 title: AI Agent 教程与开发实战指南
 summary: 面向中文开发者的 AI Agent 教程与开发实战指南，覆盖 AI Agent 入门、智能体开发、Agent 框架选型、LLM 应用、RAG 系统设计与项目实战。
 keywords:
-  - AI Agent 教程
-  - AI Agent 开发实战
-  - 智能体开发教程
-  - AI Agent 框架选型
-  - LLM 应用开发
-  - RAG 系统设计
+  - AI Agent 是什么
+  - AI Agent 学习路线怎么安排
+  - AI Agent 开发需要学哪些技术
+  - AI Agent 框架怎么选
+  - RAG 和 AI Agent 有什么区别
 tags:
   - AI Agent
   - 入门教程
@@ -15,7 +14,7 @@ tags:
   - 实战指南
 author: AI Agent Guide
 layout: home
-description: "AI Agent 中文教程与开发实战指南，适合搜索 AI Agent 教程、智能体开发教程、AI Agent 框架选型、LLM 应用开发与 RAG 系统设计的中文开发者。"
+description: "面向中文开发者的 AI Agent 学习入口，适合搜索 AI Agent 是什么、学习路线怎么安排、开发需要学哪些技术，以及框架怎么选。"
 lastUpdated: 2026-05-30
 status: published
 

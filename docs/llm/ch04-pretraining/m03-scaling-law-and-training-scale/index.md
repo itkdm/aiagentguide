@@ -1,6 +1,14 @@
 ﻿---
 title: 4.3 Scaling Law 与训练规模
+description: "围绕“Scaling Law 是什么”讲清模型规模、数据规模和训练算力之间的关系，帮助理解为什么更大规模常常带来更强能力。"
 summary: 解释 scaling law 的基本含义、参数-数据-算力的权衡关系，以及为什么“盲目扩参”并不一定带来更优效果。
+keywords:
+  - Scaling Law 是什么
+  - 大模型规模定律是什么
+  - 模型规模和能力有什么关系
+  - 为什么大模型越大越强
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 4.3 Scaling Law 与训练规模

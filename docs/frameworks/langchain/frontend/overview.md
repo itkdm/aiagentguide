@@ -1,6 +1,14 @@
 ---
 title: Frontend 概览
-description: 基于 LangChain Agent 的实时流式 Generative UI 前端模式
+description: 如果你在找 LangChain 前端怎么做、useStream 能解决什么、Agent UI 该怎样接流式状态，这页适合作为前端集成入口。
+keywords:
+  - LangChain 前端怎么做
+  - LangChain useStream 是什么
+  - LangChain Agent UI 怎么接
+  - LangChain 流式前端怎么实现
+  - LangChain generative UI 怎么做
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # Frontend 概览

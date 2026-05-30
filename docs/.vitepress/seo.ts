@@ -3,8 +3,8 @@ import path from 'node:path'
 
 import type { HeadConfig, PageData } from 'vitepress'
 
-const DESCRIPTION_MIN_LENGTH = 150
-const DESCRIPTION_MAX_LENGTH = 158
+const DESCRIPTION_CONTEXT_THRESHOLD = 90
+const DESCRIPTION_MAX_LENGTH = 160
 const DEFAULT_SOCIAL_IMAGE = 'social-card.svg'
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 
@@ -44,9 +44,6 @@ const SECTION_DESCRIPTION_INTENTS: Record<string, string> = {
   rag: '适合关注企业知识库、智能问答、搜索增强、检索增强生成系统设计、质量优化与生产化落地的读者',
   interviews: '适合岗位准备、知识复盘、案例表达与面试场景下的高频技术问题梳理'
 }
-
-const GENERIC_DESCRIPTION_CLOSER =
-  '帮助系统理解主题概念、能力边界、架构设计、工程实践、性能优化与生产环境中的落地重点。'
 
 const SECTION_TITLES: Record<string, string> = {
   'getting-started': '\u5165\u95e8',
@@ -190,8 +187,10 @@ function getFrontmatterRecord(pageData: Pick<PageData, 'frontmatter'>) {
   return (pageData.frontmatter ?? {}) as FrontmatterLike
 }
 
-function isOverviewPage(relativePath = '') {
-  return relativePath === 'index.md' || relativePath.endsWith('/index.md')
+function isImplicitlyIndexableOverviewPage(relativePath = '') {
+  const normalizedPath = relativePath.replace(/\\/g, '/')
+
+  return normalizedPath === 'index.md' || /^[^/]+\/index\.md$/.test(normalizedPath)
 }
 
 function normalizeTextValue(value: unknown) {
@@ -331,19 +330,19 @@ function expandDescription(
     return description
   }
 
-  if (description.length >= DESCRIPTION_MIN_LENGTH) {
+  if (resolvePageKind(pageData) === 'detail' || description.length >= DESCRIPTION_CONTEXT_THRESHOLD) {
     return truncateDescription(description)
   }
 
   const section = getPrimarySection(pageData.relativePath)
   const sectionTerms = SECTION_DESCRIPTION_TERMS[section]
   const sectionIntents = SECTION_DESCRIPTION_INTENTS[section]
-  const fragments = [sectionTerms, sectionIntents, siteDescription, GENERIC_DESCRIPTION_CLOSER]
+  const fragments = [sectionTerms, sectionIntents, siteDescription]
 
   for (const fragment of fragments) {
     description = appendDescriptionFragment(description, fragment)
 
-    if (description.length >= DESCRIPTION_MIN_LENGTH) {
+    if (description.length >= DESCRIPTION_CONTEXT_THRESHOLD) {
       break
     }
   }
@@ -446,7 +445,7 @@ function buildBreadcrumbs(pageData: PageData, siteUrl: string, currentTitle: str
   return breadcrumbs
 }
 
-function resolvePageKind(pageData: PageData) {
+function resolvePageKind(pageData: Pick<PageData, 'relativePath'>) {
   if (pageData.relativePath === 'index.md') {
     return 'home'
   }
@@ -518,7 +517,7 @@ export function isIndexablePage(
     return normalizedStatus === 'published'
   }
 
-  return isOverviewPage(pageData.relativePath)
+  return isImplicitlyIndexableOverviewPage(pageData.relativePath)
 }
 
 function isNoIndexPage(pageData: Pick<PageData, 'frontmatter' | 'isNotFound' | 'relativePath'>) {
@@ -656,7 +655,7 @@ export function createSeoHead(options: {
   const seoTitle = cleanText(documentTitle || resolveDisplayTitle(pageTitle, siteTitle))
   const pageKind = resolvePageKind(pageData)
   const isNoIndex = isNoIndexPage(pageData)
-  const robotsContent = isNoIndex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large'
+  const robotsContent = isNoIndex ? 'noindex, follow' : 'index, follow, max-image-preview:large'
   const keywords = resolveKeywords(pageData)
   const author = resolveAuthor(pageData)
   const publishedTime = resolvePublishedTime(pageData)

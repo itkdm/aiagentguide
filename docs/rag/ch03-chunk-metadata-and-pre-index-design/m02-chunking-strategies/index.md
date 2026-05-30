@@ -1,8 +1,15 @@
 ---
 title: 3.2 Chunk 的切分策略
+description: "RAG Chunk 应该怎么切，按长度、语义还是结构切更合适；这一页帮你理解不同切分策略的适用场景。"
 summary: 比较不同 chunk 切分策略的差异，帮助理解 chunk 大小、overlap 和结构边界为什么没有统一答案。
+keywords:
+  - "RAG Chunk 应该怎么切"
+  - "按长度切块和按语义切块有什么区别"
+  - "按结构切块适合什么场景"
+  - "RAG 切块策略怎么选"
+lastUpdated: 2026-05-30
+status: published
 ---
-
 # 3.2 Chunk 的切分策略
 
 上一节解决的是“为什么文档必须切块”。这一节要继续往前走一步：既然必须切块，那到底该怎么切？

@@ -1,6 +1,14 @@
 ---
 title: 8.1 Prompt 的基本作用
+description: "围绕“Prompt 是什么”讲清提示词在大模型交互中的作用，帮助理解为什么同一个模型会因为输入方式不同而给出完全不同的结果。"
 summary: 解释 Prompt 是什么、Prompt Engineering 的本质，以及它为什么重要但不能被神化。
+keywords:
+  - Prompt 是什么
+  - 提示词是什么
+  - 为什么 prompt 会影响结果
+  - 怎么理解大模型提示词
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 8.1 Prompt 的基本作用

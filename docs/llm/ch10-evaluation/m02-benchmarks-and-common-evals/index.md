@@ -1,6 +1,14 @@
 ---
 title: 10.2 常见评测方式与 Benchmark
+description: "围绕“常见 LLM 评测指标有哪些”讲清 benchmark、离线评测与常见指标体系，帮助理解不同评测为什么会给出不同结论。"
 summary: 介绍预训练模型、指令模型的常见评测方式，以及 benchmark 的作用和局限。
+keywords:
+  - 常见 LLM 评测指标有哪些
+  - benchmark 是什么
+  - 大模型怎么做离线评测
+  - 评测指标怎么看
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 10.2 常见评测方式与 Benchmark

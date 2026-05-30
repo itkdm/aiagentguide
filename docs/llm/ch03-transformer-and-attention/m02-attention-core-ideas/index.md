@@ -1,6 +1,14 @@
 ---
 title: 3.2 Attention 机制的核心思想
+description: "围绕“Attention 是什么”讲清注意力机制如何决定模型该关注哪些上下文信息，帮助理解相关性计算与上下文建模的核心思路。"
 summary: 帮助你理解 attention 的基本直觉、self-attention 如何建立全局依赖，以及 multi-head attention 为什么能提升表示能力。
+keywords:
+  - Attention 是什么
+  - 注意力机制是什么
+  - 自注意力怎么工作
+  - 为什么模型需要 attention
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 3.2 Attention 机制的核心思想

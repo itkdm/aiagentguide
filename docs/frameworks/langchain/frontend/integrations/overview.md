@@ -1,6 +1,14 @@
 ---
 title: Frontend Integrations Overview
-description: 了解 LangChain Frontend 可接入的 UI 库以及如何选择
+description: 如果你在比较 LangChain 前端该接哪种 UI 库、assistant-ui 和 OpenUI 适合什么场景，这页更适合作为选型入口。
+keywords:
+  - LangChain 前端集成怎么选
+  - LangChain assistant-ui 适合什么场景
+  - LangChain OpenUI 是什么
+  - LangChain AI Elements 怎么用
+  - LangChain 前端 UI 库怎么选
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # Frontend Integrations Overview

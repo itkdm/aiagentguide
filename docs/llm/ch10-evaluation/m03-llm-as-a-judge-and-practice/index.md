@@ -1,6 +1,14 @@
 ---
 title: 10.3 LLM-as-a-Judge 与评测实践
+description: "围绕“LLM as a Judge 是什么”讲清让模型评模型的常见做法、价值与风险，帮助理解这种评测方式什么时候可用。"
 summary: 解释 LLM-as-a-Judge 的用途、边界，以及真实评测体系为什么要混合多种方法。
+keywords:
+  - LLM as a Judge 是什么
+  - 让模型评模型可行吗
+  - 大模型自动评测是什么
+  - 模型评审有哪些风险
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 10.3 LLM-as-a-Judge 与评测实践

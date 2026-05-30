@@ -1,8 +1,15 @@
 ---
 title: 5.1 Embedding 的作用与原理
+description: "Embedding 是什么、为什么它能表示语义相似，以及在 RAG 里向量表示到底起什么作用，这一页先讲清原理。"
 summary: 说明 Embedding 是什么、它在 RAG 里负责什么，以及为什么它能支持语义检索。
+keywords:
+  - "Embedding 是什么"
+  - "Embedding 为什么能表示语义相似"
+  - "Embedding 在 RAG 里有什么用"
+  - "RAG 为什么需要向量表示"
+lastUpdated: 2026-05-30
+status: published
 ---
-
 # 5.1 Embedding 的作用与原理
 
 这一节先不急着讲向量数据库、相似度排序或混合检索，而是先把最基础的问题讲清楚：

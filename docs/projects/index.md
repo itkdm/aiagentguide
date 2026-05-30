@@ -2,16 +2,16 @@
 title: AI Agent 开源项目
 summary: 整理值得研究的 AI Agent 开源项目，并在项目概览页演示 Mermaid 与思维导图组件的实际效果。
 keywords:
-  - AI Agent 开源项目
-  - AI Agent 项目案例
-  - Agent 系统架构
-  - 智能体项目拆解
+  - AI Agent 开源项目推荐
+  - AI Agent 项目案例有哪些
+  - AI Agent 系统架构怎么拆
+  - 智能体项目怎么拆解
 tags:
   - AI Agent
   - 开源项目
   - 项目研究
 author: AI Agent Guide
-description: "整理值得研究的 AI Agent 开源项目与项目案例，适合搜索 Agent 系统架构、智能体项目拆解和开源项目研究入口的读者。"
+description: "整理值得研究的 AI Agent 开源项目，适合搜索 AI Agent 开源项目推荐、项目案例有哪些，以及系统架构怎么拆。"
 lastUpdated: 2026-05-30
 status: published
 ---

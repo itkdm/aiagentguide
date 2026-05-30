@@ -1,6 +1,14 @@
 ﻿---
 title: 3.3 位置编码与模型结构
+description: "围绕“位置编码是什么”解释 Transformer 为什么需要顺序信息，帮助理解 position encoding、层结构与文本顺序感知之间的关系。"
 summary: 讲清位置编码的作用、RoPE 的核心直觉，以及 Transformer 结构中 Attention、MLP、残差和 LayerNorm 如何协同工作。
+keywords:
+  - 位置编码是什么
+  - position encoding 是什么
+  - Transformer 为什么需要位置信息
+  - 模型怎么理解顺序
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 3.3 位置编码与模型结构

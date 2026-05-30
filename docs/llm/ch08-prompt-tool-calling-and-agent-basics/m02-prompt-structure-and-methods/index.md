@@ -1,6 +1,14 @@
 ---
 title: 8.2 Prompt 的结构与常见方法
+description: "围绕“Prompt 结构怎么设计”讲清角色、任务、约束和示例的组织方式，帮助理解提示词为什么需要结构化而不是随便提问。"
 summary: 解释消息角色分工、zero-shot/few-shot/CoT 等常见方法，以及它们如何影响稳定性。
+keywords:
+  - Prompt 结构怎么设计
+  - 提示词怎么写更清楚
+  - 角色任务约束是什么
+  - Few-shot Prompt 是什么
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 8.2 Prompt 的结构与常见方法

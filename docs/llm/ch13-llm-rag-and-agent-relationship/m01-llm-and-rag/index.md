@@ -1,6 +1,14 @@
 ---
 title: 13.1 LLM 与 RAG 的关系
+description: "围绕“LLM 和 RAG 有什么区别”讲清模型能力与检索增强的分工，帮助理解为什么有了大模型仍然经常需要 RAG。"
 summary: 解释为什么有了 LLM 仍然需要 RAG，以及什么问题更适合纯 LLM 或 LLM+RAG。
+keywords:
+  - LLM 和 RAG 有什么区别
+  - 为什么有了大模型还要做 RAG
+  - RAG 是在补什么
+  - LLM 和检索增强怎么分工
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 13.1 LLM 与 RAG 的关系

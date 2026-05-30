@@ -1,6 +1,14 @@
 ---
 title: 7.1 上下文窗口是什么
+description: "围绕“上下文窗口是什么”讲清模型一次能看到多少内容，帮助理解 token 上限、输入长度和回答质量之间的直接关系。"
 summary: 解释上下文窗口的定义、限制与产品约束。
+keywords:
+  - 上下文窗口是什么
+  - context window 是什么
+  - 大模型一次能看多少内容
+  - token 上限是什么意思
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 7.1 上下文窗口是什么

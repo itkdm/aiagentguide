@@ -1,8 +1,15 @@
 ---
 title: 7.2 Rerank 的作用与价值
+description: "Rerank 是什么、在 RAG 里为什么重要，以及它和初筛检索分别负责什么，这一页帮你判断什么时候该上重排。"
 summary: 说明 Rerank 在检索链路里到底解决什么问题，以及它和初次召回分别承担什么职责。
+keywords:
+  - "Rerank 是什么"
+  - "Rerank 在 RAG 里有什么用"
+  - "Rerank 和初筛检索有什么区别"
+  - "什么时候该上重排模型"
+lastUpdated: 2026-05-30
+status: published
 ---
-
 # 7.2 Rerank 的作用与价值
 
 这一节开始正式进入：

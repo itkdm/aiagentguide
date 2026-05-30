@@ -1,6 +1,14 @@
 ---
 title: 2.1 Token 是什么
+description: "围绕“Token 是什么”讲清文本为什么要先被切分成 token，帮助理解分词粒度、token 长度与模型输入输出之间的关系。"
 summary: 帮助你建立对 token 的基础理解，弄清它和字、词、子词的关系，以及它为什么会直接影响上下文长度、成本和模型效果。
+keywords:
+  - Token 是什么
+  - 大模型里的 token 是什么
+  - 为什么要把文本切成 token
+  - token 长度是什么意思
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 2.1 Token 是什么

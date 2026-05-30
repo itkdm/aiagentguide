@@ -1,6 +1,14 @@
 ---
 title: 1.1 LLM 的定义与定位
+description: "围绕“LLM 是什么”讲清大语言模型的定义、定位与能力边界，帮助理解它和传统 NLP、AIGC、基础模型之间到底是什么关系。"
 summary: 帮助你先建立对大语言模型的基本认识，理解它到底是什么、和传统 NLP 有什么差异、为什么会表现出通用能力，以及它和生成式 AI、AIGC、基础模型之间的关系。
+keywords:
+  - LLM 是什么
+  - 大语言模型是什么
+  - LLM 和 NLP 有什么区别
+  - LLM 和 AIGC 是什么关系
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 1.1 LLM 的定义与定位

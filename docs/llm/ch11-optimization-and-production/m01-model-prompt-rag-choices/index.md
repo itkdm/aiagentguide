@@ -1,6 +1,14 @@
 ---
 title: 11.1 模型、Prompt 与 RAG 的选择
+description: "围绕“模型、Prompt、RAG 该怎么选”讲清系统优化时的优先级判断，帮助理解为什么很多问题不一定要先靠微调解决。"
 summary: 讲清楚什么时候该换模型、改 Prompt、加 RAG，以及为什么很多问题本质上是系统设计问题。
+keywords:
+  - 模型 Prompt RAG 怎么选
+  - 大模型问题先改哪里
+  - Prompt 和 RAG 哪个更先做
+  - 系统优化优先级怎么判断
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 11.1 模型、Prompt 与 RAG 的选择

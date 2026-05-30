@@ -1,8 +1,15 @@
 ---
 title: 3.3 Metadata 设计
+description: "RAG 的 Metadata 应该怎么设计，哪些字段能真正帮助过滤、路由和召回，而不是只把文档切碎就结束。"
 summary: 解释元数据在 RAG 里的角色，以及为什么很多检索、过滤和治理问题最后都会回到 metadata 设计。
+keywords:
+  - "RAG Metadata 应该怎么设计"
+  - "哪些元数据字段能帮助检索"
+  - "RAG 为什么要设计 Metadata"
+  - "RAG 元数据怎么用于过滤"
+lastUpdated: 2026-05-30
+status: published
 ---
-
 # 3.3 Metadata 设计
 
 前两节主要讨论的是 chunk 本身。这一节要继续往前走一步：当 chunk 被切出来以后，系统到底还需要知道关于这个 chunk 的哪些信息？

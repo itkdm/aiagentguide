@@ -16,8 +16,8 @@ test('expands short homepage descriptions into search-ready meta descriptions', 
     'AI Agent 中文教程与实战指南'
   )
 
-  assert.ok(description.length >= 150, `expected description length >= 150, got ${description.length}`)
-  assert.ok(description.length <= 158, `expected description length <= 158, got ${description.length}`)
+  assert.ok(description.length >= 90, `expected description length >= 90, got ${description.length}`)
+  assert.ok(description.length <= 160, `expected description length <= 160, got ${description.length}`)
   assert.match(description, /AI Agent/)
   assert.match(description, /智能体开发/)
   assert.match(description, /Agent 框架/)
@@ -39,7 +39,7 @@ test('marks unpublished detail pages as noindex', () => {
     siteUrl: 'https://aiagentguide.cn/'
   })
 
-  assert.deepEqual(head[0], ['meta', { name: 'robots', content: 'noindex, nofollow' }])
+  assert.deepEqual(head[0], ['meta', { name: 'robots', content: 'noindex, follow' }])
   assert.equal(
     head.some(([tag, attrs]) => tag === 'link' && attrs?.rel === 'canonical'),
     false
@@ -64,6 +64,27 @@ test('keeps section index pages indexable without explicit status', () => {
   assert.equal(
     head.some(([tag, attrs]) => tag === 'link' && attrs?.rel === 'canonical'),
     true
+  )
+})
+
+test('marks deep section index pages as noindex unless published', () => {
+  const head = createSeoHead({
+    pageData: {
+      relativePath: 'llm/ch01-llm-overview-and-core-cognition/index.md',
+      frontmatter: {}
+    },
+    description: 'Test description',
+    documentTitle: 'LLM 总览',
+    siteTitle: 'AI Agent Guide',
+    siteDescription: 'AI Agent 中文教程与实战指南',
+    locale: 'zh-CN',
+    siteUrl: 'https://aiagentguide.cn/'
+  })
+
+  assert.deepEqual(head[0], ['meta', { name: 'robots', content: 'noindex, follow' }])
+  assert.equal(
+    head.some(([tag, attrs]) => tag === 'link' && attrs?.rel === 'canonical'),
+    false
   )
 })
 
@@ -156,8 +177,8 @@ test('adds section-specific context for short rag descriptions', () => {
     'AI Agent 中文教程与实战指南'
   )
 
-  assert.ok(description.length >= 150, `expected description length >= 150, got ${description.length}`)
-  assert.ok(description.length <= 158, `expected description length <= 158, got ${description.length}`)
+  assert.ok(description.length >= 90, `expected description length >= 90, got ${description.length}`)
+  assert.ok(description.length <= 160, `expected description length <= 160, got ${description.length}`)
   assert.match(description, /RAG/)
   assert.match(description, /检索增强生成/)
   assert.match(description, /向量检索|重排|知识库/)
@@ -175,8 +196,8 @@ test('normalizes quoted frontmatter descriptions before expanding them', () => {
     'AI Agent 中文教程与实战指南'
   )
 
-  assert.ok(description.length >= 150, `expected description length >= 150, got ${description.length}`)
-  assert.ok(description.length <= 158, `expected description length <= 158, got ${description.length}`)
+  assert.ok(description.length >= 90, `expected description length >= 90, got ${description.length}`)
+  assert.ok(description.length <= 160, `expected description length <= 160, got ${description.length}`)
   assert.doesNotMatch(description, /^["'“”]/)
   assert.doesNotMatch(description, /["'“”][。．.]?/)
 })

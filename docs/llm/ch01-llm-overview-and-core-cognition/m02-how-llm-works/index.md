@@ -1,6 +1,14 @@
 ---
 title: 1.2 LLM 的工作本质
+description: "围绕“LLM 为什么能生成回答”解释大语言模型的工作原理，帮助理解下一个 token 预测、训练经验与生成能力之间的关系。"
 summary: 帮助你理解 LLM 最底层的工作机制，包括什么叫下一个 token 预测、为什么能力不止于补全，以及这些能力为什么会表现得像理解、推理和思考。
+keywords:
+  - LLM 怎么工作
+  - LLM 为什么能生成回答
+  - 大语言模型工作原理
+  - 下一个 token 预测是什么
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 1.2 LLM 的工作本质

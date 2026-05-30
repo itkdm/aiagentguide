@@ -1,8 +1,15 @@
 ---
 title: 8.4 RAG Prompt 设计
+description: "RAG Prompt 应该怎么写，系统提示、引用约束和回答格式为什么会直接影响证据利用效果。"
 summary: 讨论 RAG Prompt 应该怎样约束模型使用检索材料、减少乱答，并在引用与资料不足场景下保持可控性。
+keywords:
+  - "RAG Prompt 应该怎么写"
+  - "系统提示为什么会影响 RAG 效果"
+  - "引用约束在 RAG 里有什么用"
+  - "回答格式为什么会影响证据利用"
+lastUpdated: 2026-05-30
+status: published
 ---
-
 # 8.4 RAG Prompt 设计
 
 先给结论：**RAG Prompt 的核心，不是把模型“写得更聪明”，而是把模型的回答边界、证据使用方式和输出行为约束得更清楚。检索和上下文构造做得再好，如果 Prompt 没把这些材料用法讲清楚，回答仍然可能失控。**

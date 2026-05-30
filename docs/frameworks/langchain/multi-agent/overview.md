@@ -1,6 +1,14 @@
 ﻿---
 title: Multi-agent
-description: 了解 LangChain 中的多 Agent 模式、适用场景与性能权衡
+description: 如果你在判断 LangChain 多 Agent 是什么、什么时候该拆成多个 Agent、Subagents 和 Router 怎么选，这页更适合作为入口。
+keywords:
+  - LangChain 多 Agent 是什么
+  - LangChain 多 Agent 适合哪些场景
+  - LangChain subagents 和 router 怎么选
+  - LangChain handoffs 是什么
+  - LangChain skills 和 subagents 有什么区别
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # Multi-agent

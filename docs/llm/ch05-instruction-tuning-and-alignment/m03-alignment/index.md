@@ -1,6 +1,14 @@
 ---
 title: 5.3 对齐（Alignment）
+description: "围绕“对齐是什么”讲清大模型为什么不仅要会回答，还要更符合人类偏好、约束与任务目标，帮助理解 alignment 的真实含义。"
 summary: 解释对齐的含义、为什么需要行为可控，以及它如何影响模型风格、安全性与可用性。
+keywords:
+  - 对齐是什么
+  - 大模型对齐是什么意思
+  - alignment 是什么
+  - 为什么模型需要对齐
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 5.3 对齐（Alignment）

@@ -1,6 +1,14 @@
 ---
 title: 13.3 三者在实际系统中的分工
+description: "围绕“LLM、RAG、Agent 在系统里怎么分工”讲清三者在真实工程中的职责边界，帮助理解系统设计时该如何组合它们。"
 summary: 把 LLM、RAG、Tool Use、Workflow、Agent 放到真实系统里一起看，讲清楚它们各自更适合解决什么问题。
+keywords:
+  - LLM RAG Agent 在系统里怎么分工
+  - 真实系统怎么组合 LLM 和 RAG
+  - Agent 在系统里负责什么
+  - 系统设计怎么划分模型职责
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 13.3 三者在实际系统中的分工

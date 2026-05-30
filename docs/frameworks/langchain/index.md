@@ -1,6 +1,14 @@
 ---
 title: LangChain 概览
-description: LangChain 是一个用于构建 LLM 应用与 Agent 的开源框架，提供统一模型接口、工具调用、记忆、流式输出与 LangGraph 能力集成。
+description: 想判断 LangChain 能做什么、适合哪些 Agent 场景、该从哪里开始学，可以先从这页快速了解能力边界与学习入口。
+keywords:
+  - LangChain 是什么
+  - LangChain 能做什么
+  - LangChain 适合什么场景
+  - LangChain 怎么入门
+  - LangChain 和 LangGraph 什么关系
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # LangChain 概览
