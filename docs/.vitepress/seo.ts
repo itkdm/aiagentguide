@@ -245,6 +245,10 @@ function normalizeStatusValue(value: unknown) {
   return normalizeTextValue(value).toLowerCase()
 }
 
+function resolveSitemapLastModified(frontmatter: FrontmatterLike, lastModified?: string) {
+  return normalizeDateValue(frontmatter.lastUpdated) ?? normalizeDateValue(frontmatter.date) ?? lastModified
+}
+
 function truncateDescription(source: string, maxLength = DESCRIPTION_MAX_LENGTH) {
   if (source.length <= maxLength) {
     return source
@@ -425,7 +429,9 @@ function buildBreadcrumbs(pageData: PageData, siteUrl: string, currentTitle: str
     const isLastSegment = index === segments.length - 1
     const segmentRoute = isLastSegment
       ? getPageRoute(pageData.relativePath, cleanUrls)
-      : currentRoute + segment + '/index.html'
+      : cleanUrls
+        ? currentRoute + segment + '/'
+        : currentRoute + segment + '/index.html'
 
     currentRoute = currentRoute + segment + '/'
 
@@ -803,7 +809,8 @@ export function buildSitemapXml(
   pages: string[],
   siteUrl: string,
   cleanUrls = false,
-  frontmatterByPage: Record<string, FrontmatterLike> = {}
+  frontmatterByPage: Record<string, FrontmatterLike> = {},
+  lastModifiedByPage: Record<string, string | undefined> = {}
 ) {
   const urls = pages
     .filter((page) =>
@@ -815,7 +822,11 @@ export function buildSitemapXml(
     )
     .map((page) => {
       const route = getPageRoute(page, cleanUrls)
-      return `<url><loc>${escapeXml(toAbsoluteUrl(siteUrl, route))}</loc></url>`
+      const frontmatter = frontmatterByPage[page] ?? {}
+      const lastModified = resolveSitemapLastModified(frontmatter, lastModifiedByPage[page])
+      const lastModTag = lastModified ? `<lastmod>${escapeXml(lastModified)}</lastmod>` : ''
+
+      return `<url><loc>${escapeXml(toAbsoluteUrl(siteUrl, route))}</loc>${lastModTag}</url>`
     })
 
   return [

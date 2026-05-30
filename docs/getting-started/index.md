@@ -14,6 +14,8 @@ tags:
 author: AI Agent Guide
 pageClass: getting-started-overview
 description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 Agent 是什么、何时使用，以及开始动手前需要建立的判断标准。"
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 入门

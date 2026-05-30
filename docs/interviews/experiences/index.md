@@ -10,6 +10,8 @@ tags:
   - 案例
 author: AI Agent Guide
 description: "按一轮面试中的连续提问整理案例，方便你按真实语境复习和模拟回答。"
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 面试案例

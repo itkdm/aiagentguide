@@ -9,15 +9,19 @@ export function toHtmlPath(pathname: string) {
     return '/'
   }
 
+  if (pathname.endsWith('/index.html')) {
+    return pathname.slice(0, -'index.html'.length)
+  }
+
+  if (pathname.endsWith('.html')) {
+    return pathname.slice(0, -'.html'.length)
+  }
+
   if (hasFileExtension(pathname)) {
     return pathname
   }
 
-  if (pathname.endsWith('.html')) {
-    return pathname
-  }
-
-  return pathname.endsWith('/') ? `${pathname}index.html` : `${pathname}.html`
+  return pathname
 }
 
 export function toHtmlAbsoluteUrl(

@@ -13,6 +13,8 @@ tags:
   - 多 Agent
 author: AI Agent Guide
 description: "系统拆解 AI Agent 的运行原理，覆盖 Agent 循环、工具调用、上下文管理、多 Agent 协作与工程化机制。"
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 原理

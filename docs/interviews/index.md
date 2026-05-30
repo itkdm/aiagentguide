@@ -11,6 +11,8 @@ tags:
   - 案例
 author: AI Agent Guide
 description: "用于整理 AI Agent 方向的面试相关内容，当前以真实面试案例为主，方便你熟悉提问方式和追问节奏。"
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 面试

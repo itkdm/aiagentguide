@@ -23,10 +23,10 @@ function markdownPathToRoute(filePath) {
   }
 
   if (relativePath.endsWith('/index.md')) {
-    return relativePath.slice(0, -'index.md'.length) + 'index.html'
+    return relativePath.slice(0, -'index.md'.length)
   }
 
-  return relativePath.replace(/\.md$/, '.html')
+  return relativePath.replace(/\.md$/, '')
 }
 
 function publicAssetToRoute(filePath) {

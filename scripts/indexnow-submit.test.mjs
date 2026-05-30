@@ -9,17 +9,17 @@ test('maps root markdown page to homepage url', () => {
   assert.equal(pathToIndexNowUrl('docs/index.md', siteUrl), 'https://aiagentguide.cn/')
 })
 
-test('maps section index markdown page to canonical index.html url', () => {
+test('maps section index markdown page to clean url', () => {
   assert.equal(
     pathToIndexNowUrl('docs/getting-started/index.md', siteUrl),
-    'https://aiagentguide.cn/getting-started/index.html'
+    'https://aiagentguide.cn/getting-started/'
   )
 })
 
-test('maps detail markdown page to canonical html url', () => {
+test('maps detail markdown page to clean url', () => {
   assert.equal(
     pathToIndexNowUrl('docs/getting-started/how-agent-works.md', siteUrl),
-    'https://aiagentguide.cn/getting-started/how-agent-works.html'
+    'https://aiagentguide.cn/getting-started/how-agent-works'
   )
 })
 

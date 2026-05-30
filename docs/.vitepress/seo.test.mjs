@@ -94,6 +94,56 @@ test('includes only indexable pages in sitemap output', () => {
   assert.doesNotMatch(sitemap, /404\.html/)
 })
 
+test('adds lastmod to sitemap entries using page metadata', () => {
+  const sitemap = buildSitemapXml(
+    ['frameworks/example.md'],
+    'https://aiagentguide.cn/',
+    false,
+    {
+      'frameworks/example.md': { status: 'published', lastUpdated: '2026-05-30' }
+    },
+    {
+      'frameworks/example.md': '2026-05-28T12:30:00.000Z'
+    }
+  )
+
+  assert.match(
+    sitemap,
+    /<url><loc>https:\/\/aiagentguide\.cn\/frameworks\/example\.html<\/loc><lastmod>2026-05-30T00:00:00.000Z<\/lastmod><\/url>/
+  )
+})
+
+test('uses clean urls for canonical and breadcrumb data when enabled', () => {
+  const head = createSeoHead({
+    pageData: {
+      title: '问题页',
+      relativePath: 'rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag.md',
+      frontmatter: { status: 'published' }
+    },
+    description: 'Test description',
+    documentTitle: '问题页 | AI Agent Guide',
+    siteTitle: 'AI Agent Guide',
+    siteDescription: 'AI Agent 中文教程与实战指南',
+    locale: 'zh-CN',
+    cleanUrls: true,
+    siteUrl: 'https://aiagentguide.cn/'
+  })
+
+  const canonical = head.find(([tag, attrs]) => tag === 'link' && attrs?.rel === 'canonical')
+  assert.deepEqual(canonical, [
+    'link',
+    {
+      rel: 'canonical',
+      href: 'https://aiagentguide.cn/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag'
+    }
+  ])
+
+  const structuredData = head.find(([tag, attrs]) => tag === 'script' && attrs?.type === 'application/ld+json')
+  assert.ok(structuredData)
+  assert.match(structuredData[2], /https:\/\/aiagentguide\.cn\/rag\/ch01-rag-overview\/m01-definition-and-positioning\/q01-rag/)
+  assert.doesNotMatch(structuredData[2], /index\.html/)
+})
+
 test('adds section-specific context for short rag descriptions', () => {
   const description = resolvePageDescription(
     {

@@ -29,6 +29,8 @@ tags:
 author: AI Agent Guide
 layout: home
 description: "AI Agent 中文教程与开发实战指南，系统讲解 AI Agent 入门、智能体开发、Agent 框架选型、LLM 应用与 RAG 实战，帮助中文开发者构建企业级智能体应用。"
+lastUpdated: 2026-05-30
+status: published
 
 hero:
   name: "AI Agent"

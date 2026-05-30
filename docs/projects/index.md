@@ -11,6 +11,8 @@ tags:
   - 项目研究
 author: AI Agent Guide
 description: "整理值得研究的 AI Agent 开源项目，并在概览页直接演示可交互图表组件。"
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 项目

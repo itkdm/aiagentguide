@@ -13,6 +13,8 @@ tags:
   - 项目教程
 author: AI Agent Guide
 description: "从最小可复现案例开始进入 AI Agent 实战，先跑通一个能解释、能复现、能继续扩展的真实闭环。"
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 实战栏目

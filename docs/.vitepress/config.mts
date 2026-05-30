@@ -50,6 +50,7 @@ const siteUrl = resolveSiteUrl(
 export default defineConfig({
   lang: 'zh-CN',
   base,
+  cleanUrls: true,
   outDir: '../.vitepress/dist',
   title: siteTitle,
   description: siteDescription,
@@ -80,10 +81,22 @@ export default defineConfig({
       const frontmatterByPage = Object.fromEntries(
         siteConfig.pages.map((page) => [page, readPageFrontmatter(siteConfig.srcDir, page)])
       )
+      const lastModifiedByPage = Object.fromEntries(
+        siteConfig.pages.map((page) => [
+          page,
+          getPageLastModified(siteConfig.srcDir, { relativePath: page })
+        ])
+      )
 
       fs.writeFileSync(
         path.join(siteConfig.outDir, 'sitemap.xml'),
-        buildSitemapXml(siteConfig.pages, siteUrl, siteConfig.cleanUrls, frontmatterByPage),
+        buildSitemapXml(
+          siteConfig.pages,
+          siteUrl,
+          siteConfig.cleanUrls,
+          frontmatterByPage,
+          lastModifiedByPage
+        ),
         'utf8'
       )
     }
