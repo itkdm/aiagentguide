@@ -130,6 +130,69 @@ assets: none
   })
 })
 
+test('auditMarkdownEntries tracks keyword coverage for indexable and published pages', () => {
+  const audit = auditMarkdownEntries([
+    {
+      relativePath: 'index.md',
+      source: `---
+title: Home
+description: Site home
+summary: Site summary
+keywords:
+  - AI Agent 教程
+status: published
+lastUpdated: 2026-05-30
+assets: none
+---
+`
+    },
+    {
+      relativePath: 'llm/index.md',
+      source: `---
+title: LLM
+description: LLM overview
+summary: LLM summary
+status: published
+lastUpdated: 2026-05-30
+assets: none
+---
+`
+    },
+    {
+      relativePath: 'frameworks/how-to-choose.md',
+      source: `---
+title: Framework choice
+description: Compare frameworks
+summary: Compare frameworks
+status: published
+assets: none
+---
+`
+    }
+  ])
+
+  assert.deepEqual(audit.keywordCoverage, {
+    totalWithKeywords: 1,
+    indexablePages: 3,
+    indexableWithKeywords: 1,
+    indexableOverviewPages: 2,
+    indexableOverviewWithKeywords: 1,
+    publishedDetailPages: 1,
+    publishedDetailWithKeywords: 0
+  })
+  assert.deepEqual(audit.indexableMissingKeywords, [
+    'llm/index.md',
+    'frameworks/how-to-choose.md'
+  ])
+  assert.deepEqual(audit.publishedDetailMissingKeywords, ['frameworks/how-to-choose.md'])
+  assert.deepEqual(audit.indexableOverviewBelowSeoThreshold, [
+    {
+      relativePath: 'llm/index.md',
+      missing: ['keywords']
+    }
+  ])
+})
+
 test('formatAuditReport includes Search Console oriented sections for detail gaps and page-type coverage', () => {
   const audit = auditMarkdownEntries([
     {
@@ -160,6 +223,9 @@ assets: none
   assert.match(report, /Page Type Counts/)
   assert.match(report, /Detail Pages Missing Indexability Decision/)
   assert.match(report, /Draft\/Noindex Coverage/)
+  assert.match(report, /Keyword Coverage/)
+  assert.match(report, /Indexable Pages Missing Keywords/)
+  assert.match(report, /Indexable Overview Pages Below SEO Threshold/)
   assert.match(report, /Detail Minimum Frontmatter Threshold/)
   assert.match(report, /frameworks\/langchain\/agents\.md/)
 })

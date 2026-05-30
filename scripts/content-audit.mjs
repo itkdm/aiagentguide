@@ -7,6 +7,8 @@ const IGNORED_DIRS = new Set(['.vitepress', 'public'])
 const REQUIRED_FIELDS = ['title', 'description', 'summary']
 const STATUS_FIELD = 'status'
 const ASSETS_FIELD = 'assets'
+const KEYWORDS_FIELD = 'keywords'
+const OVERVIEW_MINIMUM_SEO_FIELDS = ['description', 'keywords', 'status', 'lastUpdated']
 const MAX_REPORT_ITEMS = 30
 
 function walkMarkdownFiles(dir) {
@@ -111,6 +113,10 @@ function hasSummaryOrDescription(frontmatter) {
   return isPresent(frontmatter.summary) || isPresent(frontmatter.description)
 }
 
+function hasKeywords(frontmatter) {
+  return isPresent(frontmatter[KEYWORDS_FIELD])
+}
+
 function hasIndexabilityDecision(frontmatter) {
   return (
     isPresent(frontmatter.status) ||
@@ -119,10 +125,23 @@ function hasIndexabilityDecision(frontmatter) {
   )
 }
 
+function isIndexable(frontmatter, pageType) {
+  if (frontmatter.draft === true || frontmatter.noindex === true) {
+    return false
+  }
+
+  if (isPresent(frontmatter.status)) {
+    return frontmatter.status === 'published'
+  }
+
+  return pageType === 'overview'
+}
+
 function createCoverageCounters() {
   return {
     title: 0,
     description: 0,
+    keywords: 0,
     summary: 0,
     descriptionOrSummary: 0,
     status: 0,
@@ -163,10 +182,22 @@ function createAuditState() {
       blockedFromIndexing: 0,
       explicitIndexable: 0
     },
+    keywordCoverage: {
+      totalWithKeywords: 0,
+      indexablePages: 0,
+      indexableWithKeywords: 0,
+      indexableOverviewPages: 0,
+      indexableOverviewWithKeywords: 0,
+      publishedDetailPages: 0,
+      publishedDetailWithKeywords: 0
+    },
     missingRequired: [],
     missingStateFields: [],
     detailMissingIndexabilityDecision: [],
-    detailBelowMinimumThreshold: []
+    detailBelowMinimumThreshold: [],
+    indexableMissingKeywords: [],
+    indexableOverviewBelowSeoThreshold: [],
+    publishedDetailMissingKeywords: []
   }
 }
 
@@ -177,6 +208,10 @@ function updateCoverageCounters(counters, frontmatter, hasDecision) {
 
   if (isPresent(frontmatter.description)) {
     incrementObjectCounter(counters, 'description')
+  }
+
+  if (hasKeywords(frontmatter)) {
+    incrementObjectCounter(counters, 'keywords')
   }
 
   if (isPresent(frontmatter.summary)) {
@@ -231,6 +266,38 @@ function updateDraftNoindexCoverage(audit, frontmatter) {
   }
 }
 
+function updateKeywordCoverage(audit, frontmatter, pageType, indexable) {
+  const pageHasKeywords = hasKeywords(frontmatter)
+
+  if (pageHasKeywords) {
+    incrementObjectCounter(audit.keywordCoverage, 'totalWithKeywords')
+  }
+
+  if (indexable) {
+    incrementObjectCounter(audit.keywordCoverage, 'indexablePages')
+
+    if (pageHasKeywords) {
+      incrementObjectCounter(audit.keywordCoverage, 'indexableWithKeywords')
+    }
+  }
+
+  if (pageType === 'overview' && indexable) {
+    incrementObjectCounter(audit.keywordCoverage, 'indexableOverviewPages')
+
+    if (pageHasKeywords) {
+      incrementObjectCounter(audit.keywordCoverage, 'indexableOverviewWithKeywords')
+    }
+  }
+
+  if (pageType === 'detail' && frontmatter.status === 'published') {
+    incrementObjectCounter(audit.keywordCoverage, 'publishedDetailPages')
+
+    if (pageHasKeywords) {
+      incrementObjectCounter(audit.keywordCoverage, 'publishedDetailWithKeywords')
+    }
+  }
+}
+
 export function auditMarkdownEntries(entries) {
   const audit = createAuditState()
 
@@ -240,6 +307,7 @@ export function auditMarkdownEntries(entries) {
     const section = normalizeSection(relativePath)
     const pageType = classifyDocumentPath(relativePath)
     const hasDecision = hasIndexabilityDecision(frontmatter)
+    const indexable = isIndexable(frontmatter, pageType)
 
     audit.totalFiles += 1
     incrementMap(audit.sectionCounts, section)
@@ -257,6 +325,7 @@ export function auditMarkdownEntries(entries) {
 
     updateCoverageCounters(audit.coverage[pageType], frontmatter, hasDecision)
     updateDraftNoindexCoverage(audit, frontmatter)
+    updateKeywordCoverage(audit, frontmatter, pageType, indexable)
 
     const missingFields = REQUIRED_FIELDS.filter((field) => !isPresent(frontmatter[field]))
     if (missingFields.length) {
@@ -272,6 +341,23 @@ export function auditMarkdownEntries(entries) {
 
     if (pageType === 'detail' && !hasDecision) {
       audit.detailMissingIndexabilityDecision.push(relativePath)
+    }
+
+    if (indexable && !hasKeywords(frontmatter)) {
+      audit.indexableMissingKeywords.push(relativePath)
+    }
+
+    if (pageType === 'overview' && indexable) {
+      const missingOverviewSeoFields = OVERVIEW_MINIMUM_SEO_FIELDS.filter(
+        (field) => !isPresent(frontmatter[field])
+      )
+
+      if (missingOverviewSeoFields.length) {
+        audit.indexableOverviewBelowSeoThreshold.push({
+          relativePath,
+          missing: missingOverviewSeoFields
+        })
+      }
     }
 
     if (pageType === 'detail') {
@@ -294,6 +380,10 @@ export function auditMarkdownEntries(entries) {
           relativePath,
           missing: missingMinimum
         })
+      }
+
+      if (frontmatter.status === 'published' && !hasKeywords(frontmatter)) {
+        audit.publishedDetailMissingKeywords.push(relativePath)
       }
     }
   }
@@ -319,6 +409,7 @@ function formatCoverageSection(title, counters, total) {
   const orderedKeys = [
     'title',
     'description',
+    'keywords',
     'summary',
     'descriptionOrSummary',
     'status',
@@ -412,6 +503,15 @@ export function formatAuditReport(audit) {
   lines.push(`- blockedFromIndexing: ${audit.draftNoindexCoverage.blockedFromIndexing}`)
   lines.push(`- explicitIndexable: ${audit.draftNoindexCoverage.explicitIndexable}`)
 
+  lines.push('\nKeyword Coverage')
+  lines.push(`- totalWithKeywords: ${audit.keywordCoverage.totalWithKeywords}`)
+  lines.push(`- indexablePages: ${audit.keywordCoverage.indexablePages}`)
+  lines.push(`- indexableWithKeywords: ${audit.keywordCoverage.indexableWithKeywords}`)
+  lines.push(`- indexableOverviewPages: ${audit.keywordCoverage.indexableOverviewPages}`)
+  lines.push(`- indexableOverviewWithKeywords: ${audit.keywordCoverage.indexableOverviewWithKeywords}`)
+  lines.push(`- publishedDetailPages: ${audit.keywordCoverage.publishedDetailPages}`)
+  lines.push(`- publishedDetailWithKeywords: ${audit.keywordCoverage.publishedDetailWithKeywords}`)
+
   lines.push(
     formatStringList(
       'Detail Pages Missing Indexability Decision',
@@ -422,6 +522,17 @@ export function formatAuditReport(audit) {
     formatObjectList('Detail Minimum Frontmatter Threshold', audit.detailBelowMinimumThreshold, (
       item
     ) => `${item.relativePath}: ${item.missing.join(', ')}`)
+  )
+  lines.push(formatStringList('Indexable Pages Missing Keywords', audit.indexableMissingKeywords))
+  lines.push(
+    formatObjectList(
+      'Indexable Overview Pages Below SEO Threshold',
+      audit.indexableOverviewBelowSeoThreshold,
+      (item) => `${item.relativePath}: ${item.missing.join(', ')}`
+    )
+  )
+  lines.push(
+    formatStringList('Published Detail Pages Missing Keywords', audit.publishedDetailMissingKeywords)
   )
   lines.push(
     formatObjectList('Missing Required Metadata', audit.missingRequired, (item) => {
