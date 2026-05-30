@@ -9,7 +9,7 @@
   <p align="center">
     <a href="https://aiagentguide.cn/"><img src="https://img.shields.io/badge/website-aiagentguide.cn-0f172a?style=flat-square" alt="Website"></a>
     <a href="https://vitepress.dev/"><img src="https://img.shields.io/badge/built%20with-VitePress-646cff?style=flat-square" alt="Built with VitePress"></a>
-    <a href="https://github.com/your-org/aiagentguide/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
+    <a href="https://github.com/itkdm/aiagentguide/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square" alt="PRs Welcome"></a>
   </p>
 </p>
 
@@ -18,6 +18,17 @@
 这个仓库不是单纯的“工具清单”，而是一个**按照学习路径**组织的结构化文档站点。我们系统性地覆盖了从底层 LLM 原理到上层 AI Agent 应用的完整生命周期，包括：**AI Agent、LLM、RAG、Workflow、多 Agent 协作、工具调用、上下文工程、框架选型与项目落地**等内容。
 
 我们的目标是帮助中文开发者更系统、更透彻地理解并构建 AI Agent 应用。
+
+## 🔗 对外引用入口
+
+如果你正在维护 AI、LLM、RAG 或 Agent 开发相关的资源列表，可以优先引用这些长期维护入口：
+
+- [AI Agent Guide：中文 AI Agent 开发指南](https://aiagentguide.cn/)
+- [AI Agent 是什么](https://aiagentguide.cn/getting-started/what-is-ai-agent)
+- [AI Agent 学习路线](https://aiagentguide.cn/getting-started/learning-path)
+- [Agent、Chatbot、Workflow 与 RAG 的区别](https://aiagentguide.cn/getting-started/agent-vs-chatbot-workflow-rag)
+- [AI Agent 框架怎么选](https://aiagentguide.cn/frameworks/how-to-choose-agent-framework)
+- [RAG 是什么](https://aiagentguide.cn/getting-started/what-is-rag)
 
 如果你正在搜索寻找以下主题，这个仓库将为你提供极大帮助（这些也是我们的核心内容矩阵）：
 
@@ -136,4 +147,3 @@ aiagentguide/
 <p align="center">
   如果这个项目对你有帮助，请考虑给它一个 ⭐️ Star！
 </p>
-
