@@ -1,6 +1,7 @@
 node_modules/
 content-plans/
 .codex/
+CONTENT_README.md
 
 docs/.vitepress/cache/
 docs/.vitepress/dist/
