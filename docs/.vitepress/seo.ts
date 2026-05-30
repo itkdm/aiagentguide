@@ -60,6 +60,66 @@ const SECTION_TITLES: Record<string, string> = {
 
 type FrontmatterLike = Record<string, unknown>
 
+function parseFrontmatter(source: string): FrontmatterLike {
+  const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+
+  if (!match) {
+    return {}
+  }
+
+  const data: FrontmatterLike = {}
+  let currentKey: string | null = null
+
+  for (const rawLine of match[1].split(/\r?\n/)) {
+    if (!rawLine.trim()) {
+      continue
+    }
+
+    const listItem = rawLine.match(/^\s*-\s+(.*)$/)
+
+    if (listItem && currentKey) {
+      const currentValue = data[currentKey]
+      const nextValue = normalizeTextValue(listItem[1])
+
+      if (!nextValue) {
+        continue
+      }
+
+      if (!Array.isArray(currentValue)) {
+        data[currentKey] = currentValue ? [currentValue, nextValue] : [nextValue]
+        continue
+      }
+
+      currentValue.push(nextValue)
+      continue
+    }
+
+    const pair = rawLine.match(/^([A-Za-z][A-Za-z0-9_-]*):\s*(.*)$/)
+
+    if (!pair) {
+      currentKey = null
+      continue
+    }
+
+    const [, key, rawValue] = pair
+    currentKey = key
+
+    if (!rawValue) {
+      data[key] = []
+      continue
+    }
+
+    if (rawValue === 'true' || rawValue === 'false') {
+      data[key] = rawValue === 'true'
+      continue
+    }
+
+    data[key] = rawValue.trim()
+  }
+
+  return data
+}
+
 function normalizeSiteUrl(rawSiteUrl?: string) {
   if (!rawSiteUrl) {
     return undefined
@@ -130,6 +190,10 @@ function getFrontmatterRecord(pageData: Pick<PageData, 'frontmatter'>) {
   return (pageData.frontmatter ?? {}) as FrontmatterLike
 }
 
+function isOverviewPage(relativePath = '') {
+  return relativePath === 'index.md' || relativePath.endsWith('/index.md')
+}
+
 function normalizeTextValue(value: unknown) {
   return cleanText(String(value ?? ''))
 }
@@ -175,6 +239,10 @@ function normalizeDateValue(value: unknown) {
   const parsed = new Date(normalized)
 
   return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString()
+}
+
+function normalizeStatusValue(value: unknown) {
+  return normalizeTextValue(value).toLowerCase()
 }
 
 function truncateDescription(source: string, maxLength = DESCRIPTION_MAX_LENGTH) {
@@ -429,9 +497,26 @@ function resolveAuthor(pageData: Pick<PageData, 'frontmatter'>) {
   return normalizeTextValue(frontmatter.author)
 }
 
-function isNoIndexPage(pageData: Pick<PageData, 'frontmatter' | 'isNotFound'>) {
+export function isIndexablePage(
+  pageData: Pick<PageData, 'frontmatter' | 'isNotFound' | 'relativePath'>
+) {
   const frontmatter = getFrontmatterRecord(pageData)
-  return pageData.isNotFound || Boolean(frontmatter.draft || frontmatter.noindex)
+
+  if (pageData.isNotFound || Boolean(frontmatter.draft || frontmatter.noindex)) {
+    return false
+  }
+
+  const normalizedStatus = normalizeStatusValue(frontmatter.status)
+
+  if (normalizedStatus) {
+    return normalizedStatus === 'published'
+  }
+
+  return isOverviewPage(pageData.relativePath)
+}
+
+function isNoIndexPage(pageData: Pick<PageData, 'frontmatter' | 'isNotFound' | 'relativePath'>) {
+  return !isIndexablePage(pageData)
 }
 
 export function resolveSiteUrl(base: string, explicitSiteUrl?: string, githubRepository?: string) {
@@ -476,6 +561,16 @@ export function readPageSource(srcDir: string, pageData: Pick<PageData, 'filePat
   }
 
   return fs.readFileSync(absolutePath, 'utf8')
+}
+
+export function readPageFrontmatter(srcDir: string, relativePath: string) {
+  const absolutePath = path.join(srcDir, relativePath)
+
+  if (!fs.existsSync(absolutePath)) {
+    return {}
+  }
+
+  return parseFrontmatter(fs.readFileSync(absolutePath, 'utf8'))
 }
 
 export function resolvePageDescription(
@@ -704,9 +799,20 @@ function escapeXml(value: string) {
     .replace(/'/g, '&apos;')
 }
 
-export function buildSitemapXml(pages: string[], siteUrl: string, cleanUrls = false) {
+export function buildSitemapXml(
+  pages: string[],
+  siteUrl: string,
+  cleanUrls = false,
+  frontmatterByPage: Record<string, FrontmatterLike> = {}
+) {
   const urls = pages
-    .filter((page) => page !== '404.md')
+    .filter((page) =>
+      isIndexablePage({
+        relativePath: page,
+        frontmatter: frontmatterByPage[page] ?? {},
+        isNotFound: page === '404.md'
+      })
+    )
     .map((page) => {
       const route = getPageRoute(page, cleanUrls)
       return `<url><loc>${escapeXml(toAbsoluteUrl(siteUrl, route))}</loc></url>`

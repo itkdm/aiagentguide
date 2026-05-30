@@ -19,6 +19,7 @@ import {
   buildSitemapXml,
   createSeoHead,
   getPageLastModified,
+  readPageFrontmatter,
   readPageSource,
   resolvePageDescription,
   resolveSiteUrl
@@ -76,9 +77,13 @@ export default defineConfig({
     fs.writeFileSync(path.join(siteConfig.outDir, 'robots.txt'), buildRobotsTxt(siteUrl), 'utf8')
 
     if (siteUrl) {
+      const frontmatterByPage = Object.fromEntries(
+        siteConfig.pages.map((page) => [page, readPageFrontmatter(siteConfig.srcDir, page)])
+      )
+
       fs.writeFileSync(
         path.join(siteConfig.outDir, 'sitemap.xml'),
-        buildSitemapXml(siteConfig.pages, siteUrl, siteConfig.cleanUrls),
+        buildSitemapXml(siteConfig.pages, siteUrl, siteConfig.cleanUrls, frontmatterByPage),
         'utf8'
       )
     }
