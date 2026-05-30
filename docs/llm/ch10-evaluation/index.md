@@ -1,6 +1,9 @@
 ---
 title: 第 10 章 LLM 评测体系
+description: 介绍 LLM 评测为什么不能只靠主观感觉，并梳理离线评测、在线评测、LLM-as-a-Judge 等常见方法。
 summary: 建立对 LLM 评测的基本判断，理解离线评测、线上效果和真实业务指标之间的关系。
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 第 10 章 LLM 评测体系

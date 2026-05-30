@@ -1,6 +1,9 @@
 ---
 title: 第 8 章 Prompt、工具调用与 Agent 基础
+description: 梳理 Prompt、Tool Calling 与 Agent 的关系，帮助你理解模型如何从纯文本生成走向调用工具和执行任务。
 summary: 解释 Prompt 的真实作用、工具调用的意义，以及模型如何从文本生成器变成可用系统组件。
+lastUpdated: 2026-05-30
+status: published
 ---
 
 # 第 8 章 Prompt、工具调用与 Agent 基础
