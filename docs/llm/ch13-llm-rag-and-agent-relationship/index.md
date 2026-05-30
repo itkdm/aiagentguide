@@ -2,6 +2,11 @@
 title: 第 13 章 LLM 与 RAG、Agent 的关系
 description: 解释 LLM、RAG 与 Agent 分别解决什么问题，以及它们在真实系统中如何协作而不是互相替代。
 summary: 帮助读者把 LLM、RAG、Agent 三者放到一张图里看，理解它们在真实系统中的边界与协作关系。
+keywords:
+  - LLM 和 RAG 的关系
+  - RAG 和 Agent 的区别
+  - LLM Agent 区别
+  - AI 系统分层
 lastUpdated: 2026-05-30
 status: published
 ---

@@ -2,6 +2,11 @@
 title: 第 10 章 RAG 调优方法论
 description: 梳理 RAG 调优时的优先级、常见抓手与排查顺序，帮助你避免无序试参和盲目堆技术。
 summary: 讲清 RAG 调优的优先级顺序、关键取舍和闭环思路，避免把优化变成随机试参。
+keywords:
+  - RAG 调优
+  - RAG 优化方法
+  - 检索增强生成优化
+  - RAG 排障
 lastUpdated: 2026-05-30
 status: published
 ---

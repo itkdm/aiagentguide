@@ -2,6 +2,11 @@
 title: 第 2 章 Token、Embedding 与语言建模基础
 description: 讲清 LLM 如何把文本拆成 token、映射为 embedding，并通过语言建模与自回归生成机制逐步产出回答。
 summary: 解释 LLM 如何把文本变成可计算表示，并理解语言模型为什么能够按 token 逐步生成内容。
+keywords:
+  - Token 是什么
+  - Embedding 是什么
+  - 语言建模
+  - 自回归生成
 lastUpdated: 2026-05-30
 status: published
 ---

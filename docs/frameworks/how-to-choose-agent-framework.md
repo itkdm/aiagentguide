@@ -1,16 +1,13 @@
 ﻿---
 title: 如何选择合适的 AI Agent 框架
-description: 如何选择合适的 AI Agent 框架，基于最新各框架官方文档与发布信息，整理 LangChain、LangGraph、AutoGen、CrewAI、LangChain4j、Spring AI、Spring AI Alibaba、AgentScope Java 的选型方法。
+description: 如何选择合适的 AI Agent 框架，适合搜索 AI Agent 框架对比、Java AI Agent 框架、LangChain vs LangGraph 与 Spring AI Alibaba 选型方法的开发者。
 summary: 本文详细介绍了如何选择合适的AI Agent框架，给出选型方法和指导建议！
 
 keywords:
   - AI Agent 框架选型
-  - LangChain
-  - LangGraph
-  - AutoGen
-  - CrewAI
-  - LangChain4j
-  - Spring AI
+  - AI Agent 框架对比
+  - Java AI Agent 框架
+  - LangChain vs LangGraph
   - Spring AI Alibaba
   - AgentScope Java
 tags:
@@ -18,7 +15,7 @@ tags:
   - 框架
   - 选型
 date: 2026-04-30
-lastUpdated: 2026-04-30
+lastUpdated: 2026-05-30
 status: published
 assets: none
 reviewed: false

@@ -3,16 +3,17 @@ title: AI Agent 实战栏目
 summary: 从最小可复现案例开始进入 AI Agent 实战，先跑通一个能解释、能复现、能继续扩展的真实闭环。
 keywords:
   - AI Agent 实战
-  - Agent 项目教程
-  - Agent 工程实践
-  - AI Agent 项目拆解
+  - AI Agent 实战教程
+  - AI Agent 项目实战
+  - Agent 工作流实战
+  - 智能体工程实践
 tags:
   - AI Agent
   - 实战
   - 工程实践
   - 项目教程
 author: AI Agent Guide
-description: "从最小可复现案例开始进入 AI Agent 实战，先跑通一个能解释、能复现、能继续扩展的真实闭环。"
+description: "从最小可复现案例进入 AI Agent 实战，适合搜索 AI Agent 实战教程、Agent 工作流实战和智能体工程实践路径的开发者。"
 lastUpdated: 2026-05-30
 status: published
 ---

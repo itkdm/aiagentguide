@@ -2,6 +2,11 @@
 title: 第 14 章 常见误区与设计原则总结
 description: 汇总 RAG 学习与落地中的常见误区、判断标准与设计原则，帮助你建立更稳定的系统思维。
 summary: 总结 RAG 高频误区与一套可复用的设计原则，帮助形成稳定判断框架。
+keywords:
+  - RAG 常见误区
+  - RAG 设计原则
+  - RAG 方法论
+  - 检索增强生成误区
 lastUpdated: 2026-05-30
 status: published
 ---

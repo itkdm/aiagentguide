@@ -2,6 +2,12 @@
 title: RAG 教程目录
 description: 按章节与主题模块组织的 RAG 教程总览，帮助你从整体认知、检索链路到生产实践建立系统学习路径。
 summary: 按章节、主题模块和具体问题组织的 RAG 教程结构。
+keywords:
+  - RAG 教程
+  - RAG 学习路线
+  - 检索增强生成教程
+  - RAG 系统设计
+  - 企业知识库问答
 lastUpdated: 2026-05-30
 status: published
 ---

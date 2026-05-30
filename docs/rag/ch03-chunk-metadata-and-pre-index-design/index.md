@@ -2,6 +2,11 @@
 title: 第 3 章 Chunk、Metadata 与索引前设计
 description: 讲清切块、元数据和索引前设计如何影响召回质量，为后续检索和生成效果打下稳定基础。
 summary: 说明为什么 chunk 粒度、metadata 设计和检索前结构准备会直接决定后面索引与召回的上限。
+keywords:
+  - Chunk 切分
+  - Metadata 设计
+  - RAG 切块策略
+  - 索引前设计
 lastUpdated: 2026-05-30
 status: published
 ---

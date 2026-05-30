@@ -2,6 +2,11 @@
 title: 第 3 章 Transformer 与 Attention 机制
 description: 介绍 Transformer 与 Attention 的核心思路，帮助你理解大模型为何能够高效建模长序列与上下文关系。
 summary: 讲清 Transformer 为什么成为现代 LLM 的核心架构，以及 Attention、位置编码和结构范式分别解决什么问题。
+keywords:
+  - Transformer 原理
+  - Attention 机制
+  - 位置编码
+  - Transformer 架构
 lastUpdated: 2026-05-30
 status: published
 ---

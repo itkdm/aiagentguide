@@ -2,6 +2,11 @@
 title: 第 11 章 LLM 优化与落地
 description: 讲清模型上线后如何在效果、延迟、成本之间做平衡，并理解常见优化路径和生产化决策。
 summary: 从模型、Prompt、RAG、成本和系统设计角度，讲清楚 LLM 项目怎么优化、怎么落地。
+keywords:
+  - LLM 优化
+  - LLM 落地
+  - 大模型成本优化
+  - 大模型生产实践
 lastUpdated: 2026-05-30
 status: published
 ---

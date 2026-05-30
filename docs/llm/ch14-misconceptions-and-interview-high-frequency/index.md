@@ -2,6 +2,11 @@
 title: 第 14 章 LLM 常见误区与面试高频问题
 description: 汇总学习和面试中最常见的 LLM 误区、高频问题与表达方法，帮助你建立更稳的概念边界和答题框架。
 summary: 把学习和使用 LLM 时最常见的认知误区拆开讲清，并帮助读者形成更稳定的系统化表达框架。
+keywords:
+  - LLM 面试题
+  - LLM 常见误区
+  - 大模型高频问题
+  - LLM 面试回答
 lastUpdated: 2026-05-30
 status: published
 ---

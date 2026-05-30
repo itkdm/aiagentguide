@@ -3,16 +3,17 @@ title: AI Agent 原理
 summary: 系统拆解 AI Agent 的运行原理，重点覆盖 Agent 循环、工具调用、上下文管理、多 Agent 协作和工程机制。
 keywords:
   - AI Agent 原理
-  - Agent 循环
-  - 多 Agent
-  - 工具调用
+  - Agent 工作流原理
+  - Tool Calling 原理
+  - 多 Agent 协作
+  - Agent 记忆机制
 tags:
   - AI Agent
   - 原理
   - Agent 循环
   - 多 Agent
 author: AI Agent Guide
-description: "系统拆解 AI Agent 的运行原理，覆盖 Agent 循环、工具调用、上下文管理、多 Agent 协作与工程化机制。"
+description: "系统拆解 AI Agent 的运行原理，适合搜索 Agent 工作流原理、Tool Calling 原理、多 Agent 协作和 Agent 记忆机制的开发者。"
 lastUpdated: 2026-05-30
 status: published
 ---

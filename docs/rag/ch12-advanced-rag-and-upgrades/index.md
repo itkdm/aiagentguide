@@ -2,6 +2,11 @@
 title: 第 12 章 高级 RAG 形态与升级路径
 description: 总结高级 RAG 形态与演进路线，帮助你理解何时需要从基础 RAG 升级到更复杂的系统设计。
 summary: 通过多路召回、分层检索与自检机制等高级形态，构建更稳定的检索与生成链路。
+keywords:
+  - 高级 RAG
+  - 多路召回
+  - 分层检索
+  - RAG 升级路径
 lastUpdated: 2026-05-30
 status: published
 ---

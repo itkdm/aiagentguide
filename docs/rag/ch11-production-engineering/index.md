@@ -2,6 +2,11 @@
 title: 第 11 章 生产级 RAG 工程实践
 description: 介绍生产环境中的 RAG 工程实践，帮助你理解监控、权限、时效、成本与稳定性等落地问题。
 summary: 讲清生产级 RAG 除了主链路以外必须具备的工程能力，并覆盖性能、观测、灰度与风险控制的关键方法。
+keywords:
+  - 生产级 RAG
+  - RAG 工程实践
+  - RAG 监控
+  - RAG 稳定性
 lastUpdated: 2026-05-30
 status: published
 ---

@@ -2,6 +2,11 @@
 title: 第 5 章 指令微调与对齐
 description: 梳理为什么预训练后的模型还需要指令微调与对齐，以及 SFT、RLHF、DPO 等方法分别解决什么问题。
 summary: 解释为什么预训练之后仍需要指令微调与对齐，并建立从“会续写”到“会当助手”的工程判断框架。
+keywords:
+  - 指令微调
+  - SFT 是什么
+  - RLHF
+  - DPO
 lastUpdated: 2026-05-30
 status: published
 ---

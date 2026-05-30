@@ -1,11 +1,14 @@
 ---
 title: 资源导航
-description: 汇总 AI Agent、LLM、RAG 与相关框架的官方文档和高价值外部入口，方便快速回到源头资料。
+description: 汇总 AI Agent、LLM、RAG 与相关框架的官方文档和学习资源，适合快速查找 Agent 框架文档、RAG 资料和智能体开发资料。
 summary: 保留常用官方资料与工具入口，便于按主题快速查阅原始文档。
 keywords:
   - AI Agent 资源
-  - LLM 资源
-  - RAG 资源
+  - AI Agent 官方文档
+  - LLM 学习资源
+  - RAG 学习资源
+  - Agent 框架文档
+  - 智能体开发资料
 tags:
   - 资源
   - 官方文档

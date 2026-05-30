@@ -2,6 +2,11 @@
 title: 第 2 章 数据接入与知识库准备
 description: 说明 RAG 为什么首先是数据工程问题，并梳理数据接入、清洗、治理与知识库准备的关键步骤。
 summary: 说明为什么 RAG 首先是数据工程问题，并梳理数据源接入、清洗标准化、权限治理和时效管理的基本思路。
+keywords:
+  - RAG 数据准备
+  - 知识库构建
+  - 企业知识库整理
+  - RAG 数据治理
 lastUpdated: 2026-05-30
 status: published
 ---

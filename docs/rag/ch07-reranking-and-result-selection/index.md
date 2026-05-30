@@ -2,6 +2,11 @@
 title: 第 7 章 重排、排序与结果精选
 description: 介绍 RAG 中的重排与结果选择机制，帮助你理解为什么召回后还需要二次筛选与排序。
 summary: 讲清为什么“召回到了”仍然不够，以及重排、去重、聚合和最终结果精选怎样共同决定回答质量。
+keywords:
+  - Rerank 重排
+  - 检索结果排序
+  - RAG 重排
+  - 结果精选
 lastUpdated: 2026-05-30
 status: published
 ---

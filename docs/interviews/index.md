@@ -3,14 +3,16 @@ title: 面试
 summary: 用于整理 AI Agent 方向的面试相关内容，当前以真实面试案例为主，方便你熟悉提问方式和追问节奏。
 keywords:
   - AI Agent 面试
-  - AI Agent 面试
+  - AI Agent 面试题
   - Agent 面经
+  - LLM 面试题
+  - RAG 面试题
 tags:
   - AI Agent
   - 面试
   - 案例
 author: AI Agent Guide
-description: "用于整理 AI Agent 方向的面试相关内容，当前以真实面试案例为主，方便你熟悉提问方式和追问节奏。"
+description: "用于整理 AI Agent、LLM 与 RAG 方向的面试题和真实面试案例，适合岗位准备、面经复盘和技术表达训练。"
 lastUpdated: 2026-05-30
 status: published
 ---

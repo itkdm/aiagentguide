@@ -2,6 +2,11 @@
 title: 第 4 章 预训练机制
 description: 说明大模型预训练阶段如何依赖海量数据、训练目标和规模扩展形成基础能力与通用语言建模能力。
 summary: 解释 LLM 的通用能力如何通过大规模预训练形成，并理解预训练数据、目标、规模与能力边界之间的关系。
+keywords:
+  - LLM 预训练
+  - Scaling Law
+  - 预训练数据
+  - 训练目标
 lastUpdated: 2026-05-30
 status: published
 ---

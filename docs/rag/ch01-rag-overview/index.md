@@ -2,6 +2,11 @@
 title: 第 1 章 RAG 全景图与核心认知
 description: 这一章先帮你建立对 RAG 的整体认知，理解它的定义、适用问题、系统组成与最常见的误区。
 summary: 建立对 RAG 的整体认知，先理解它是什么、适合解决什么问题、系统如何构成，以及最常见的误解有哪些。
+keywords:
+  - RAG 是什么
+  - 检索增强生成
+  - RAG 基础认知
+  - RAG 适用场景
 lastUpdated: 2026-05-30
 status: published
 ---

@@ -3,9 +3,10 @@ title: AI Agent 入门
 summary: 帮助中文开发者建立 AI Agent 的基础认知，理解 Agent 是什么、适合什么任务，以及动手前需要掌握的判断标准。
 keywords:
   - AI Agent 入门
-  - 智能体入门
-  - Agent 教程
-  - Agent 是什么
+  - AI Agent 是什么
+  - 智能体入门教程
+  - Agent 学习路线
+  - Agent 适用场景
 tags:
   - AI Agent
   - 入门
@@ -13,7 +14,7 @@ tags:
   - 学习路径
 author: AI Agent Guide
 pageClass: getting-started-overview
-description: "面向中文开发者的 AI Agent 入门栏目，帮助你理解 Agent 是什么、何时使用，以及开始动手前需要建立的判断标准。"
+description: "面向中文开发者的 AI Agent 入门栏目，适合搜索 AI Agent 是什么、智能体入门教程、Agent 学习路线和 Agent 适用场景的读者。"
 lastUpdated: 2026-05-30
 status: published
 ---

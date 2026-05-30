@@ -2,6 +2,11 @@
 title: 第 5 章 Embedding、BM25 与混合检索
 description: 比较向量检索、关键词检索与混合检索的适用场景，帮助你理解不同召回策略该如何组合使用。
 summary: 说明语义检索、关键词检索和混合检索各自解决什么问题，以及为什么真实 RAG 往往不会只依赖单一路召回。
+keywords:
+  - BM25
+  - 混合检索
+  - 向量检索
+  - Embedding 检索
 lastUpdated: 2026-05-30
 status: published
 ---

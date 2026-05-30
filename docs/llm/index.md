@@ -2,6 +2,12 @@
 title: LLM 教程目录
 description: 按章节与问题域组织的 LLM 教程总览，帮助你系统理解大语言模型的核心概念、工作机制与工程实践。
 summary: 按章节、主题模块和具体问题组织的 LLM 教程结构。
+keywords:
+  - LLM 教程
+  - 大语言模型教程
+  - LLM 学习路线
+  - LLM 基础知识
+  - LLM 原理
 lastUpdated: 2026-05-30
 status: published
 ---

@@ -2,6 +2,11 @@
 title: 第 1 章 LLM 全景图与核心认知
 description: 这一章先建立对大语言模型的整体认知，帮助你理解 LLM 是什么、为什么重要，以及它擅长和不擅长什么。
 summary: 帮助读者先建立对大语言模型的整体认识，理解它是什么、为什么重要、擅长什么以及不擅长什么。
+keywords:
+  - LLM 是什么
+  - 大语言模型入门
+  - LLM 基础认知
+  - LLM 能力边界
 lastUpdated: 2026-05-30
 status: published
 ---

@@ -2,6 +2,11 @@
 title: 第 9 章 RAG 评测体系与错误归因
 description: 讲清 RAG 系统该如何做评测与错误归因，帮助你区分问题究竟来自数据、检索、重排还是生成阶段。
 summary: 讲清为什么 RAG 不能只看最终回答，怎样分别评估检索层和生成层，怎样构建评测集，并把失败案例归到可行动的问题类型。
+keywords:
+  - RAG 评测
+  - 错误归因
+  - RAG 评估方法
+  - 检索生成评测
 lastUpdated: 2026-05-30
 status: published
 ---
