@@ -1,21 +1,20 @@
 ﻿---
 title: 如何选择合适的 AI Agent 框架
-description: 如何选择合适的 AI Agent 框架，适合搜索 AI Agent 框架对比、Java AI Agent 框架、LangChain vs LangGraph 与 Spring AI Alibaba 选型方法的开发者。
-summary: 本文详细介绍了如何选择合适的AI Agent框架，给出选型方法和指导建议！
+description: Java AI Agent 框架怎么选？本文从团队语言、系统复杂度和生产要求出发，比较 LangChain4j、Spring AI、Spring AI Alibaba 与 AgentScope Java。
+summary: 如果你的团队主要使用 Java 或 Spring，这篇文章帮助你判断该从 LangChain4j、Spring AI、Spring AI Alibaba 还是 AgentScope Java 开始选型。
 
 keywords:
-  - AI Agent 框架选型
-  - AI Agent 框架对比
+  - Java AI Agent 框架怎么选
   - Java AI Agent 框架
-  - LangChain vs LangGraph
-  - Spring AI Alibaba
-  - AgentScope Java
+  - Java AI Agent 框架选型
+  - LangChain4j 和 Spring AI 怎么选
+  - Spring AI Alibaba 选型
 tags:
   - AI Agent
   - 框架
   - 选型
 date: 2026-04-30
-lastUpdated: 2026-05-30
+lastUpdated: 2026-06-03
 status: published
 assets: none
 reviewed: false
@@ -42,6 +41,8 @@ noindex: false
 - 你到底需要单 Agent、带状态的工作流，还是多 Agent 协作
 - 你对持久化、恢复执行、可观测性、企业集成的要求有多高
 
+如果你搜索的是“Java AI Agent 框架怎么选”，可以先把注意力放在 **LangChain4j、Spring AI、Spring AI Alibaba 和 AgentScope Java** 这几类选择上。它们的差异不只是 API 风格，而是分别对应“轻量接入 LLM 能力”“融入 Spring 生态”“做更完整的 Agent 工作流”和“围绕 Java Agent 协作能力构建系统”。
+
 ## 先给结论
 
 如果你只想先有一个靠谱起点，可以先按这个顺序判断：
@@ -55,6 +56,17 @@ noindex: false
 - Java 团队想以“Agent 本身”为中心构建 ReAct、多 Agent、计划、记忆和工具协作，重点看 **AgentScope Java**
 
 这里没有“绝对最优框架”，只有“当前问题更适合哪一层抽象”。
+
+## Java AI Agent 框架怎么选
+
+如果你的线上系统主要是 Java / Spring，优先按下面这个顺序收敛：
+
+- 只想给现有 Java 应用接入聊天模型、工具调用、RAG 或向量库能力，先看 **LangChain4j** 或 **Spring AI**
+- 已经在 Spring Boot 体系里做服务治理、监控、配置和企业集成，优先看 **Spring AI**
+- 需要图式工作流、持久化执行、人机协同、多 Agent 模式或 A2A 方向能力，重点看 **Spring AI Alibaba**
+- 想围绕 Java Agent 本身做 ReAct、计划、记忆、工具协作和多 Agent 组织，重点看 **AgentScope Java**
+
+一个实用判断是：如果你的问题只是“把 LLM 能力接进 Java 项目”，不要一开始就选最复杂的 Agent Framework；如果你已经需要长链路流程、恢复执行和协作调度，再把 Spring AI Alibaba 或 AgentScope Java 放到优先级前面。
 
 ## 第一步：先按语言和组织约束筛掉一半选项
 
