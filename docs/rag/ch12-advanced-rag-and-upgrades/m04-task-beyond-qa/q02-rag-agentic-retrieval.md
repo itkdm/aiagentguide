@@ -1,6 +1,21 @@
 ---
 title: 12.4.2 什么时候 RAG 应该升级为“Agentic Retrieval”？
-summary: 给出可操作的升级信号与迁移路径，判断何时需要 Agentic Retrieval。
+description: Agentic RAG 和普通 RAG 有什么区别？本文用检索触发、决策方式和迁移路径说明什么时候该升级为 Agentic Retrieval。
+summary: 这篇文章帮助你判断普通 RAG 什么时候不够用，以及如何从固定检索流程逐步升级到 Agentic Retrieval。
+keywords:
+  - Agentic RAG 和普通 RAG 有什么区别
+  - Agentic RAG 是什么
+  - Agentic Retrieval 是什么
+  - RAG 什么时候升级为 Agent
+  - RAG 和 Agentic Retrieval 区别
+lastUpdated: 2026-06-03
+status: published
+assets: none
+reviewed: false
+sourceType: original
+author: AI Agent Guide
+draft: false
+noindex: false
 ---
 
 # 12.4.2 什么时候 RAG 应该升级为“Agentic Retrieval”？
@@ -8,6 +23,8 @@ summary: 给出可操作的升级信号与迁移路径，判断何时需要 Agen
 先给结论：*当检索不再是“一次性找证据”，而是“需要多轮决策、动态改写与工具协同”时，RAG 就该升级为 Agentic Retrieval。*
 
 Agentic Retrieval 的本质不是“更复杂的检索”，而是“检索由 Agent 来控制”，它能动态决定检索路径与检索深度。
+
+如果把它放到 Agentic RAG 的语境里，普通 RAG 更像固定流水线：先检索，再生成；Agentic RAG 则让 Agent 根据任务状态决定是否检索、怎么检索、是否改写问题、是否继续查证。两者的核心区别不在“有没有向量库”，而在检索是否由动态决策驱动。
 
 ## 需要升级的典型信号
 
