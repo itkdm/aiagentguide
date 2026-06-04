@@ -80,6 +80,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Verify external tool links
+        env:
+          TOOL_LINK_OPTIONAL_URLS: https://quickrouter.ai/
         run: node ./scripts/check-tool-links.mjs
 
       - name: Build site

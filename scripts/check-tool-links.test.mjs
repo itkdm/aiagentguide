@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { extractToolUrls, retryUrlCheck } from './check-tool-links.mjs'
+import { extractToolUrls, retryUrlCheck, splitFailuresByOptionalStatus } from './check-tool-links.mjs'
 
 test('extractToolUrls returns unique external hrefs from html anchors', () => {
   const markdown = `
@@ -32,4 +32,19 @@ test('retryUrlCheck retries transient failures until a later attempt succeeds', 
 
   assert.equal(attempts, 3)
   assert.deepEqual(result, { ok: true, status: 200, finalUrl: 'https://example.com/' })
+})
+
+test('splitFailuresByOptionalStatus separates configured optional link failures', () => {
+  const failures = [
+    { url: 'https://optional.example.com/', ok: false },
+    { url: 'https://required.example.com/', ok: false }
+  ]
+
+  assert.deepEqual(
+    splitFailuresByOptionalStatus(failures, new Set(['https://optional.example.com/'])),
+    {
+      optionalFailures: [{ url: 'https://optional.example.com/', ok: false }],
+      hardFailures: [{ url: 'https://required.example.com/', ok: false }]
+    }
+  )
 })

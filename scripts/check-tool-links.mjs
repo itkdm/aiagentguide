@@ -28,6 +28,15 @@ function resolveTargetFiles() {
   return (configured?.length ? configured : DEFAULT_TARGET_FILES).map((filePath) => path.resolve(filePath))
 }
 
+function resolveOptionalUrls() {
+  return new Set(
+    process.env.TOOL_LINK_OPTIONAL_URLS
+      ?.split(',')
+      .map((value) => value.trim())
+      .filter(Boolean) ?? []
+  )
+}
+
 export async function collectToolUrls() {
   const markdownFiles = resolveTargetFiles()
 
@@ -111,6 +120,21 @@ export async function retryUrlCheck(check, attempts = RETRY_ATTEMPTS, delayMs = 
   return lastResult
 }
 
+export function splitFailuresByOptionalStatus(failures, optionalUrls) {
+  const optionalFailures = []
+  const hardFailures = []
+
+  for (const failure of failures) {
+    if (optionalUrls.has(failure.url)) {
+      optionalFailures.push(failure)
+    } else {
+      hardFailures.push(failure)
+    }
+  }
+
+  return { optionalFailures, hardFailures }
+}
+
 async function checkUrlWithCurl(url) {
   try {
     const { stdout } = await execFile(
@@ -166,6 +190,7 @@ async function runPool(items, worker, concurrency = CONCURRENCY) {
 async function main() {
   const urls = await collectToolUrls()
   const urlList = [...urls.keys()]
+  const optionalUrls = resolveOptionalUrls()
 
   if (urlList.length === 0) {
     console.log('No external tool URLs found.')
@@ -189,18 +214,26 @@ async function main() {
   })
 
   const failures = results.filter((result) => !result.ok)
+  const { optionalFailures, hardFailures } = splitFailuresByOptionalStatus(failures, optionalUrls)
 
   for (const result of results) {
     if (result.ok) {
       console.log(`OK   ${result.status} ${result.url}`)
+    } else if (optionalUrls.has(result.url)) {
+      console.warn(`WARN ${result.url} ${result.error ? `(${result.error})` : `(status ${result.status})`}`)
+      console.warn(`     Optional URL referenced by: ${result.files.join(', ')}`)
     } else {
       console.error(`FAIL ${result.url} ${result.error ? `(${result.error})` : `(status ${result.status})`}`)
       console.error(`     Referenced by: ${result.files.join(', ')}`)
     }
   }
 
-  if (failures.length > 0) {
-    console.error(`\n${failures.length} external tool URL(s) failed the accessibility check.`)
+  if (optionalFailures.length > 0) {
+    console.warn(`\n${optionalFailures.length} optional external tool URL(s) were unreachable.`)
+  }
+
+  if (hardFailures.length > 0) {
+    console.error(`\n${hardFailures.length} external tool URL(s) failed the accessibility check.`)
     process.exit(1)
   }
 
