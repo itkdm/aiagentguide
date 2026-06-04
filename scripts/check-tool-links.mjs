@@ -6,8 +6,10 @@ import { promisify } from 'node:util'
 import { fileURLToPath } from 'node:url'
 
 const DEFAULT_TARGET_FILES = ['docs/tools/aggregators.md']
-const REQUEST_TIMEOUT_MS = 15000
+const REQUEST_TIMEOUT_MS = 30000
 const CONCURRENCY = 5
+const RETRY_ATTEMPTS = 3
+const RETRY_DELAY_MS = 1000
 const ACCEPTABLE_STATUSES = new Set([200, 201, 202, 204, 301, 302, 303, 307, 308, 401, 403, 405])
 const execFile = promisify(execFileCallback)
 const CURL_OUTPUT_SINK = process.platform === 'win32' ? 'NUL' : '/dev/null'
@@ -89,6 +91,26 @@ export async function checkUrl(url) {
   }
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+export async function retryUrlCheck(check, attempts = RETRY_ATTEMPTS, delayMs = RETRY_DELAY_MS) {
+  let lastResult
+
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    lastResult = await check()
+
+    if (lastResult.ok || attempt === attempts) {
+      return lastResult
+    }
+
+    await sleep(delayMs)
+  }
+
+  return lastResult
+}
+
 async function checkUrlWithCurl(url) {
   try {
     const { stdout } = await execFile(
@@ -153,11 +175,15 @@ async function main() {
   console.log(`Checking ${urlList.length} external tool URL(s)...`)
 
   const results = await runPool(urlList, async (url) => {
-    let result = await checkUrl(url)
+    const result = await retryUrlCheck(async () => {
+      let checkResult = await checkUrl(url)
 
-    if (!result.ok) {
-      result = await checkUrlWithCurl(url)
-    }
+      if (!checkResult.ok) {
+        checkResult = await checkUrlWithCurl(url)
+      }
+
+      return checkResult
+    })
 
     return { url, ...result, files: urls.get(url) ?? [] }
   })
