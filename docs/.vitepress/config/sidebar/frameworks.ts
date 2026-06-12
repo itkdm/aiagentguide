@@ -154,7 +154,11 @@ export const frameworksSidebar: DefaultTheme.Sidebar = {
         text: '核心组件',
         collapsed: false,
         items: [
-          { text: 'Agents', link: '/frameworks/spring-ai-alibaba/core-components/agents' }
+          { text: 'Agents', link: '/frameworks/spring-ai-alibaba/core-components/agents' },
+          { text: '模型', link: '/frameworks/spring-ai-alibaba/core-components/models' },
+          { text: '消息', link: '/frameworks/spring-ai-alibaba/core-components/messages' },
+          { text: '工具', link: '/frameworks/spring-ai-alibaba/core-components/tools' },
+          { text: '短期记忆', link: '/frameworks/spring-ai-alibaba/core-components/short-term-memory' }
         ]
       }
     ]
