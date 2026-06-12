@@ -45,8 +45,9 @@ status: published
 推荐先读：
 
 - [第一个 Agent：搜集资料并整理成清单](./first-agent-materials-brief.md)
+- [Coding Agent 实战方法](./coding-agents/)
 
-这篇会带你完成一个很适合入门的任务：
+第一篇会带你完成一个很适合入门的任务：
 
 - 给定一个主题
 - 用搜索或网页读取能力找资料
