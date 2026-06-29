@@ -1,6 +1,7 @@
 node_modules/
 content-plans/
 .codex/
+.workbuddy/
 CONTENT_README.md
 AGENTS.md
 

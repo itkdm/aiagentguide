@@ -1,28 +1,172 @@
 ---
-title: verification-before-completion
-description: "Superpowers 完成前验证 skill：修完必须验证。"
-summary: "Superpowers 原 skill 翻译：verification-before-completion。"
+title: Verification Before Completion 完成前验证
+description: Superpowers 完成前验证技能：在声称工作完成前必须运行验证命令并确认输出，确保每个任务都有确凿证据表明已正确完成。
+summary: Superpowers 原技能翻译：verification-before-completion。介绍先有证据再做断言的原则和关卡函数，确保每个交付都经过验证。
 keywords:
-  - verification-before-completion
-  - 验证
-  - 完成前检查
+  - Superpowers
+  - 完成前验证
+  - 证据先行
+  - 工作交付验证
+  - 测试验证
 tags:
   - Superpowers
   - 参考
 author: AI Agent Guide
-lastUpdated: 2026-06-12
-status: draft
+lastUpdated: 2026-06-23
+status: published
 assets: none
-reviewed: false
+reviewed: true
 sourceType: reference
-draft: true
+draft: false
 noindex: false
 ---
 
 # verification-before-completion
 
-> 本文为 [Superpowers](https://github.com/prime-radiant-inc/superpowers) 原 skill 文件夹的中文翻译，基于 MIT 协议。原文路径：`skills/verification-before-completion/`。
+> 本文为 [Superpowers](https://github.com/obra/superpowers/tree/main/skills/verification-before-completion) 原 skill 文件夹的中文翻译，基于 MIT 协议。原文路径：`skills/verification-before-completion/`。
 
-## 原文 SKILL.md 翻译
+---
 
-（待翻译）
+**Skill 元数据**
+
+| 字段 | 内容 |
+|------|------|
+| 名称 | verification-before-completion |
+| 描述 | 在准备声称工作已完成、已修复或已通过测试时使用，提交或创建 PR 之前必须先运行验证命令并确认输出——证据先于断言 |
+
+---
+
+# 完成前验证
+
+## 概述
+
+没有验证就声称工作完成，不是效率，是不诚实。
+
+**核心原则：** 先有证据，再做断言，始终如此。
+
+**违反此规则的字面意思就是违反此规则的精神。**
+
+## 铁律
+
+```
+没有新鲜验证证据，就不能做完成声明
+```
+
+如果你没有在此消息中运行验证命令，就不能声称它通过。
+
+## 关卡函数
+
+```
+在声称任何状态或表达满足感之前：
+
+1. 识别：什么命令能证明这个声明？
+2. 运行：执行完整的命令（新鲜、完整）
+3. 读取：完整输出，检查退出码，计数失败
+4. 验证：输出是否确认声明？
+   - 如果否：用证据陈述实际状态
+   - 如果是：用证据陈述声明
+5. 只有然后：做出声明
+
+跳过任何步骤 = 撒谎，不是验证
+```
+
+## 常见失败
+
+| 声明 | 需要 | 不够 |
+|------|------|------|
+| 测试通过 | 测试命令输出：0 失败 | 之前运行过、"应该能过" |
+| Linter 干净 | Linter 输出：0 错误 | 部分检查、推断 |
+| 构建成功 | 构建命令：exit 0 | Linter 通过、日志看起来好 |
+| Bug 修复 | 测试原始症状：通过 | 代码改了、假设修好了 |
+| 回归测试有效 | 红绿循环已验证 | 测试通过一次 |
+| Agent 完成 | VCS diff 显示变更 | Agent 报告"成功" |
+| 需求满足 | 逐行检查清单 | 测试通过 |
+
+## 红旗——停下来
+
+- 使用"应该"、"大概"、"似乎"
+- 在验证之前表达满足感（"太好了！"、"完美！"、"完成！"等）
+- 没有验证就要提交/推送/PR
+- 信任 agent 的成功报告
+- 依赖部分验证
+- 想着"就这一次"
+- 累了，想结束工作
+- **任何暗示成功但没有运行验证的措辞**
+
+## 借口预防
+
+| 借口 | 现实 |
+|------|------|
+| "现在应该能工作了" | 运行验证 |
+| "我有信心" | 信心 ≠ 证据 |
+| "就这一次" | 没有例外 |
+| "Linter 过了" | Linter ≠ 编译器 |
+| "Agent 说成功了" | 独立验证 |
+| "我累了" | 疲惫 ≠ 借口 |
+| "部分检查够了" | 部分什么都证明不了 |
+| "换种说法规则就不适用了" | 精神重于字面 |
+
+## 关键模式
+
+**测试：**
+```
+✅ [运行测试命令] [看到：34/34 通过] "所有测试通过"
+❌ "现在应该能通过了" / "看起来正确"
+```
+
+**回归测试（TDD 红绿）：**
+```
+✅ 编写 → 运行（通过）→ 撤销修复 → 运行（必须失败）→ 恢复 → 运行（通过）
+❌ "我写了一个回归测试"（没有红绿验证）
+```
+
+**构建：**
+```
+✅ [运行构建] [看到：exit 0] "构建通过"
+❌ "Linter 过了"（linter 不检查编译）
+```
+
+**需求：**
+```
+✅ 重新阅读计划 → 创建检查清单 → 逐项验证 → 报告缺口或完成
+❌ "测试通过，阶段完成"
+```
+
+**Agent 委托：**
+```
+✅ Agent 报告成功 → 检查 VCS diff → 验证变更 → 报告实际状态
+❌ 信任 agent 报告
+```
+
+## 为什么这很重要
+
+来自 24 条失败记忆：
+- 你的伙伴说"我不相信你"——信任破裂
+- 未定义的函数被交付——会崩溃
+- 缺失的需求被交付——功能不完整
+- 时间浪费在虚假完成 → 重定向 → 返工
+- 违反："诚实是核心价值观。如果你撒谎，你会被替换。"
+
+## 何时应用
+
+**在以下情况之前始终应用：**
+- 任何成功/完成声明的变体
+- 任何满足感的表达
+- 关于工作状态的任何积极陈述
+- 提交、创建 PR、任务完成
+- 进入下一个任务
+- 委托给 agent
+
+**规则适用于：**
+- 精确的短语
+- 改述和同义词
+- 成功的暗示
+- 任何暗示完成/正确的沟通
+
+## 总结
+
+**验证没有捷径。**
+
+运行命令。读取输出。然后声称结果。
+
+这是不可谈判的。
