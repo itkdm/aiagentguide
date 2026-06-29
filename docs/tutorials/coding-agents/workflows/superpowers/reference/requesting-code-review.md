@@ -65,7 +65,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 
 **2. 派发代码审查员子代理：**
 
-派发一个 `general-purpose` 子代理，填充 [code-reviewer.md](code-reviewer.md) 的模板
+派发一个 `general-purpose` 子代理，填充 code-reviewer.md 的模板
 
 **占位符：**
 - `{DESCRIPTION}` — 你构建了什么的简短摘要
@@ -134,7 +134,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 - 展示证明它有效工作的代码/测试
 - 请求澄清
 
-参见模板：[code-reviewer.md](code-reviewer.md)
+参见模板：code-reviewer.md
 
 ---
 

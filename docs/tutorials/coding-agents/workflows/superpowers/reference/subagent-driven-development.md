@@ -205,9 +205,9 @@ digraph process {
 
 ## 提示模板
 
-- [implementer-prompt.md](implementer-prompt.md) - 派发实现者子代理
-- [task-reviewer-prompt.md](task-reviewer-prompt.md) - 派发任务审查员子代理（规格合规 + 代码质量）
-- 最终全分支审查：使用 superpowers:requesting-code-review 的 [code-reviewer.md](../requesting-code-review/code-reviewer.md)
+- implementer-prompt.md - 派发实现者子代理
+- task-reviewer-prompt.md - 派发任务审查员子代理（规格合规 + 代码质量）
+- 最终全分支审查：使用 superpowers:requesting-code-review 的 code-reviewer.md
 
 ## 示例工作流
 
