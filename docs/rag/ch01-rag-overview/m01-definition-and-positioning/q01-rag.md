@@ -11,13 +11,15 @@ RAG 是 `Retrieval-Augmented Generation` 的缩写，中文通常叫“检索增
 
 **让模型在回答之前，先查资料，再基于资料作答。**
 
-<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag.svg" alt="RAG 是什么" />
+<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag-handdrawn.png" alt="RAG 是什么" />
 
-这件事之所以重要，是因为大模型本身的知识主要来自训练阶段。训练完成后，模型的内部知识就基本固定了。它可能不知道最新信息，也不知道你的私有文档、内部流程、产品细节和业务术语。RAG 的作用，就是把这部分“模型原本不知道，或者知道得不够准”的信息，在回答时临时补进来。
+RAG在当前阶段之所以重要，是因为大模型本身的知识主要来自训练阶段。训练完成后，模型的内部知识就基本固定了。它可能不知道最新信息，也不知道你的私有文档、内部流程、产品细节和业务术语。RAG 的作用，就是把这部分"模型原本不知道，或者知道得不够准"的信息，在回答时临时补进来。
+
+<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/model-knowledge-cutoff.png" alt="模型知识库截止时间" />
 
 ## RAG 的核心组成是什么
 
-一个典型的 RAG 系统，通常包含下面几步：
+一个典型的 RAG 系统，整体上分为离线和在线两个阶段，通常包含下面几步：
 
 1. 准备外部知识，比如文档、网页、FAQ、代码库或数据库内容。
 2. 把这些内容处理成更适合检索的形式，比如切块、补充元数据、建立索引。
@@ -26,21 +28,23 @@ RAG 是 `Retrieval-Augmented Generation` 的缩写，中文通常叫“检索增
 5. 让大模型基于这些上下文生成答案。
 
 所以 RAG 不是某一个单点技术，而是一条完整链路。检索只是其中一环，生成也只是其中一环。真正的效果，取决于整条链路能不能协同起来。
+<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/q01-rag-core-components-handdrawn.webp" alt="RAG 的核心组成" />
 
 ## 一个最小化的代码示意
 
-如果你想先用代码感受一下 RAG 在做什么，可以先看一个极简流程：
+先用一段代码感受一下 RAG 在做什么：
 
 ```python
 # 仅示意：省略了具体框架、鉴权、异常处理和持久化
 
+# 这个算是我们提前构建的知识库
 knowledge_base = [
     "退款规则：商品签收后 7 天内支持无理由退货。",
     "发票规则：电子发票会在支付完成后 24 小时内开具。",
     "配送规则：偏远地区配送时间可能延长 2 到 3 天。"
 ]
 
-
+# 这是一个简单的检索函数，根据关键词匹配返回最相关的文档
 def retrieve(query: str, docs: list[str], top_k: int = 2) -> list[str]:
     keywords = [word for word in ["退款", "发票", "配送", "无理由退货"] if word in query]
     scored: list[tuple[int, str]] = []
@@ -87,6 +91,10 @@ RAG 常见，不是因为它“高级”，而是因为它很实用。很多真�
 - 需要让回答更容易追溯来源
 
 这几件事，单靠基础模型往往做不好。模型可能会“说得像对”，但并不一定真的基于可靠资料。RAG 的价值就在于，它把“回答”和“证据”绑得更紧，让答案尽量建立在外部资料之上。
+
+::: tip 思考与讨论
+在未来，随着基础模型越来越强大，你认为 RAG 会继续成为大模型应用里的常见方案吗？会有一个方案替代它吗？你有什么设想呢？大胆想象！
+:::
 
 ## RAG 不等于万能
 
