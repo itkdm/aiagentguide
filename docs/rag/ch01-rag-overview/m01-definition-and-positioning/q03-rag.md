@@ -14,7 +14,7 @@ summary: 解释大模型知识截止、私有数据缺失、可追溯性不足�
 - 它可能知道一些通用知识，但不一定知道得足够准
 - 它能生成自然语言，但不一定能说明答案依据来自哪里
 
-<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/q03-rag.svg" alt="为什么经常需要 RAG" />
+<SingleImagePreview src="/rag/ch01-rag-overview/m01-definition-and-positioning/q03-rag-handdrawn.webp" alt="为什么经常需要 RAG" />
 
 而很多真实应用，恰恰最在意的就是这些问题。
 
