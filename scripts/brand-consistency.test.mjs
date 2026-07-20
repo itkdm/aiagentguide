@@ -36,7 +36,8 @@ test('presents the brand and slogan on the homepage', () => {
   const homepage = read('docs/index.md')
   const homeStyles = read('docs/.vitepress/theme/styles/home.css')
 
-  assert.match(homepage, /^title: AI Agent 中文教程与开发实战$/m)
+  assert.match(homepage, /^title: 布吉岛 Agent｜AI Agent 开发教程与实战$/m)
+  assert.match(homepage, /^titleTemplate: false$/m)
   assert.match(homepage, /^author: 布吉岛$/m)
   assert.match(homepage, /^  name: "布吉岛 Agent"$/m)
   assert.match(homepage, /^  text: "从不知道，到做得到"$/m)

@@ -630,6 +630,27 @@ a.home-card {
   }
 }
 
+/* Mobile: minimize hero to name + image, hide secondary sections, trim footer */
+@media (max-width: 768px) {
+  .tech-stack-section,
+  .home-section-journey {
+    display: none;
+  }
+
+  .VPHomeHero .text,
+  .VPHomeHero .tagline,
+  .VPHomeHero .actions {
+    display: none;
+  }
+
+  .VPContent.is-home + .VPFooter .footer-brand,
+  .VPContent.is-home + .VPFooter .footer-contact,
+  .VPContent.is-home + .VPFooter .message .footer-link[href*="sitemap.xml"],
+  .VPContent.is-home + .VPFooter .message .footer-link[href^="mailto:"] {
+    display: none;
+  }
+}
+
 @media (max-width: 640px) {
   .VPHomeHero.VPHero {
     padding-top: calc(var(--vp-nav-height) + var(--vp-layout-top-height, 0px) + 72px);
