@@ -66,7 +66,7 @@ pageClass: tool-detail-page
   <article class="tool-feature-card">
     <h3>OkRouter</h3>
     <p>主打企业级统一 AI Gateway，公开提供模型页和接入文档，适合偏生产化使用的场景。</p>
-    <p><a href="https://okrouter.com/en" target="_blank" rel="noreferrer">官网</a> · <a href="https://okrouter.com/docs" target="_blank" rel="noreferrer">文档</a></p>
+    <p><a href="https://okrouter.ai/" target="_blank" rel="noreferrer">官网</a> · <a href="https://okrouter.ai/docs/api-keys" target="_blank" rel="noreferrer">文档</a></p>
   </article>
   <article class="tool-feature-card">
     <h3>api-hub.ai</h3>
