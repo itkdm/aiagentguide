@@ -12,7 +12,7 @@ tags:
   - RAG
   - 检索增强生成
   - 基础概念
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # RAG 是什么

@@ -9,7 +9,7 @@ tags:
   - RAG
   - 工程化
   - 二面
-author: AI Agent Guide
+author: 布吉岛
 description: "一组围绕 RAG、Agent 与工程化展开的连续提问，适合用来熟悉真实面试中的追问节奏。"
 ---
 

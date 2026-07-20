@@ -12,7 +12,7 @@ tags:
   - 工具
   - Manus
   - 通用 Agent
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page

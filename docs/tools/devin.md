@@ -12,7 +12,7 @@ tags:
   - 工具
   - Devin
   - 编程智能体
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page
@@ -170,4 +170,3 @@ pageClass: tool-detail-page
 - [Devin 自助计划（官方 Billing Docs）](https://docs.devin.ai/admin/billing/self-serve)
 - [Cognition 博客：New self-serve plans for Devin](https://cognition.ai/blog/new-self-serve-plans-for-devin)
 - [Devin Enterprise Deployment](https://docs.devin.ai/enterprise/deployment)
-

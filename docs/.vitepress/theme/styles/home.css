@@ -213,7 +213,7 @@
 }
 
 .VPHomeHero .text {
-  max-width: 12ch;
+  max-width: none;
   letter-spacing: -0.04em;
 }
 
@@ -641,9 +641,9 @@ a.home-card {
     max-width: none;
   }
   .VPHomeHero .text {
-    max-width: 8ch;
-    font-size: clamp(2.6rem, 14vw, 4.2rem);
-    line-height: 0.98;
+    max-width: 5.5em;
+    font-size: clamp(2.35rem, 10.25vw, 2.75rem);
+    line-height: 1.02;
   }
   .VPHomeHero .tagline {
     font-size: 0.98rem;
@@ -722,10 +722,6 @@ a.home-card {
 }
 
 @media (max-width: 420px) {
-  .VPHomeHero .text {
-    max-width: 7ch;
-    font-size: clamp(2.3rem, 13vw, 3.4rem);
-  }
   .VPHomeHero .tagline {
     font-size: 0.94rem;
     line-height: 1.55rem;

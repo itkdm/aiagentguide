@@ -12,7 +12,7 @@ tags:
   - 核心组件
   - 工具调用
   - 状态管理
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # Agent 的核心组件

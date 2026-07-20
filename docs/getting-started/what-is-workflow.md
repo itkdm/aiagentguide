@@ -12,7 +12,7 @@ tags:
   - Workflow
   - 工作流
   - 基础概念
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # Workflow 是什么（工作流）

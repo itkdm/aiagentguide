@@ -10,7 +10,7 @@ tags:
   - AI Agent
   - Coding Agent
   - learn-claude-code
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # learn-claude-code

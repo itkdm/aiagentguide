@@ -10,7 +10,7 @@ tags:
   - AI Agent
   - 开源项目
   - 项目研究
-author: AI Agent Guide
+author: 布吉岛
 description: "整理值得研究的 AI Agent 开源项目，适合搜索 AI Agent 开源项目推荐、项目案例有哪些，以及系统架构怎么拆。"
 lastUpdated: 2026-05-30
 status: published

@@ -13,7 +13,7 @@ tags:
   - 工具
   - Claude
   - Computer Use
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page

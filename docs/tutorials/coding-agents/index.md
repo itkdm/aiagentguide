@@ -14,7 +14,7 @@ tags:
   - Claude Code
   - AI 编程
   - 实战方法
-author: AI Agent Guide
+author: 布吉岛
 lastUpdated: 2026-05-30
 status: published
 assets: none
@@ -41,4 +41,3 @@ Coding Agent 不只是“让模型写代码”。在真实项目里，更重要�
 ## 阅读重点
 
 读这个专题时，不要只看工具命令。更值得关注的是任务如何描述、上下文如何给、修改范围如何控制、完成前如何验证。
-

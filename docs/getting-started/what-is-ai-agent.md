@@ -11,7 +11,7 @@ tags:
   - AI Agent
   - 基础概念
   - Agent 定义
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # 什么是 AI Agent

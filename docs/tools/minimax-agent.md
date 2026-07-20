@@ -12,7 +12,7 @@ tags:
   - 工具
   - MiniMax
   - 通用 Agent
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page
@@ -170,4 +170,3 @@ pageClass: tool-detail-page
 - [MiniMax Agent Subscription Service Terms](https://agent.minimax.io/doc/en/credit-rules.html)
 - [MiniMax Agent FAQ](https://agent.minimax.io/faq/en.html)
 - [MiniMax 官网](https://www.minimax.io/)
-

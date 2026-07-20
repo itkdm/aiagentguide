@@ -12,7 +12,7 @@ tags:
   - 入门
   - 项目准备
   - 实战
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # 第一次动手前要知道什么

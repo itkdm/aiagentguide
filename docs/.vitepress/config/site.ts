@@ -1,7 +1,7 @@
 ﻿import type { HeadConfig } from 'vitepress'
 
-export const siteTitle = 'AI Agent Guide'
-export const siteDescription = 'AI Agent 中文教程与实战指南'
+export const siteTitle = '布吉岛 Agent'
+export const siteDescription = '布吉岛 Agent 是面向中文开发者的 AI Agent 教程与开发实战指南'
 export const defaultSiteUrl = 'https://aiagentguide.cn/'
 
 export const siteHead: HeadConfig[] = [
@@ -48,11 +48,11 @@ gtag('config', 'G-XVLTZZW9QV');`
 export const siteLogo = {
   light: '/logo-agent-loop.svg',
   dark: '/logo-agent-loop-dark.svg',
-  alt: 'AI Agent Guide'
+  alt: '布吉岛 Agent'
 }
 
 export const siteFooter = {
   message:
-    '<span class="footer-brand">AI Agent 实战指南</span><span class="footer-sep">·</span><a class="footer-link" href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">豫ICP备2025137611号-5</a><span class="footer-sep">·</span><a class="footer-link" href="https://aiagentguide.cn/sitemap.xml" target="_blank" rel="noreferrer">sitemap.xml</a><span class="footer-sep">·</span><span class="footer-contact">有问题或合作欢迎联系</span><a class="footer-link" href="mailto:hello@aiagentguide.cn">hello@aiagentguide.cn</a>',
-  copyright: 'Copyright © 2026 AI Agent Guide'
+    '<span class="footer-brand">布吉岛 Agent · 从不知道，到做得到</span><span class="footer-sep">·</span><a class="footer-link" href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">豫ICP备2025137611号-5</a><span class="footer-sep">·</span><a class="footer-link" href="https://aiagentguide.cn/sitemap.xml" target="_blank" rel="noreferrer">sitemap.xml</a><span class="footer-sep">·</span><span class="footer-contact">有问题或合作欢迎联系</span><a class="footer-link" href="mailto:hello@aiagentguide.cn">hello@aiagentguide.cn</a>',
+  copyright: 'Copyright © 2026 布吉岛'
 }

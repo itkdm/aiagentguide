@@ -12,7 +12,7 @@ tags:
   - 实战
   - 入门项目
   - 最小闭环
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # 第一个 Agent：搜集资料并整理成清单

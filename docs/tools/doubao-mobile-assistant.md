@@ -13,7 +13,7 @@ tags:
   - 工具
   - 豆包
   - 手机智能体
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page
@@ -171,4 +171,3 @@ pageClass: tool-detail-page
 - [36Kr：豆包发布「豆包手机助手」技术预览版](https://www.36kr.com/p/3576865446361987)
 - [IT之家：豆包发布手机助手技术预览版](https://www.ithome.com/0/901/473.htm)
 - [IT之家：豆包手机助手回应争议](https://www.ithome.com/0/902/267.htm)
-

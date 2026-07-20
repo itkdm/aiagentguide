@@ -13,7 +13,7 @@ keywords:
 tags:
   - Superpowers
   - 参考
-author: AI Agent Guide
+author: 布吉岛
 lastUpdated: 2026-06-16
 status: published
 assets: none

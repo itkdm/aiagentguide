@@ -18,7 +18,7 @@ status: published
 assets: none
 reviewed: false
 sourceType: curated
-author: AI Agent Guide
+author: 布吉岛
 draft: false
 noindex: false
 ---

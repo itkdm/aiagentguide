@@ -12,7 +12,7 @@ tags:
   - 资源
   - 官方文档
   - 参考资料
-author: AI Agent Guide
+author: 布吉岛
 lastUpdated: 2026-05-30
 status: published
 assets: none

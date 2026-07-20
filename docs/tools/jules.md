@@ -13,7 +13,7 @@ tags:
   - 工具
   - Jules
   - 编程智能体
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page

@@ -11,7 +11,7 @@ tags:
   - RAG
   - 多 Agent
   - 记忆
-author: AI Agent Guide
+author: 布吉岛
 description: "一组围绕 Agent、RAG、记忆、规划、权限控制与多 Agent 协作展开的真实面经题目，适合用来熟悉 AI Agent 岗位常见追问路径。"
 ---
 

@@ -11,7 +11,7 @@ tags:
   - 多模态
   - RAG
   - Agent 设计
-author: AI Agent Guide
+author: 布吉岛
 description: "一组围绕文档问答、多模态解析、评测体系、LoRA、框架选型、天气 Agent 设计、工具调用与系统测试展开的一面题目。"
 ---
 

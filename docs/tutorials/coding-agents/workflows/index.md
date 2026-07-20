@@ -13,7 +13,7 @@ tags:
   - 开发工作流
   - 项目开发
   - 上下文管理
-author: AI Agent Guide
+author: 布吉岛
 lastUpdated: 2026-05-30
 status: published
 assets: none

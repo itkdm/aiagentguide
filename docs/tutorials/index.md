@@ -12,7 +12,7 @@ tags:
   - 实战
   - 工程实践
   - 项目教程
-author: AI Agent Guide
+author: 布吉岛
 description: "从最小可复现案例进入 AI Agent 实战，适合搜索 AI Agent 第一个项目怎么做、实战从哪里开始，以及工作流怎么落地。"
 lastUpdated: 2026-05-30
 status: published

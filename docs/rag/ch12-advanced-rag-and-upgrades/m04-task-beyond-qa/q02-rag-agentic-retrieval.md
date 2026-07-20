@@ -13,7 +13,7 @@ status: published
 assets: none
 reviewed: false
 sourceType: original
-author: AI Agent Guide
+author: 布吉岛
 draft: false
 noindex: false
 ---

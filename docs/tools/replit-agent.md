@@ -12,7 +12,7 @@ tags:
   - 工具
   - Replit
   - 编程智能体
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page
@@ -170,4 +170,3 @@ pageClass: tool-detail-page
 - [Replit AI Billing](https://docs.replit.com/billing/ai-billing)
 - [Replit Pricing](https://replit.com/pricing)
 - [Replit 博客：Effort-Based Pricing](https://replit.com/blog/effort-based-pricing)
-

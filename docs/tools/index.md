@@ -11,7 +11,7 @@ tags:
   - AI Agent
   - 工具
   - 产品导航
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tools-directory

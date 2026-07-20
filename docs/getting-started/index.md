@@ -12,7 +12,7 @@ tags:
   - 入门
   - 基础概念
   - 学习路径
-author: AI Agent Guide
+author: 布吉岛
 pageClass: getting-started-overview
 description: "聚焦 AI Agent 入门判断，适合搜索 AI Agent 是什么、适合哪些场景、学习路线怎么安排，以及开发前需要学哪些技术。"
 lastUpdated: 2026-05-30

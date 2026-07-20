@@ -14,7 +14,7 @@ tags:
   - Claude Code
   - Codex
   - 工程协作
-author: AI Agent Guide
+author: 布吉岛
 lastUpdated: 2026-05-30
 status: published
 assets: none

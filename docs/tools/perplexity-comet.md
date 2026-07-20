@@ -13,7 +13,7 @@ tags:
   - 工具
   - Perplexity
   - AI 浏览器
-author: AI Agent Guide
+author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page
@@ -171,4 +171,3 @@ pageClass: tool-detail-page
 - [Comet 入门：设置（官方帮助中心）](https://comet-help.perplexity.ai/zh-CN/articles/11583745-comet-%E5%85%A5%E9%97%A8-%E8%AE%BE%E7%BD%AE)
 - [Comet Memory（官方帮助中心）](https://comet-help.perplexity.ai/en/articles/12658438-comet-memory)
 - [Enterprise Pricing and Billing（Perplexity 官方帮助中心）](https://www.perplexity.ai/help-center/en/articles/10352986-pricing-billing-for-enterprise-pro)
-

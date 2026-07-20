@@ -12,7 +12,7 @@ tags:
   - 工作原理
   - Agent 循环
   - 工具调用
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # Agent 是怎么运转的

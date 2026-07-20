@@ -12,7 +12,7 @@ tags:
   - 原理
   - 工程化
   - Harness Engineering
-author: AI Agent Guide
+author: 布吉岛
 date: 2026-04-19
 lastUpdated: 2026-04-19
 description: "什么是 Harness Engineering？这篇文章从 Agent 工程实践出发，解释 harness 的含义、它和 Prompt Engineering / Context Engineering 的区别、一个可用 harness 的组成，以及如何判断自己的 Agent 问题该改模型、改提示词，还是改 harness。"

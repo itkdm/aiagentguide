@@ -11,7 +11,7 @@ tags:
   - AI Agent
   - OpenClaw
   - 架构
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # OpenClaw 架构

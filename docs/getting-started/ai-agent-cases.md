@@ -12,7 +12,7 @@ tags:
   - 案例
   - 应用场景
   - 入门
-author: AI Agent Guide
+author: 布吉岛
 pageClass: getting-started-cases
 ---
 

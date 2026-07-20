@@ -11,7 +11,7 @@ tags:
   - RAG
   - 微调
   - 推荐系统
-author: AI Agent Guide
+author: 布吉岛
 description: "一组围绕 RAG 评估与优化、LoRA、DPO、幻觉治理、推荐模型基础与 SQL 算法题展开的二面题目，适合用于混合型岗位面试准备。"
 ---
 

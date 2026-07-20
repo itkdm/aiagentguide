@@ -12,7 +12,7 @@ tags:
   - 术语表
   - 基础概念
   - 入门
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # 术语表

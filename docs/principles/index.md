@@ -12,7 +12,7 @@ tags:
   - 原理
   - Agent 循环
   - 多 Agent
-author: AI Agent Guide
+author: 布吉岛
 description: "系统拆解 AI Agent 的运行机制，适合搜索 AI Agent 和工作流有什么区别、ReAct Agent 是什么，以及 Tool Calling 怎么工作。"
 lastUpdated: 2026-05-30
 status: published

@@ -12,7 +12,7 @@ tags:
   - 误区
   - 入门
   - 新手
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # 新手常见误区

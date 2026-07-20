@@ -1,6 +1,6 @@
 ---
-title: AI Agent 教程与开发实战指南
-summary: 面向中文开发者的 AI Agent 教程与开发实战指南，覆盖 AI Agent 入门、智能体开发、Agent 框架选型、LLM 应用、RAG 系统设计与项目实战。
+title: AI Agent 中文教程与开发实战
+summary: 布吉岛 Agent 面向中文开发者整理 AI Agent 教程与开发实战，覆盖入门认知、原理拆解、框架选型、LLM、RAG 与项目实践。
 keywords:
   - AI Agent 是什么
   - AI Agent 学习路线怎么安排
@@ -12,16 +12,16 @@ tags:
   - 入门教程
   - 框架选型
   - 实战指南
-author: AI Agent Guide
+author: 布吉岛
 layout: home
-description: "面向中文开发者的 AI Agent 学习入口，适合搜索 AI Agent 是什么、学习路线怎么安排、开发需要学哪些技术，以及框架怎么选。"
-lastUpdated: 2026-05-30
+description: "布吉岛 Agent 是面向中文开发者的 AI Agent 学习入口，帮助你理解 AI Agent、规划学习路线、选择开发框架并完成项目实践。"
+lastUpdated: 2026-07-20
 status: published
 
 hero:
-  name: "AI Agent"
-  text: "构建未来的智能体"
-  tagline: "深度解析 LLM 驱动的自主智能体架构与实战。从入门认知、原理拆解、框架选型到生产级项目落地。"
+  name: "布吉岛 Agent"
+  text: "从不知道，到做得到"
+  tagline: "系统理解 AI Agent 的核心原理、框架选型与工程实践，把零散概念变成真正能运行的智能体项目。"
   image:
     light: /hero-visual.svg
     dark: /hero-visual-dark.svg

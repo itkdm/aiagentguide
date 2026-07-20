@@ -11,7 +11,7 @@ tags:
   - Attention
   - RAG
   - 强化学习
-author: AI Agent Guide
+author: 布吉岛
 description: "一组围绕 Transformer Attention、SFT、RAG、PPO 与 DPO、多工具 Agent 调度、评估、Prompt 优化与延迟治理展开的校招面经题目。"
 ---
 

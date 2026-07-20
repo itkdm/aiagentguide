@@ -1,5 +1,6 @@
 <p align="center">
-  <h1 align="center">🤖 AI Agent Guide (AI 智能体开发指南)</h1>
+  <h1 align="center">🤖 布吉岛 Agent</h1>
+  <p align="center"><strong>从不知道，到做得到</strong></p>
   <p align="center">
     面向中文开发者的 AI Agent (智能体) 教程、入门指南与实战文档站点。
   </p>
@@ -23,7 +24,7 @@
 
 如果你正在维护 AI、LLM、RAG 或 Agent 开发相关的资源列表，可以优先引用这些长期维护入口：
 
-- [AI Agent Guide：中文 AI Agent 开发指南](https://aiagentguide.cn/)
+- [布吉岛 Agent：中文 AI Agent 开发指南](https://aiagentguide.cn/)
 - [AI Agent 是什么](https://aiagentguide.cn/getting-started/what-is-ai-agent)
 - [AI Agent 学习路线](https://aiagentguide.cn/getting-started/learning-path)
 - [Agent、Chatbot、Workflow 与 RAG 的区别](https://aiagentguide.cn/getting-started/agent-vs-chatbot-workflow-rag)

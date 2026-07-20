@@ -12,7 +12,7 @@ tags:
   - FAQ
   - 入门
   - 常见问题
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # FAQ

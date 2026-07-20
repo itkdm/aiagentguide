@@ -33,8 +33,8 @@ test('marks unpublished detail pages as noindex', () => {
     },
     description: 'Test description',
     documentTitle: 'Example',
-    siteTitle: 'AI Agent Guide',
-    siteDescription: 'AI Agent 中文教程与实战指南',
+    siteTitle: '布吉岛 Agent',
+    siteDescription: '布吉岛 Agent 是面向中文开发者的 AI Agent 教程与开发实战指南',
     locale: 'zh-CN',
     siteUrl: 'https://aiagentguide.cn/'
   })
@@ -54,8 +54,8 @@ test('keeps section index pages indexable without explicit status', () => {
     },
     description: 'Test description',
     documentTitle: 'RAG',
-    siteTitle: 'AI Agent Guide',
-    siteDescription: 'AI Agent 中文教程与实战指南',
+    siteTitle: '布吉岛 Agent',
+    siteDescription: '布吉岛 Agent 是面向中文开发者的 AI Agent 教程与开发实战指南',
     locale: 'zh-CN',
     siteUrl: 'https://aiagentguide.cn/'
   })
@@ -75,8 +75,8 @@ test('marks deep section index pages as noindex unless published', () => {
     },
     description: 'Test description',
     documentTitle: 'LLM 总览',
-    siteTitle: 'AI Agent Guide',
-    siteDescription: 'AI Agent 中文教程与实战指南',
+    siteTitle: '布吉岛 Agent',
+    siteDescription: '布吉岛 Agent 是面向中文开发者的 AI Agent 教程与开发实战指南',
     locale: 'zh-CN',
     siteUrl: 'https://aiagentguide.cn/'
   })
@@ -142,9 +142,9 @@ test('uses clean urls for canonical and breadcrumb data when enabled', () => {
       frontmatter: { status: 'published' }
     },
     description: 'Test description',
-    documentTitle: '问题页 | AI Agent Guide',
-    siteTitle: 'AI Agent Guide',
-    siteDescription: 'AI Agent 中文教程与实战指南',
+    documentTitle: '问题页 | 布吉岛 Agent',
+    siteTitle: '布吉岛 Agent',
+    siteDescription: '布吉岛 Agent 是面向中文开发者的 AI Agent 教程与开发实战指南',
     locale: 'zh-CN',
     cleanUrls: true,
     siteUrl: 'https://aiagentguide.cn/'

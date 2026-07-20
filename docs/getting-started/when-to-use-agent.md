@@ -12,7 +12,7 @@ tags:
   - 适用场景
   - 任务判断
   - 选型
-author: AI Agent Guide
+author: 布吉岛
 ---
 
 # 什么任务适合用 Agent
