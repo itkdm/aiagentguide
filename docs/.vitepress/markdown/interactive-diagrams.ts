@@ -22,6 +22,10 @@ export function useInteractiveDiagramMarkdown(md: MarkdownIt) {
       return renderComponent('MindmapDiagram', token.content)
     }
 
+    if (info === 'dot') {
+      token.info = 'text'
+    }
+
     return fallbackFence(tokens, idx, options, env, self)
   }
 }
