@@ -1,14 +1,19 @@
 node_modules/
+
+# VitePress
+.vitepress/
+docs/.vitepress/cache/
+docs/.vitepress/.temp/
+
+# Internal agent files
 content-plans/
 .codex/
 .workbuddy/
 CONTENT_README.md
 AGENTS.md
+Agent.md
 
-docs/.vitepress/cache/
-docs/.vitepress/dist/
-.vitepress/
-
+# Logs
 pnpm-debug.log*
 npm-debug.log*
 yarn-debug.log*
@@ -23,7 +28,6 @@ clean-build*.txt
 
 .DS_Store
 Thumbs.db
-Agent.md
 client_secret_482357350182-pvjkesu72nknesgvetbfvd00a3i9uk75.apps.googleusercontent.com.json
 credentials.json
 gsc-token.json
