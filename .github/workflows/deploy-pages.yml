@@ -88,11 +88,12 @@ jobs:
           TOOL_LINK_OPTIONAL_URLS: https://quickrouter.ai/
         run: pnpm tools:links
 
+      - name: Clean build artifacts
+        run: rm -rf docs/.vitepress/.temp .vitepress/dist
+
       - name: Build site
         timeout-minutes: 5
-        run: |
-          rm -rf docs/.vitepress/.temp .vitepress/dist
-          pnpm docs:build
+        run: pnpm docs:build
 
       - name: Verify build output
         run: |
