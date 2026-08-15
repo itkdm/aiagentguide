@@ -5,10 +5,12 @@ import { useData } from 'vitepress'
 import HomeParticles from './components/HomeParticles.vue'
 import HomeTypewriter from './components/HomeTypewriter.vue'
 import AIOpenMenu from './components/AIOpenMenu.vue'
-import HtmlUrlRedirector from './components/HtmlUrlRedirector.vue'
+import { useHtmlUrlRedirect } from './composables/useHtmlUrlRedirect'
 
 const { Layout } = DefaultTheme
 const { frontmatter } = useData()
+
+useHtmlUrlRedirect()
 
 const shouldShowAIOpenMenu = computed(() => {
     if (frontmatter.value.layout === 'home') {
@@ -26,7 +28,6 @@ const shouldShowAIOpenMenu = computed(() => {
 </script>
 
 <template>
-    <HtmlUrlRedirector />
     <Layout>
         <template #home-hero-before>
             <ClientOnly>
