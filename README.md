@@ -123,7 +123,6 @@ aiagentguide/
 │  ├─ rag/                # 【底】RAG 相关知识体系
 │  ├─ interviews/         # 常见面试与问答
 │  └─ resources/          # 经典资源汇总
-├─ content-plans/         # 内部规划文档（并不直接通过路由对外展示）
 ├─ scripts/               # 自动化构建与辅助脚本
 ├─ .github/workflows/     # CI/CD (GitHub Actions 部署配置)
 └─ package.json           # 本地依赖及运行脚本
@@ -140,8 +139,6 @@ aiagentguide/
 - 📝 补充最新的 Agent 原理、优质框架、优秀开源项目。
 - 🏗️ 优化教程结构、学习路径和专业术语解释。
 - 🎨 改进 VitePress 主题、增强站点交互体验或完善 SEO。
-
-*注：站点内容编写及参数说明可参考项目根目录的 [CONTENT_README.md](./CONTENT_README.md)。*
 
 ---
 
