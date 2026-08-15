@@ -79,16 +79,22 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Run tests
+        run: pnpm test
+
+      - name: Content audit
+        run: pnpm content:audit
+
       - name: Verify external tool links
         env:
           TOOL_LINK_OPTIONAL_URLS: https://quickrouter.ai/
-        run: node ./scripts/check-tool-links.mjs
+        run: pnpm tools:links
 
       - name: Build site
         timeout-minutes: 5
         run: |
           rm -rf docs/.vitepress/.temp .vitepress/dist
-          node ./scripts/build-pages.mjs
+          pnpm docs:build
 
       - name: Verify build output
         run: |

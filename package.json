@@ -2,27 +2,42 @@
   "name": "aiagentguide",
   "version": "1.0.0",
   "type": "module",
-  "description": "ai agent guide",
+  "private": true,
+  "description": " AI Agent 教程、入门指南与实战文档站点",
+  "keywords": [
+    "ai-agent",
+    "llm",
+    "rag",
+    "vitepress",
+    "documentation",
+    "agent-framework",
+    "workflow",
+    "multi-agent"
+  ],
+  "author": "布吉岛",
+  "license": "CC-BY-SA-4.0",
+  "homepage": "https://aiagentguide.cn/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itkdm/aiagentguide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/itkdm/aiagentguide/issues"
+  },
+  "packageManager": "pnpm@10.11.0",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "docs:dev": "vitepress dev docs",
-    "docs:build": "node scripts/build-pages.mjs",
+    "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
+    "test": "node --test scripts/*.test.mjs docs/.vitepress/**/*.test.mjs",
     "tools:links": "node scripts/check-tool-links.mjs",
     "content:audit": "node scripts/content-audit.mjs",
     "indexnow:test": "node --test scripts/indexnow-submit.test.mjs",
     "tools:links:test": "node --test scripts/check-tool-links.test.mjs"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/itkdm/aiagentguide.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/itkdm/aiagentguide/issues"
-  },
-  "homepage": "https://github.com/itkdm/aiagentguide#readme",
   "devDependencies": {
     "vitepress": "^1.6.4"
   }
