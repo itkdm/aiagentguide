@@ -10,9 +10,9 @@ import {
 
 test('classifyDocumentPath separates overview and detail pages', () => {
   assert.equal(classifyDocumentPath('index.md'), 'overview')
-  assert.equal(classifyDocumentPath('frameworks/index.md'), 'overview')
-  assert.equal(classifyDocumentPath('frameworks/langchain/frontend/overview.md'), 'overview')
-  assert.equal(classifyDocumentPath('frameworks/how-to-choose-agent-framework.md'), 'detail')
+  assert.equal(classifyDocumentPath('rag/index.md'), 'overview')
+  assert.equal(classifyDocumentPath('rag/langchain/frontend/overview.md'), 'overview')
+  assert.equal(classifyDocumentPath('rag/how-to-choose-agent-framework.md'), 'detail')
 })
 
 test('parseFrontmatter accepts utf-8 bom prefixed files', () => {
@@ -30,7 +30,7 @@ status: published
 test('auditMarkdownEntries flags detail pages missing indexability decision and minimum threshold', () => {
   const audit = auditMarkdownEntries([
     {
-      relativePath: 'frameworks/index.md',
+      relativePath: 'rag/index.md',
       source: `---
 title: Frameworks
 description: Framework overview
@@ -43,7 +43,7 @@ assets: none
 `
     },
     {
-      relativePath: 'frameworks/langchain/agents.md',
+      relativePath: 'rag/langchain/agents.md',
       source: `---
 title: Agents
 summary: Learn agent basics
@@ -60,11 +60,11 @@ assets: none
   assert.equal(audit.coverage.detail.indexabilityDecision, 0)
   assert.equal(audit.coverage.detail.minimumThreshold, 0)
   assert.deepEqual(audit.detailMissingIndexabilityDecision, [
-    'frameworks/langchain/agents.md'
+    'rag/langchain/agents.md'
   ])
   assert.deepEqual(audit.detailBelowMinimumThreshold, [
     {
-      relativePath: 'frameworks/langchain/agents.md',
+      relativePath: 'rag/langchain/agents.md',
       missing: ['indexabilityDecision']
     }
   ])
@@ -73,7 +73,7 @@ assets: none
 test('auditMarkdownEntries accepts status or draft/noindex as indexability decision and tracks draft/noindex coverage', () => {
   const audit = auditMarkdownEntries([
     {
-      relativePath: 'frameworks/index.md',
+      relativePath: 'rag/index.md',
       source: `---
 title: Frameworks
 summary: Framework overview
@@ -85,7 +85,7 @@ assets: none
 `
     },
     {
-      relativePath: 'frameworks/langchain/index.md',
+      relativePath: 'rag/langchain/index.md',
       source: `---
 title: LangChain
 description: LangChain overview
@@ -96,7 +96,7 @@ assets: none
 `
     },
     {
-      relativePath: 'frameworks/langchain/quickstart.md',
+      relativePath: 'rag/langchain/quickstart.md',
       source: `---
 title: Quickstart
 summary: Start here
@@ -106,7 +106,7 @@ assets: none
 `
     },
     {
-      relativePath: 'frameworks/langchain/runtime.md',
+      relativePath: 'rag/langchain/runtime.md',
       source: `---
 title: Runtime
 description: Runtime docs
@@ -147,11 +147,11 @@ assets: none
 `
     },
     {
-      relativePath: 'llm/index.md',
+      relativePath: 'rag/index.md',
       source: `---
-title: LLM
-description: LLM overview
-summary: LLM summary
+title: RAG
+description: RAG overview
+summary: RAG summary
 status: published
 lastUpdated: 2026-05-30
 assets: none
@@ -159,7 +159,7 @@ assets: none
 `
     },
     {
-      relativePath: 'frameworks/how-to-choose.md',
+      relativePath: 'rag/how-to-choose.md',
       source: `---
 title: Framework choice
 description: Compare frameworks
@@ -181,13 +181,13 @@ assets: none
     publishedDetailWithKeywords: 0
   })
   assert.deepEqual(audit.indexableMissingKeywords, [
-    'llm/index.md',
-    'frameworks/how-to-choose.md'
+    'rag/index.md',
+    'rag/how-to-choose.md'
   ])
-  assert.deepEqual(audit.publishedDetailMissingKeywords, ['frameworks/how-to-choose.md'])
+  assert.deepEqual(audit.publishedDetailMissingKeywords, ['rag/how-to-choose.md'])
   assert.deepEqual(audit.indexableOverviewBelowSeoThreshold, [
     {
-      relativePath: 'llm/index.md',
+      relativePath: 'rag/index.md',
       missing: ['keywords']
     }
   ])
@@ -196,7 +196,7 @@ assets: none
 test('formatAuditReport includes Search Console oriented sections for detail gaps and page-type coverage', () => {
   const audit = auditMarkdownEntries([
     {
-      relativePath: 'frameworks/index.md',
+      relativePath: 'rag/index.md',
       source: `---
 title: Frameworks
 summary: Framework overview
@@ -208,7 +208,7 @@ assets: none
 `
     },
     {
-      relativePath: 'frameworks/langchain/agents.md',
+      relativePath: 'rag/langchain/agents.md',
       source: `---
 title: Agents
 summary: Learn agent basics
@@ -227,5 +227,5 @@ assets: none
   assert.match(report, /Indexable Pages Missing Keywords/)
   assert.match(report, /Indexable Overview Pages Below SEO Threshold/)
   assert.match(report, /Detail Minimum Frontmatter Threshold/)
-  assert.match(report, /frameworks\/langchain\/agents\.md/)
+  assert.match(report, /rag\/langchain\/agents\.md/)
 })

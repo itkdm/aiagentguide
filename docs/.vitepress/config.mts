@@ -75,7 +75,7 @@ export default defineConfig({
     })
   },
   buildEnd(siteConfig) {
-    fs.writeFileSync(path.join(siteConfig.outDir, 'robots.txt'), buildRobotsTxt(siteUrl), 'utf8')
+    fs.writeFileSync(path.join(siteConfig.outDir, 'robots.txt'), buildRobotsTxt(siteUrl, siteConfig.base), 'utf8')
 
     if (siteUrl) {
       const frontmatterByPage = Object.fromEntries(

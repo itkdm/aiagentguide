@@ -28,7 +28,7 @@ test('expands short homepage descriptions into search-ready meta descriptions', 
 test('marks unpublished detail pages as noindex', () => {
   const head = createSeoHead({
     pageData: {
-      relativePath: 'llm/ch01/example.md',
+      relativePath: 'projects/example.md',
       frontmatter: {}
     },
     description: 'Test description',
@@ -70,7 +70,7 @@ test('keeps section index pages indexable without explicit status', () => {
 test('marks deep section index pages as noindex unless published', () => {
   const head = createSeoHead({
     pageData: {
-      relativePath: 'llm/ch01-llm-overview-and-core-cognition/index.md',
+      relativePath: 'rag/ch01-rag-overview/index.md',
       frontmatter: {}
     },
     description: 'Test description',
@@ -93,8 +93,8 @@ test('includes only indexable pages in sitemap output', () => {
     [
       'index.md',
       'rag/index.md',
-      'llm/ch01/example.md',
-      'frameworks/example.md',
+      'rag/example.md',
+      'projects/example.md',
       '404.md'
     ],
     'https://aiagentguide.cn/',
@@ -102,35 +102,35 @@ test('includes only indexable pages in sitemap output', () => {
     {
       'index.md': {},
       'rag/index.md': {},
-      'llm/ch01/example.md': {},
-      'frameworks/example.md': { status: 'published' },
+      'rag/example.md': {},
+      'projects/example.md': { status: 'published' },
       '404.md': {}
     }
   )
 
   assert.match(sitemap, /https:\/\/aiagentguide\.cn\/<\/loc>/)
   assert.match(sitemap, /https:\/\/aiagentguide\.cn\/rag\/index\.html<\/loc>/)
-  assert.match(sitemap, /https:\/\/aiagentguide\.cn\/frameworks\/example\.html<\/loc>/)
+  assert.match(sitemap, /https:\/\/aiagentguide\.cn\/projects\/example\.html<\/loc>/)
   assert.doesNotMatch(sitemap, /llm\/ch01\/example\.html/)
   assert.doesNotMatch(sitemap, /404\.html/)
 })
 
 test('adds lastmod to sitemap entries using page metadata', () => {
   const sitemap = buildSitemapXml(
-    ['frameworks/example.md'],
+    ['projects/example.md'],
     'https://aiagentguide.cn/',
     false,
     {
-      'frameworks/example.md': { status: 'published', lastUpdated: '2026-05-30' }
+      'projects/example.md': { status: 'published', lastUpdated: '2026-05-30' }
     },
     {
-      'frameworks/example.md': '2026-05-28T12:30:00.000Z'
+      'projects/example.md': '2026-05-28T12:30:00.000Z'
     }
   )
 
   assert.match(
     sitemap,
-    /<url><loc>https:\/\/aiagentguide\.cn\/frameworks\/example\.html<\/loc><lastmod>2026-05-30T00:00:00.000Z<\/lastmod><\/url>/
+    /<url><loc>https:\/\/aiagentguide\.cn\/projects\/example\.html<\/loc><lastmod>2026-05-30T00:00:00.000Z<\/lastmod><\/url>/
   )
 })
 

@@ -16,6 +16,9 @@ author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page
+noindex: true
+status: draft
+draft: true
 ---
 
 # MiniMax Agent

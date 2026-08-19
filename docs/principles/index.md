@@ -29,31 +29,14 @@ status: published
 
 如果说 `入门` 负责建立直觉和判断，那么 `原理` 负责解释系统为什么这样设计。
 
-## 说明
-
-这一栏s01-s12主要参考了开源项目 [learn-claude-code](https://github.com/shareAI-lab/learn-claude-code/blob/main/README-zh.md) 的原理路线。
-
-但这一栏并直接照抄原文，而是用中文重写并且重点放在：
-
-- 面向中文开发者的理解路径
-- 更贴近通用 AI Agent 的机制解释
-- 结合最小代码示例说明核心原理
-
 ## 定位说明
 
-这一栏前面的 `s01-s12` 主线，整体更接近 **Claude Code-like / Coding Agent** 的工程原理，重点解释的是：
+这一栏以 `通用原理补充` 为主线，重点拆解更广义的 AI Agent 运行机制：
 
 - 工具调用型 Agent 怎么循环运行
-- 长任务、多 Agent、任务系统、后台任务怎么组织
-- 为什么代码任务里会出现 worktree、目录隔离、团队协议这类机制
-
-这些机制当然对理解 Agent 很有帮助，但并不是所有 AI Agent 的唯一标准结构。
-
-因此更准确的理解是：
-
-- `s01-s12`：偏工程实现，尤其适合理解 Coding Agent
-- `通用原理补充`：把这条工程线和更广义的 Agent 原理接起来
-- `OpenClaw 原理`：用一个具体案例拆解 Agent 是怎样落地运作的
+- 记忆、规划、上下文、技能这类通用模块怎么组织
+- 多 Agent 协作为什么有效、什么时候并不适合
+- 为什么从“能跑起来”到“可控、可扩展”之间，还需要 Harness、可靠性与安全这一类工程机制
 
 ## 这一栏适合谁
 
@@ -63,52 +46,25 @@ status: published
 
 ## 章节结构
 
-### 工具与执行
-
-- [s01 Agent 循环](./s01-agent-loop.md)
-- [s02 工具](./s02-tools.md)
-
-### 规划与协作
-
-- [s03 TodoWrite](./s03-todowrite.md)
-- [s04 子 Agent](./s04-sub-agents.md)
-- [s05 技能](./s05-skills.md)
-- [s07 任务系统](./s07-task-system.md)
-
-### 内存管理
-
-- [s06 上下文压缩](./s06-context-compression.md)
-
-### 并发
-
-- [s08 后台任务](./s08-background-tasks.md)
-
-### 协作
-
-- [s09 Agent 团队](./s09-agent-teams.md)
-- [s10 团队协议](./s10-team-protocol.md)
-- [s11 自主 Agent](./s11-autonomous-agents.md)
-- [s12 Worktree + 任务隔离](./s12-worktree-task-isolation.md)
-
 ### 通用原理补充
 
 - [通用 Agent 架构：感知、规划、行动、反思](./general-agent-architecture.md)
+- [通用 Agent 原理：核心循环](./general-core-loop.md)
+- [通用 Agent 原理：规划](./general-planning.md)
+- [通用 Agent 原理：工具](./general-tools.md)
 - [通用 Agent 原理：记忆](./general-memory.md)
+- [通用 Agent 原理：Skill](./general-skills.md)
+- [通用 Agent 原理：MCP](./general-mcp.md)
 - [通用 Agent 原理：什么是 Harness Engineering，为什么 Agent 不只是模型和 Prompt？](./general-harness-engineering.md)
 - [通用多 Agent 原理：什么时候拆分，什么时候不拆](./general-multi-agent.md)
 - [通用 Agent 原理：可靠性与安全](./general-reliability-safety.md)
 
-### OpenClaw 原理
-
-- [OpenClaw 原理拆解](./openclaw-principles.md)
-
 ## 推荐阅读顺序
 
-1. 先看 `s01 Agent 循环` 和 `s02 工具`
-2. 再看 `s03 TodoWrite`、`s06 上下文压缩`、`s07 任务系统`
-3. 然后看 `s04 子 Agent`、`s05 技能`、`s08 后台任务`
-4. 最后看 `s09` 到 `s12`，把协作和工程隔离这一层补齐
-5. 如果你想把这条 Coding Agent 工程线和更广义的 Agent 理解对上，再看 `通用原理补充` 和 `OpenClaw 原理`
+1. 先看 `通用 Agent 架构` 和 `核心循环`，建立整体框架
+2. 再看 `规划`、`工具`、`记忆`、`Skill`，把执行链路拆开
+3. 然后看 `MCP`、`Harness Engineering`、`可靠性与安全`，把工程那一层补齐
+4. 最后看 `多 Agent`，理解什么时候拆分、什么时候保持单体
 
 ## 这一栏和前后栏目怎么衔接
 

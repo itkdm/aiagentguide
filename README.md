@@ -28,7 +28,6 @@
 - [AI Agent 是什么](https://aiagentguide.cn/getting-started/what-is-ai-agent)
 - [AI Agent 学习路线](https://aiagentguide.cn/getting-started/learning-path)
 - [Agent、Chatbot、Workflow 与 RAG 的区别](https://aiagentguide.cn/getting-started/agent-vs-chatbot-workflow-rag)
-- [AI Agent 框架怎么选](https://aiagentguide.cn/frameworks/how-to-choose-agent-framework)
 - [RAG 是什么](https://aiagentguide.cn/getting-started/what-is-rag)
 
 如果你正在搜索寻找以下主题，这个仓库将为你提供极大帮助（这些也是我们的核心内容矩阵）：

@@ -153,14 +153,14 @@ status: published
     <span class="gs-path-desc">建立整体认知，先分清核心概念和判断标准</span>
   </a>
   <span class="gs-path-arrow" aria-hidden="true">→</span>
-  <a class="gs-path-step" href="../frameworks/">
-    <span class="gs-path-name">框架</span>
-    <span class="gs-path-desc">解决技术选型问题，判断不同框架适合什么场景</span>
+  <a class="gs-path-step" href="../principles/">
+    <span class="gs-path-name">原理</span>
+    <span class="gs-path-desc">理解 Agent 的执行循环、上下文、工具调用与可靠性设计</span>
   </a>
   <span class="gs-path-arrow" aria-hidden="true">→</span>
-  <a class="gs-path-step" href="../tutorials/">
-    <span class="gs-path-name">实战</span>
-    <span class="gs-path-desc">解决怎么动手的问题，把认知落到最小可运行案例里</span>
+  <a class="gs-path-step" href="../rag/">
+    <span class="gs-path-name">RAG</span>
+    <span class="gs-path-desc">掌握检索增强生成的架构、检索重排与生产化落地</span>
   </a>
   <span class="gs-path-arrow" aria-hidden="true">→</span>
   <a class="gs-path-step" href="../tools/">

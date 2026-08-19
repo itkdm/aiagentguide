@@ -15,9 +15,11 @@ author: 布吉岛
 aside: false
 outline: false
 pageClass: tools-directory
+noindex: true
 description: "收录常用 AI Agent 工具，适合搜索 AI Agent 开发工具怎么选、调试工具有哪些，以及观测平台和智能体平台怎么比较。"
 lastUpdated: 2026-05-30
-status: published
+status: draft
+draft: true
 ---
 
 <ToolsDirectory />

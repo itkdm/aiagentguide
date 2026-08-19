@@ -2,6 +2,9 @@
 aside: false
 outline: false
 pageClass: tool-detail-page
+noindex: true
+status: draft
+draft: true
 ---
 
 # n8n

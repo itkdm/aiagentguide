@@ -14,17 +14,12 @@ const SECTION_DESCRIPTION_TERMS: Record<string, string> = {
     '覆盖 AI Agent 定义、智能体适用场景、工作流边界、RAG 区别、任务拆解、工具调用与技术选型等核心问题',
   principles:
     '聚焦智能体架构、规划决策、工具调用、记忆机制、执行循环、可靠性治理、观测评估与工程实现等关键主题',
-  frameworks:
-    '覆盖 Agent 框架选型、LangChain、LangGraph、多 Agent 协作、工作流编排、模型集成、工程实践与落地方式比较',
-  tutorials:
-    '聚焦 AI Agent 项目拆解、工作流设计、工具调用、原型验证、系统实现、部署路径与业务场景落地等实践问题',
   projects:
     '聚焦 AI Agent 项目分析、系统架构、方案设计、功能拆解、工程实现、能力边界与真实业务落地经验',
   tools:
     '覆盖 AI Agent 工具、智能体平台、工作流产品、模型集成、评测观测、自动化协作、部署能力与生态配套比较',
   resources:
     '聚合 AI Agent、LLM、RAG、智能体系统设计、工程实践、研究资料、框架文档与行业参考等高价值内容',
-  llm: '覆盖大模型原理、推理机制、提示工程、上下文管理、工具调用、评测优化、应用架构与智能体协同等关键能力',
   rag: '覆盖 RAG 架构、检索增强生成、向量检索、混合检索、重排、知识库构建、上下文拼装、评测优化与生产部署等关键主题',
   interviews:
     '覆盖 AI Agent、LLM、RAG 面试题、案例解析、岗位准备、技术表达、方案复盘与知识体系梳理等高频内容'
@@ -34,13 +29,9 @@ const SECTION_DESCRIPTION_INTENTS: Record<string, string> = {
   home: '适合关注智能体产品、系统架构、技术选型、工程实现、企业知识库、搜索增强与业务落地的读者',
   'getting-started': '帮助建立智能体认知框架，理解什么是 AI Agent、何时使用 Agent，以及如何判断系统设计边界',
   principles: '适合理解 AI Agent 系统设计、执行逻辑、可靠性控制、评测方法与生产环境下的工程治理重点',
-  frameworks:
-    '适合比较不同 Agent 框架的适用场景、技术路线、扩展能力、开发体验与团队落地成本',
-  tutorials: '适合参考从需求分析、方案设计到原型实现、验证优化与部署交付的完整实践路径',
   projects: '适合研究真实项目中的能力设计、系统边界、架构权衡、实施路径与可复制经验',
   tools: '适合比较智能体开发平台、自动化工具链、观测评测能力与企业级集成方向',
   resources: '便于系统跟踪技术框架、工程方法、行业趋势、研究进展与长期学习路线',
-  llm: '适合关注大模型能力边界、上下文窗口、推理稳定性、应用设计与智能体系统协同方式的读者',
   rag: '适合关注企业知识库、智能问答、搜索增强、检索增强生成系统设计、质量优化与生产化落地的读者',
   interviews: '适合岗位准备、知识复盘、案例表达与面试场景下的高频技术问题梳理'
 }
@@ -48,8 +39,6 @@ const SECTION_DESCRIPTION_INTENTS: Record<string, string> = {
 const SECTION_TITLES: Record<string, string> = {
   'getting-started': '\u5165\u95e8',
   principles: '\u539f\u7406',
-  frameworks: '\u6846\u67b6',
-  tutorials: '\u5b9e\u6218\u6559\u7a0b',
   projects: '\u9879\u76ee',
   tools: '\u5de5\u5177',
   resources: '\u8d44\u6e90'
@@ -176,10 +165,10 @@ function sanitizeMarkdown(source: string) {
 function cleanText(source: string) {
   return source
     .replace(/\s+/g, ' ')
-    .replace(/^["'“”‘’]+/, '')
-    .replace(/["'“”‘’]+$/, '')
+    .replace(/^["'""'']+/, '')
+    .replace(/["'""'']+$/, '')
     .replace(/^[\s:;,.-]+/, '')
-    .replace(/[。．.]["'“”‘’]+$/, '。')
+    .replace(/[。．.]["'""'']+$/, '。')
     .trim()
 }
 
@@ -783,8 +772,14 @@ export function createSeoHead(options: {
   return head
 }
 
-export function buildRobotsTxt(siteUrl?: string) {
-  const lines = ['User-agent: *', 'Allow: /']
+export function buildRobotsTxt(siteUrl?: string, base = '/') {
+  const normalizedBase =
+    !base || base === '/' ? '/' : base.endsWith('/') ? base : `${base}/`
+  const lines = [
+    'User-agent: *',
+    `Disallow: ${normalizedBase}tools/`,
+    'Allow: /'
+  ]
 
   if (siteUrl) {
     lines.push('', `Sitemap: ${new URL('sitemap.xml', siteUrl).toString()}`)

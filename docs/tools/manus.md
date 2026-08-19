@@ -16,6 +16,9 @@ author: 布吉岛
 aside: false
 outline: false
 pageClass: tool-detail-page
+noindex: true
+status: draft
+draft: true
 ---
 
 # Manus
@@ -46,8 +49,8 @@ pageClass: tool-detail-page
 ## Manus是什么？
 
 <div class="tool-prose-card">
-  <p>Manus 官方将其定义为“自主通用 AI Agent”。它的定位不是只回答问题，而是围绕任务目标自行规划、执行并交付结果。</p>
-  <p>和传统聊天机器人主要提供回答不同，Manus 更强调“采取行动”。官方资料显示，它可以在带有联网能力、持久文件系统、可安装软件与自定义工具的沙盒环境中运行，因此更适合完成多步骤、较长流程的任务。</p>
+  <p>Manus 官方将其定义为"自主通用 AI Agent"。它的定位不是只回答问题，而是围绕任务目标自行规划、执行并交付结果。</p>
+  <p>和传统聊天机器人主要提供回答不同，Manus 更强调"采取行动"。官方资料显示，它可以在带有联网能力、持久文件系统、可安装软件与自定义工具的沙盒环境中运行，因此更适合完成多步骤、较长流程的任务。</p>
 </div>
 
 ## 主要功能

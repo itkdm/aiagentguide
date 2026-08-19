@@ -23,19 +23,19 @@ const steps = [
   {
     number: '03',
     label: '再做判断',
-    title: '框架选型对比',
-    description: '聚焦主流 AI Agent 框架，先看差异、适用场景和开发方式，再决定后续投入方向。',
-    cta: '查看框架',
-    href: '/frameworks/',
-    icon: '⚖️'
+    title: 'RAG 系统构建',
+    description: '掌握检索增强生成的架构、检索与重排、知识库构建与生产化落地的关键方法。',
+    cta: '查看 RAG',
+    href: '/rag/',
+    icon: '📚'
   },
   {
     number: '04',
     label: '最后动手',
-    title: '实战案例教程',
-    description: '从最小可运行 Agent 起步，把概念和框架选择真正落到项目实践里。',
-    cta: '进入实战',
-    href: '/tutorials/',
+    title: '项目实战参考',
+    description: '从真实项目中研究能力设计、系统边界、架构权衡与可复制的实施经验。',
+    cta: '查看项目',
+    href: '/projects/',
     icon: '💻'
   }
 ] as const
