@@ -13,6 +13,9 @@ tags:
   - 强化学习
 author: 布吉岛
 description: "一组围绕 Transformer Attention、SFT、RAG、PPO 与 DPO、多工具 Agent 调度、评估、Prompt 优化与延迟治理展开的校招面经题目。"
+noindex: true
+status: draft
+draft: true
 ---
 
 # 大模型 Agent 校招面经 - 阿里淘天
@@ -49,7 +52,7 @@ description: "一组围绕 Transformer Attention、SFT、RAG、PPO 与 DPO、多
 
 ## 练习建议
 
-- 第 1 到第 5 题建议按“原理、为什么、适用场景、常见问题”来准备，避免只答定义。
+- 第 1 到第 5 题建议按"原理、为什么、适用场景、常见问题"来准备，避免只答定义。
 - 第 6 到第 11 题适合整理成系统设计回答，重点准备规划机制、调度策略、fallback、评估指标和性能优化手段。
 - 第 12 题是高频基础算法题，至少要准备 DFS、BFS 和并查集三种解法的思路差异。
 

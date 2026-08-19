@@ -14,7 +14,9 @@ tags:
 author: 布吉岛
 description: "整理 AI Agent 方向的真实面试案例，适合搜索 AI Agent 面试会问什么、面试题怎么准备，以及项目经历怎么回答。"
 lastUpdated: 2026-05-30
-status: published
+noindex: true
+status: draft
+draft: true
 ---
 
 # 面试

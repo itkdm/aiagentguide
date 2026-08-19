@@ -11,7 +11,9 @@ tags:
 author: 布吉岛
 description: "按一轮面试中的连续提问整理案例，方便你按真实语境复习和模拟回答。"
 lastUpdated: 2026-05-30
-status: published
+noindex: true
+status: draft
+draft: true
 ---
 
 # 面试案例

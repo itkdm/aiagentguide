@@ -13,6 +13,9 @@ tags:
   - 记忆
 author: 布吉岛
 description: "一组围绕 Agent、RAG、记忆、规划、权限控制与多 Agent 协作展开的真实面经题目，适合用来熟悉 AI Agent 岗位常见追问路径。"
+noindex: true
+status: draft
+draft: true
 ---
 
 # 某小厂 Agent 面经分享

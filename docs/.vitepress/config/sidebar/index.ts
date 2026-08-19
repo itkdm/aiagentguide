@@ -1,6 +1,5 @@
 ﻿import type { DefaultTheme } from 'vitepress'
 import { gettingStartedSidebar } from './getting-started'
-import { interviewsSidebar } from './interviews'
 
 import { principlesSidebar } from './principles'
 import { projectsSidebar } from './projects'
@@ -10,6 +9,5 @@ export const siteSidebar: DefaultTheme.Sidebar = {
   ...gettingStartedSidebar,
   ...principlesSidebar,
   ...ragSidebar,
-  ...interviewsSidebar,
   ...projectsSidebar
 }

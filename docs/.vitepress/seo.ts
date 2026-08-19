@@ -778,6 +778,7 @@ export function buildRobotsTxt(siteUrl?: string, base = '/') {
   const lines = [
     'User-agent: *',
     `Disallow: ${normalizedBase}tools/`,
+    `Disallow: ${normalizedBase}interviews/`,
     'Allow: /'
   ]
 
