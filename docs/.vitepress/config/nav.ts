@@ -5,7 +5,6 @@ export const siteNav: DefaultTheme.NavItem[] = [
   { text: '原理', link: '/principles/' },
   { text: '框架', link: '/frameworks/' },
   { text: '实战', link: '/tutorials/' },
-  { text: '项目', link: '/projects/' },
   { text: 'LLM', link: '/llm/' },
   { text: 'RAG', link: '/rag/' },
   { text: '面试', link: '/interviews/' },
