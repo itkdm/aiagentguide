@@ -1,7 +1,8 @@
 ﻿import fs from 'node:fs'
 import path from 'node:path'
 
-import type { HeadConfig, PageData } from 'vitepress'
+import type { DefaultTheme, HeadConfig, PageData } from 'vitepress'
+import { buildBreadcrumbChain } from './breadcrumb.ts'
 
 const DESCRIPTION_CONTEXT_THRESHOLD = 90
 const DESCRIPTION_MAX_LENGTH = 160
@@ -374,66 +375,6 @@ function getOgLocale(locale: string) {
   return locale.replace('-', '_')
 }
 
-function getBreadcrumbSegments(pageData: PageData) {
-  const normalizedPath = pageData.relativePath.replace(/\\/g, '/')
-
-  if (!normalizedPath || normalizedPath === 'index.md') {
-    return []
-  }
-
-  const segments = normalizedPath.split('/')
-
-  if (segments[segments.length - 1] === 'index.md') {
-    return segments.slice(0, -1)
-  }
-
-  segments[segments.length - 1] = segments[segments.length - 1].replace(/\.md$/, '')
-
-  return segments
-}
-
-function getCrumbName(segment: string) {
-  return SECTION_TITLES[segment] ?? segment.replace(/[-_]/g, ' ')
-}
-
-function buildBreadcrumbs(pageData: PageData, siteUrl: string, currentTitle: string, cleanUrls = false) {
-  const segments = getBreadcrumbSegments(pageData)
-  const breadcrumbs = [
-    {
-      '@type': 'ListItem',
-      position: 1,
-      name: '\u9996\u9875',
-      item: siteUrl
-    }
-  ]
-
-  if (!segments.length) {
-    return breadcrumbs
-  }
-
-  let currentRoute = ''
-
-  segments.forEach((segment, index) => {
-    const isLastSegment = index === segments.length - 1
-    const segmentRoute = isLastSegment
-      ? getPageRoute(pageData.relativePath, cleanUrls)
-      : cleanUrls
-        ? currentRoute + segment + '/'
-        : currentRoute + segment + '/index.html'
-
-    currentRoute = currentRoute + segment + '/'
-
-    breadcrumbs.push({
-      '@type': 'ListItem',
-      position: index + 2,
-      name: isLastSegment ? currentTitle : getCrumbName(segment),
-      item: toAbsoluteUrl(siteUrl, segmentRoute)
-    })
-  })
-
-  return breadcrumbs
-}
-
 function resolvePageKind(pageData: Pick<PageData, 'relativePath'>) {
   if (pageData.relativePath === 'index.md') {
     return 'home'
@@ -626,6 +567,7 @@ export function createSeoHead(options: {
   siteUrl?: string
   lastModified?: string
   socialImagePath?: string
+  sidebar?: DefaultTheme.Sidebar | DefaultTheme.MultiSidebar
 }): HeadConfig[] {
   const {
     pageData,
@@ -753,11 +695,44 @@ export function createSeoHead(options: {
 
     structuredData.push(webPageData)
 
+    // 面包屑层级与页面可见面包屑共用同一套 Sidebar 派生逻辑，
+    // 保证 JSON-LD 与 UI 完全一致。
+    const breadcrumbChain = buildBreadcrumbChain(
+      canonicalPath,
+      options.sidebar as DefaultTheme.Sidebar | DefaultTheme.MultiSidebar,
+      pageTitle
+    )
+
+    const itemListElement: Record<string, unknown>[] = [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: '\u9996\u9875',
+        item: siteUrl
+      }
+    ]
+
+    breadcrumbChain.forEach((node, index) => {
+      const isLast = index === breadcrumbChain.length - 1
+      const item: Record<string, unknown> = {
+        '@type': 'ListItem',
+        position: index + 2,
+        name: node.text
+      }
+      // 当前页使用规范 URL；若链路无可用 link 则仅保留 name
+      if (isLast && canonicalUrl) {
+        item.item = canonicalUrl
+      } else if (node.link) {
+        item.item = toAbsoluteUrl(siteUrl, node.link)
+      }
+      itemListElement.push(item)
+    })
+
     structuredData.push({
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       '@id': `${canonicalUrl}#breadcrumb`,
-      itemListElement: buildBreadcrumbs(pageData, siteUrl, pageTitle, cleanUrls)
+      itemListElement
     })
   }
 

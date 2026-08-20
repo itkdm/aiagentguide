@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import { buildSitemapXml, createSeoHead, resolvePageDescription } from './seo.ts'
+import { siteSidebar } from './config/sidebar/index.ts'
 
 test('expands short homepage descriptions into search-ready meta descriptions', () => {
   const description = resolvePageDescription(
@@ -57,7 +58,8 @@ test('keeps section index pages indexable without explicit status', () => {
     siteTitle: '布吉岛 Agent',
     siteDescription: '布吉岛 Agent 是面向中文开发者的 AI Agent 教程与开发实战指南',
     locale: 'zh-CN',
-    siteUrl: 'https://aiagentguide.cn/'
+    siteUrl: 'https://aiagentguide.cn/',
+    sidebar: siteSidebar
   })
 
   assert.deepEqual(head[0], ['meta', { name: 'robots', content: 'index, follow, max-image-preview:large' }])
@@ -147,7 +149,8 @@ test('uses clean urls for canonical and breadcrumb data when enabled', () => {
     siteDescription: '布吉岛 Agent 是面向中文开发者的 AI Agent 教程与开发实战指南',
     locale: 'zh-CN',
     cleanUrls: true,
-    siteUrl: 'https://aiagentguide.cn/'
+    siteUrl: 'https://aiagentguide.cn/',
+    sidebar: siteSidebar
   })
 
   const canonical = head.find(([tag, attrs]) => tag === 'link' && attrs?.rel === 'canonical')

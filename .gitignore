@@ -5,6 +5,7 @@ docs/.vitepress/cache/
 docs/.vitepress/.temp/
 docs/.vitepress/dist/
 .vitepress/dist/
+.vitepress/verify-dist/
 
 # Internal agent files
 content-plans/

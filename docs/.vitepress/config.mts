@@ -71,7 +71,8 @@ export default defineConfig({
       locale: siteData.lang,
       cleanUrls: siteData.cleanUrls,
       siteUrl,
-      lastModified: getPageLastModified(siteConfig.srcDir, pageData)
+      lastModified: getPageLastModified(siteConfig.srcDir, pageData),
+      sidebar: siteSidebar
     })
   },
   buildEnd(siteConfig) {

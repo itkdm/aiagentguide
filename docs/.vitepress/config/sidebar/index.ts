@@ -1,9 +1,9 @@
 ﻿import type { DefaultTheme } from 'vitepress'
-import { gettingStartedSidebar } from './getting-started'
+import { gettingStartedSidebar } from './getting-started.ts'
 
-import { principlesSidebar } from './principles'
-import { projectsSidebar } from './projects'
-import { ragSidebar } from './rag'
+import { principlesSidebar } from './principles.ts'
+import { projectsSidebar } from './projects.ts'
+import { ragSidebar } from './rag.ts'
 
 export const siteSidebar: DefaultTheme.Sidebar = {
   ...gettingStartedSidebar,

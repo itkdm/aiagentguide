@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
+import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
-
-type SidebarItem = {
-  text?: string
-  link?: string
-  items?: SidebarItem[]
-}
+import type { DefaultTheme } from 'vitepress'
+import { buildBreadcrumbChain } from '../../breadcrumb'
 
 const { theme, frontmatter } = useData()
 const route = useRoute()
@@ -34,190 +30,31 @@ const shouldRender = computed(() => {
   return true
 })
 
-// 根据当前路径，从某条 sidebar 树中找到一条到达当前 link 的最深路径链
-function findPathChain(items: SidebarItem[] | undefined, target: string, trail: SidebarItem[]): SidebarItem[] | null {
-  if (!items) {
-    return null
-  }
-
-  for (const item of items) {
-    const nextTrail = [...trail, item]
-    const itemLink = normalizeLink(item.link)
-
-    if (itemLink && itemLink === target) {
-      return nextTrail
-    }
-
-    if (item.items && item.items.length > 0) {
-      const childResult = findPathChain(item.items, target, nextTrail)
-      if (childResult) {
-        return childResult
-      }
-    }
-  }
-
-  return null
-}
-
-function normalizeLink(link?: string): string | null {
-  if (!link) {
-    return null
-  }
-
-  let value = link
-  if (value.endsWith('/index.html')) {
-    value = value.replace(/\/index\.html$/, '/')
-  } else if (value.endsWith('.html')) {
-    value = value.replace(/\.html$/, '')
-  }
-
-  if (!value.startsWith('/')) {
-    value = `/${value}`
-  }
-
-  return value.replace(/\/+$/, '') || '/'
-}
-
-function normalizePath(path: string): string {
-  let value = path
-  if (value.endsWith('/index.html')) {
-    value = value.replace(/\/index\.html$/, '/')
-  } else if (value.endsWith('.html')) {
-    value = value.replace(/\.html$/, '')
-  }
-
-  return (value.replace(/\/+$/, '') || '/').replace(/\/{2,}/g, '/')
-}
-
-const breadcrumbItems = computed<SidebarItem[]>(() => {
+// 面包屑层级链（不含“首页”），与 seo.ts 共用同一套 Sidebar 派生逻辑。
+// 这样可见 Breadcrumb 与 BreadcrumbList JSON-LD 始终保持一致。
+const breadcrumbItems = computed(() => {
   if (!shouldRender.value) {
     return []
   }
 
   const sidebar = theme.value.sidebar as
-    | Record<string, SidebarItem[]>
-    | SidebarItem[]
+    | DefaultTheme.Sidebar
+    | DefaultTheme.MultiSidebar
     | undefined
 
   if (!sidebar) {
     return []
   }
 
-  const target = normalizePath(route.path)
-
-  // 侧边栏可能是对象（按路径前缀分组）或数组
-  if (Array.isArray(sidebar)) {
-    const chain = findPathChain(sidebar, target, [])
-    return chain ?? []
-  }
-
-  // 对象形式：找到与当前路径最匹配的 key 分组
-  const matchingKeys = Object.keys(sidebar)
-    .filter((key) => target === key || target.startsWith(key))
-    .sort((a, b) => b.length - a.length)
-
-  for (const key of matchingKeys) {
-    const chain = findPathChain(sidebar[key], target, [])
-    if (chain && chain.length > 0) {
-      return chain
-    }
-  }
-
-  return []
-})
-
-// 为没有直接 link 的节点推断一个概览页 link（如果子节点中有“概览”）
-function inferLink(item: SidebarItem): string | undefined {
-  if (item.link) {
-    return normalizeLink(item.link) ?? undefined
-  }
-
-  if (!item.items || item.items.length === 0) {
-    return undefined
-  }
-
-  const overview = item.items.find(
-    (child) => child.text === '概览' && child.link
+  return buildBreadcrumbChain(
+    route.path,
+    sidebar,
+    (frontmatter.value.title as string) || undefined
   )
-  return overview ? normalizeLink(overview.link) ?? undefined : undefined
-}
-
-// 面包屑显示层级：根栏目（如“RAG”）+ 命中的中间节点 + 当前页
-const displayItems = computed(() => {
-  if (!breadcrumbItems.value.length) {
-    return []
-  }
-
-  const items = breadcrumbItems.value.map((item) => ({
-    text: item.text ?? '',
-    link: inferLink(item)
-  }))
-
-  // 去掉与当前页完全同名的重复尾节点（如“概览”页）
-  const last = items[items.length - 1]
-  const current = normalizePath(route.path)
-  if (last.link === current && items.length > 1) {
-    items.pop()
-  }
-
-  return items
 })
 
-// 面包屑结构化数据（BreadcrumbList），用于 SEO。
-const jsonLd = computed(() => {
-  if (!displayItems.value.length) {
-    return null
-  }
-
-  const siteBase = typeof window !== 'undefined' ? window.location.origin : ''
-  const currentPath = normalizePath(route.path)
-  const itemListElement = displayItems.value.map((item, index) => {
-    const url = item.link ? `${siteBase}${item.link}` : `${siteBase}${currentPath}`
-    return {
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.text,
-      item: url
-    }
-  })
-
-  return {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement
-  }
-})
-
-// 将结构化数据注入页面 head，便于搜索引擎抓取。
-// 因为模板里不能放 <script> 标签，这里在客户端动态插入。
-function injectJsonLd() {
-  if (typeof document === 'undefined') {
-    return
-  }
-
-  const existing = document.getElementById('breadcrumb-jsonld')
-  if (existing) {
-    existing.remove()
-  }
-
-  if (!jsonLd.value) {
-    return
-  }
-
-  const script = document.createElement('script')
-  script.type = 'application/ld+json'
-  script.id = 'breadcrumb-jsonld'
-  script.textContent = JSON.stringify(jsonLd.value)
-  document.head.appendChild(script)
-}
-
-onMounted(injectJsonLd)
-
-watch(
-  () => route.path,
-  () => injectJsonLd(),
-  { immediate: true }
-)
+// displayItems 即层级链；最后一项为当前页（不可点击）。
+const displayItems = breadcrumbItems
 
 </script>
 
