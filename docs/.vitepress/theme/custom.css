@@ -1009,6 +1009,43 @@
   color: #cbd5e1;
 }
 
+/* 弱化滚动条：全站统一变窄、变浅（Chrome/Edge/Safari） */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.35);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.55);
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+/* Firefox 兼容 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.35) transparent;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(148, 163, 184, 0.28);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(148, 163, 184, 0.45);
+}
+
+.dark * {
+  scrollbar-color: rgba(148, 163, 184, 0.28) transparent;
+}
+
 @media (max-width: 960px) {
   .tools-directory .vp-doc .tool-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

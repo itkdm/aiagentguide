@@ -466,14 +466,23 @@ const steps = [
     gap: 8px;
 }
 
-/* Scrollbar */
+/* Scrollbar：与全站统一 */
 .msg-list-wrap::-webkit-scrollbar {
     width: 4px;
+    height: 4px;
 }
 
 .msg-list-wrap::-webkit-scrollbar-thumb {
-    background: var(--vp-c-divider);
+    background-color: rgba(148, 163, 184, 0.35);
     border-radius: 2px;
+}
+
+.msg-list-wrap::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(148, 163, 184, 0.55);
+}
+
+.msg-list-wrap::-webkit-scrollbar-track {
+    background-color: transparent;
 }
 
 .msg-card {
