@@ -4,27 +4,13 @@ import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
 import HomeParticles from './components/HomeParticles.vue'
 import HomeTypewriter from './components/HomeTypewriter.vue'
-import AIOpenMenu from './components/AIOpenMenu.vue'
+import Breadcrumb from './components/Breadcrumb.vue'
 import { useHtmlUrlRedirect } from './composables/useHtmlUrlRedirect'
 
 const { Layout } = DefaultTheme
 const { frontmatter } = useData()
 
 useHtmlUrlRedirect()
-
-const shouldShowAIOpenMenu = computed(() => {
-    if (frontmatter.value.layout === 'home') {
-        return false
-    }
-
-    const pageClass = frontmatter.value.pageClass
-    if (typeof pageClass !== 'string') {
-        return true
-    }
-
-    const pageClasses = pageClass.split(/\s+/)
-    return !pageClasses.includes('tools-directory') && !pageClasses.includes('tool-detail-page')
-})
 </script>
 
 <template>
@@ -44,9 +30,7 @@ const shouldShowAIOpenMenu = computed(() => {
         </template>
 
         <template #doc-before>
-            <ClientOnly>
-                <AIOpenMenu v-if="shouldShowAIOpenMenu" />
-            </ClientOnly>
+            <Breadcrumb />
         </template>
     </Layout>
 </template>

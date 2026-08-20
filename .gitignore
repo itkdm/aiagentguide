@@ -1,9 +1,10 @@
 node_modules/
 
-# VitePress
-.vitepress/
+# VitePress（只忽略构建缓存与产物，主题源码需入库）
 docs/.vitepress/cache/
 docs/.vitepress/.temp/
+docs/.vitepress/dist/
+.vitepress/dist/
 
 # Internal agent files
 content-plans/
