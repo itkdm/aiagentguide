@@ -18,7 +18,7 @@ export function normalizePath(rawPath?: string): string {
 
   let path = rawPath.trim()
 
-  // 去掉 base 前缀（如 /repo/）
+  // 去掉开头斜杠（注意：仅处理前导 /，不处理 VitePress base 前缀）
   if (path.startsWith('/')) {
     path = path.slice(1)
   }

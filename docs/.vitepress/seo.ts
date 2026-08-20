@@ -728,12 +728,16 @@ export function createSeoHead(options: {
       itemListElement.push(item)
     })
 
-    structuredData.push({
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      '@id': `${canonicalUrl}#breadcrumb`,
-      itemListElement
-    })
+    // Google 要求 BreadcrumbList 至少包含两个 ListItem；
+    // 仅首页一项时（如 pageTitle 缺失且页面不在 sidebar）不满足，跳过生成。
+    if (itemListElement.length >= 2) {
+      structuredData.push({
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        '@id': `${canonicalUrl}#breadcrumb`,
+        itemListElement
+      })
+    }
   }
 
   if (structuredData.length) {
