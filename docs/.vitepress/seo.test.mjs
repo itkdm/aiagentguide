@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { buildSitemapXml, createSeoHead, resolvePageDescription } from './seo.ts'
+import { buildRobotsTxt, buildSitemapXml, createSeoHead, resolvePageDescription } from './seo.ts'
 import { siteSidebar } from './config/sidebar/index.ts'
 
 test('expands short homepage descriptions into search-ready meta descriptions', () => {
@@ -203,4 +203,11 @@ test('normalizes quoted frontmatter descriptions before expanding them', () => {
   assert.ok(description.length <= 160, `expected description length <= 160, got ${description.length}`)
   assert.doesNotMatch(description, /^["'“”]/)
   assert.doesNotMatch(description, /["'“”][。．.]?/)
+})
+
+test('blocks Cloudflare internal paths in robots.txt', () => {
+  const robots = buildRobotsTxt('https://aiagentguide.cn/', '/')
+
+  assert.match(robots, /Disallow: \/cdn-cgi\//)
+  assert.match(robots, /Sitemap: https:\/\/aiagentguide\.cn\/sitemap\.xml/)
 })

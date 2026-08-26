@@ -758,6 +758,7 @@ export function buildRobotsTxt(siteUrl?: string, base = '/') {
     'User-agent: *',
     `Disallow: ${normalizedBase}tools/`,
     `Disallow: ${normalizedBase}interviews/`,
+    'Disallow: /cdn-cgi/',
     'Allow: /'
   ]
 
