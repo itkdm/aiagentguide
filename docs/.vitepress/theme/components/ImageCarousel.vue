@@ -254,6 +254,7 @@ onBeforeUnmount(() => {
               :alt="activeImage.alt || activeImage.title || 'carousel image'"
               width="1600"
               height="900"
+              loading="lazy"
               @error="markImageFailed(activeImage.src)"
             />
             <div v-else class="image-carousel-image-fallback">
@@ -269,6 +270,7 @@ onBeforeUnmount(() => {
             :alt="activeImage?.alt || activeImage?.title || 'carousel image'"
             width="1600"
             height="900"
+            loading="lazy"
             @click="openLightbox"
             @error="markImageFailed(activeImage?.src)"
           />

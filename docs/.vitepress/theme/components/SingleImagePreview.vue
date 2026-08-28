@@ -74,6 +74,7 @@ onBeforeUnmount(() => {
         :alt="resolvedAlt"
         width="1600"
         height="900"
+        loading="lazy"
         @click="openLightbox"
         @error="hasFailed = true"
       />
