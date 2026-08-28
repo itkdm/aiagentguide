@@ -3,6 +3,7 @@ import HomeJourney from './components/HomeJourney.vue'
 import HomeTechStack from './components/HomeTechStack.vue'
 import HomeDemo from './components/HomeDemo.vue'
 import HomeAboutSite from './components/HomeAboutSite.vue'
+import HomeFaq from './components/HomeFaq.vue'
 import ToolAutoPreview from './components/ToolAutoPreview.vue'
 import ToolsDirectory from './components/ToolsDirectory.vue'
 import AgentLoopVisualizer from './components/AgentLoopVisualizer.vue'
@@ -26,6 +27,7 @@ export default {
     app.component('HomeTechStack', HomeTechStack)
     app.component('HomeDemo', HomeDemo)
     app.component('HomeAboutSite', HomeAboutSite)
+    app.component('HomeFaq', HomeFaq)
     app.component('ToolAutoPreview', ToolAutoPreview)
     app.component('ToolsDirectory', ToolsDirectory)
     app.component('AgentLoopVisualizer', AgentLoopVisualizer)

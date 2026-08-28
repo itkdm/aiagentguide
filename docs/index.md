@@ -44,4 +44,6 @@ aside: false
 
 <HomeAboutSite />
 
+<HomeFaq />
+
 <HomeJourney />
