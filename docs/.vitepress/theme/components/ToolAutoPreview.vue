@@ -82,6 +82,6 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="previewSrc" class="tool-preview">
-    <img :src="previewSrc" :alt="altText" loading="lazy" decoding="async" />
+    <img :src="previewSrc" :alt="altText" width="1600" height="900" loading="lazy" decoding="async" />
   </div>
 </template>

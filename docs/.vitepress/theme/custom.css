@@ -753,6 +753,7 @@
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 14px 36px rgba(15, 23, 42, 0.05);
+  aspect-ratio: 16 / 9;
 }
 
 .tool-preview img {

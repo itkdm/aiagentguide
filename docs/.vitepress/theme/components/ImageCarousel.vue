@@ -51,13 +51,9 @@ const normalizedImages = computed(() =>
 )
 
 const activeImage = computed(() => normalizedImages.value[currentIndex.value])
-const stageStyle = computed(() =>
-  props.aspectRatio
-    ? {
-        aspectRatio: props.aspectRatio
-      }
-    : {}
-)
+const stageStyle = computed(() => ({
+  aspectRatio: props.aspectRatio || '16 / 9'
+}))
 const useCoverLayout = computed(() => props.fit === 'cover' && Boolean(props.aspectRatio))
 
 function getImageKey(src?: string) {
@@ -256,6 +252,8 @@ onBeforeUnmount(() => {
               :class="{ 'is-cover': useCoverLayout }"
               :src="activeImage.src"
               :alt="activeImage.alt || activeImage.title || 'carousel image'"
+              width="1600"
+              height="900"
               @error="markImageFailed(activeImage.src)"
             />
             <div v-else class="image-carousel-image-fallback">
@@ -269,6 +267,8 @@ onBeforeUnmount(() => {
             :class="{ 'is-cover': useCoverLayout }"
             :src="activeImage?.src"
             :alt="activeImage?.alt || activeImage?.title || 'carousel image'"
+            width="1600"
+            height="900"
             @click="openLightbox"
             @error="markImageFailed(activeImage?.src)"
           />

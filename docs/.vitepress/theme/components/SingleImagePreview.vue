@@ -24,13 +24,9 @@ const props = withDefaults(
 const isLightboxOpen = ref(false)
 const hasFailed = ref(false)
 
-const stageStyle = computed(() =>
-  props.aspectRatio
-    ? {
-        aspectRatio: props.aspectRatio
-      }
-    : {}
-)
+const stageStyle = computed(() => ({
+  aspectRatio: props.aspectRatio || '16 / 9'
+}))
 
 const useCoverLayout = computed(() => props.fit === 'cover' && Boolean(props.aspectRatio))
 const resolvedAlt = computed(() => props.alt || props.title || 'preview image')
@@ -76,6 +72,8 @@ onBeforeUnmount(() => {
         :class="{ 'is-cover': useCoverLayout }"
         :src="src"
         :alt="resolvedAlt"
+        width="1600"
+        height="900"
         @click="openLightbox"
         @error="hasFailed = true"
       />

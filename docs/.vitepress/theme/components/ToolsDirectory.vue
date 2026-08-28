@@ -60,7 +60,7 @@ const getToolTags = (name: string) => toolTags[name] ?? []
         <a v-for="tool in group.tools" :key="tool.href" class="tool-tile" :href="withBase(tool.href)">
           <span v-if="group.category !== '中转站汇总'" class="tool-tile-logo" :class="tool.logoClass">{{ tool.initials }}</span>
           <span v-else class="tool-featured-visual" aria-hidden="true">
-            <img :src="withBase('/tools/aggregators-hub-icon.webp')" alt="" loading="lazy" />
+            <img :src="withBase('/tools/aggregators-hub-icon.webp')" alt="" width="56" height="56" loading="lazy" />
           </span>
           <div class="tool-tile-body">
             <h3>{{ tool.name }}</h3>
