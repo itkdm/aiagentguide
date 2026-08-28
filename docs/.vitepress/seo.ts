@@ -320,7 +320,7 @@ function expandDescription(
     return description
   }
 
-  if (resolvePageKind(pageData) === 'detail' || description.length >= DESCRIPTION_CONTEXT_THRESHOLD) {
+  if (pageData.relativePath === 'index.md' || resolvePageKind(pageData) === 'detail' || description.length >= DESCRIPTION_CONTEXT_THRESHOLD) {
     return truncateDescription(description)
   }
 
