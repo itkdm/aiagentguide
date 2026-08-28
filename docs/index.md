@@ -42,4 +42,6 @@ aside: false
 
 <HomeDemo />
 
+<HomeAboutSite />
+
 <HomeJourney />
