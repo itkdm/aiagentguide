@@ -6,7 +6,7 @@ import { siteSidebar } from './config/sidebar/index.ts'
 
 test('outputs homepage description verbatim without auto-expansion', () => {
   const homepageDescription =
-    '布吉岛 Agent 是一个专注 AI Agent 学习与开发实践的教程网站，提供 Agent 入门、原理讲解、工作流、RAG 与实际案例等内容，帮助开发者系统理解智能体的核心概念、运行方式与开发思路，并通过循序渐进的教程逐步掌握 AI Agent 和大模型应用开发。'
+    '布吉岛 Agent 专注 AI Agent 学习与开发实践，提供 Agent 入门、原理讲解、RAG 与实践项目等内容，帮助开发者系统理解智能体核心概念和开发思路，逐步掌握大模型应用开发。'
 
   const description = resolvePageDescription(
     {
