@@ -4,25 +4,26 @@ import assert from 'node:assert/strict'
 import { buildRobotsTxt, buildSitemapXml, createSeoHead, resolvePageDescription } from './seo.ts'
 import { siteSidebar } from './config/sidebar/index.ts'
 
-test('expands short homepage descriptions into search-ready meta descriptions', () => {
+test('outputs homepage description verbatim without auto-expansion', () => {
+  const homepageDescription =
+    '布吉岛 Agent 是一个专注 AI Agent 学习与开发实践的教程网站，提供 Agent 入门、原理讲解、工作流、RAG 与实际案例等内容，帮助开发者系统理解智能体的核心概念、运行方式与开发思路，并通过循序渐进的教程逐步掌握 AI Agent 和大模型应用开发。'
+
   const description = resolvePageDescription(
     {
       relativePath: 'index.md',
       frontmatter: {
-        description:
-          'AI Agent 中文教程与开发实战指南，系统讲解 AI Agent 入门、智能体开发、Agent 框架选型、LLM 应用与 RAG 实战。'
+        description: homepageDescription
       }
     },
     '',
     'AI Agent 中文教程与实战指南'
   )
 
-  assert.ok(description.length >= 90, `expected description length >= 90, got ${description.length}`)
+  assert.equal(description, homepageDescription)
   assert.ok(description.length <= 160, `expected description length <= 160, got ${description.length}`)
+  assert.doesNotMatch(description, /\.\.\.$/)
   assert.match(description, /AI Agent/)
-  assert.match(description, /智能体开发/)
-  assert.match(description, /Agent 框架/)
-  assert.match(description, /LLM 应用/)
+  assert.match(description, /智能体/)
   assert.match(description, /RAG/)
 })
 
