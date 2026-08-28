@@ -13,7 +13,7 @@ onMounted(() => {
     // Initialize structure
     // Using a span to wrap the changing word for animation control
     const updateTagline = () => {
-        tagline.innerHTML = `构建 <span class="tagline-rotator">${targets[index]}</span> 的智能体`
+        tagline.innerHTML = `系统学习 Agent，构建 <span class="tagline-rotator">${targets[index]}</span> 的智能体`
     }
 
     updateTagline()
