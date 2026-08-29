@@ -657,6 +657,7 @@ export function createSeoHead(options: {
       '@type': 'WebSite',
       '@id': `${siteUrl}#website`,
       name: siteTitle,
+      alternateName: '布吉岛Agent',
       url: siteUrl,
       description: siteDescription,
       inLanguage: locale,

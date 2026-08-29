@@ -30,6 +30,9 @@ clean-build*.txt
 
 .DS_Store
 Thumbs.db
+
+# Local assets not tracked
+logo.png
 client_secret_482357350182-pvjkesu72nknesgvetbfvd00a3i9uk75.apps.googleusercontent.com.json
 credentials.json
 gsc-token.json
