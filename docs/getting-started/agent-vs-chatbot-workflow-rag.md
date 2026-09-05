@@ -26,7 +26,7 @@ assets: none
 
 ## 先看一张整体关系图
 
-Chatbot、Workflow、RAG、Agent 经常会同时出现在 AI 应用里，但其实它们关注的是不同的问题。
+Chatbot、Workflow、RAG、Agent 经常会同时出现在 一个 AI 产品里，但其实它们关注的是不同的问题。
 
 我们可以先用四句话建立一个整体印象：
 
