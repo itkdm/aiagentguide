@@ -60,7 +60,7 @@
   color: #475569;
 }
 
-.getting-started-overview .vp-doc blockquote {
+.vp-doc blockquote {
   margin: 24px 0;
   padding: 18px 24px;
   border-left: 4px solid #2563eb;
@@ -68,7 +68,7 @@
   background: rgba(37, 99, 235, 0.08);
 }
 
-.getting-started-overview .vp-doc blockquote p {
+.vp-doc blockquote p {
   margin: 0;
   line-height: 1.9;
   color: #334155;
@@ -154,11 +154,11 @@
   color: #9fb0c8;
 }
 
-.dark .getting-started-overview .vp-doc blockquote {
+.dark .vp-doc blockquote {
   background: rgba(96, 165, 250, 0.12);
 }
 
-.dark .getting-started-overview .vp-doc blockquote p {
+.dark .vp-doc blockquote p {
   color: #dbeafe;
 }
 
