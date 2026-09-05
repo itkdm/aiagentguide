@@ -169,7 +169,7 @@ test('uses clean urls for canonical and breadcrumb data when enabled', () => {
   assert.doesNotMatch(structuredData[2], /index\.html/)
 })
 
-test('adds section-specific context for short rag descriptions', () => {
+test('keeps short rag descriptions verbatim without auto-expansion', () => {
   const description = resolvePageDescription(
     {
       relativePath: 'rag/index.md',
@@ -181,14 +181,12 @@ test('adds section-specific context for short rag descriptions', () => {
     'AI Agent 中文教程与实战指南'
   )
 
-  assert.ok(description.length >= 90, `expected description length >= 90, got ${description.length}`)
+  assert.equal(description, 'RAG 架构与检索增强生成文档。')
   assert.ok(description.length <= 160, `expected description length <= 160, got ${description.length}`)
-  assert.match(description, /RAG/)
-  assert.match(description, /检索增强生成/)
-  assert.match(description, /向量检索|重排|知识库/)
+  assert.doesNotMatch(description, /向量检索|重排|知识库/)
 })
 
-test('normalizes quoted frontmatter descriptions before expanding them', () => {
+test('normalizes quoted frontmatter descriptions without auto-expansion', () => {
   const description = resolvePageDescription(
     {
       relativePath: 'principles/index.md',
@@ -200,7 +198,7 @@ test('normalizes quoted frontmatter descriptions before expanding them', () => {
     'AI Agent 中文教程与实战指南'
   )
 
-  assert.ok(description.length >= 90, `expected description length >= 90, got ${description.length}`)
+  assert.equal(description, '系统拆解 AI Agent 的运行原理，覆盖 Agent 循环、工具调用与上下文管理。')
   assert.ok(description.length <= 160, `expected description length <= 160, got ${description.length}`)
   assert.doesNotMatch(description, /^["'“”]/)
   assert.doesNotMatch(description, /["'“”][。．.]?/)
