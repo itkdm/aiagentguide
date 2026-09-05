@@ -10,6 +10,17 @@ const ASSETS_FIELD = 'assets'
 const KEYWORDS_FIELD = 'keywords'
 const OVERVIEW_MINIMUM_SEO_FIELDS = ['description', 'keywords', 'status', 'lastUpdated']
 const MAX_REPORT_ITEMS = 30
+const DESCRIPTION_WIDTH_MIN = 70
+const DESCRIPTION_WIDTH_MAX = 160
+
+function countDisplayWidth(value) {
+  const text = typeof value === 'string' ? value : ''
+  let width = 0
+  for (const char of text) {
+    width += char.charCodeAt(0) <= 0x7f ? 1 : 2
+  }
+  return width
+}
 
 function walkMarkdownFiles(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true })
@@ -197,7 +208,8 @@ function createAuditState() {
     detailBelowMinimumThreshold: [],
     indexableMissingKeywords: [],
     indexableOverviewBelowSeoThreshold: [],
-    publishedDetailMissingKeywords: []
+    publishedDetailMissingKeywords: [],
+    publishedInvalidDescriptionWidth: []
   }
 }
 
@@ -345,6 +357,13 @@ export function auditMarkdownEntries(entries) {
 
     if (indexable && !hasKeywords(frontmatter)) {
       audit.indexableMissingKeywords.push(relativePath)
+    }
+
+    if (frontmatter.status === 'published' && isPresent(frontmatter.description)) {
+      const descriptionWidth = countDisplayWidth(frontmatter.description)
+      if (descriptionWidth < DESCRIPTION_WIDTH_MIN || descriptionWidth > DESCRIPTION_WIDTH_MAX) {
+        audit.publishedInvalidDescriptionWidth.push({ relativePath, width: descriptionWidth })
+      }
     }
 
     if (pageType === 'overview' && indexable) {
@@ -533,6 +552,14 @@ export function formatAuditReport(audit) {
   )
   lines.push(
     formatStringList('Published Detail Pages Missing Keywords', audit.publishedDetailMissingKeywords)
+  )
+  lines.push(
+    formatObjectList(
+      'Published Pages With Invalid Description Width',
+      audit.publishedInvalidDescriptionWidth,
+      (item) =>
+        `${item.relativePath}: width ${item.width} (require ${DESCRIPTION_WIDTH_MIN}-${DESCRIPTION_WIDTH_MAX})`
+    )
   )
   lines.push(
     formatObjectList('Missing Required Metadata', audit.missingRequired, (item) => {

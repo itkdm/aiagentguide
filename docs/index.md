@@ -15,7 +15,7 @@ tags:
   - 实战指南
 author: 布吉岛
 layout: home
-description: "布吉岛 Agent 专注 AI Agent 学习与开发实践，提供 Agent 入门、原理讲解、RAG 与实践项目等内容，帮助开发者系统理解智能体核心概念和开发思路，逐步掌握大模型应用开发。"
+description: "布吉岛 Agent 专注 AI Agent 学习与开发实践，覆盖入门、原理、RAG 与实践项目，帮助开发者系统理解智能体核心概念与开发思路，掌握大模型应用开发。"
 lastUpdated: 2026-07-20
 status: published
 
