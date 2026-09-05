@@ -13,7 +13,7 @@ tags:
 author: 布吉岛
 pageClass: getting-started-overview
 description: "布吉岛Agent入门学习的基础指南，从 Agent、Workflow、RAG 等核心概念开始，逐步建立判断标准和完整学习路线。"
-lastUpdated: 2026-08-29
+lastUpdated: 2026-09-05
 status: published
 ---
 
