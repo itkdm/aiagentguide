@@ -14,7 +14,6 @@ tags:
   - 入门
 author: 布吉岛
 pageClass: getting-started-cases
-date: 2026-09-06
 lastUpdated: 2026-09-06
 status: published
 draft: false
