@@ -3,11 +3,10 @@ title: 布吉岛 AI Agent 开发教程与实战指南
 titleTemplate: false
 summary: 布吉岛 Agent 面向中文开发者整理 AI Agent 教程与开发实战，覆盖入门认知、原理拆解、框架选型、LLM、RAG 与项目实践。
 keywords:
-  - AI Agent 是什么
-  - AI Agent 学习路线怎么安排
-  - AI Agent 开发需要学哪些技术
-  - AI Agent 框架怎么选
-  - RAG 和 AI Agent 有什么区别
+  - AI Agent教程
+  - 智能体开发教程
+  - Agent实战项目
+  - AI 智能体
 tags:
   - AI Agent
   - 入门教程
