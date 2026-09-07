@@ -51,7 +51,7 @@ const faqs = [
 </script>
 
 <template>
-  <div class="home-section home-section-journey home-faq">
+  <div class="home-section home-faq">
     <div class="wrapper">
       <h2 class="section-title">常见问题</h2>
       <p class="section-sub">关于Agent 开发，初学者最常问的几件事。</p>
