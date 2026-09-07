@@ -48,7 +48,7 @@ test('presents the brand and slogan on the homepage', () => {
   )
   assert.match(
     homeStyles,
-    /@media \(max-width: 640px\)[\s\S]*?\.VPHomeHero \.text \{\r?\n    max-width: 5\.5em;\r?\n    font-size: clamp\(2\.35rem, 10\.25vw, 2\.75rem\);\r?\n    line-height: 1\.02;/
+    /@media \(max-width: 768px\)[\s\S]*?\.VPHomeHero \.name \{\r?\n    display: none;[\s\S]*?\.VPHomeHero \.text::before \{[\s\S]*?content: '从入门到实战';[\s\S]*?\.VPHomeHero \.text::after \{[\s\S]*?content: '系统学习 Agent 开发';/
   )
 })
 

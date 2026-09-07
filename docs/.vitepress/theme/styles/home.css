@@ -630,14 +630,50 @@ a.home-card {
   }
 }
 
-/* Mobile: minimize hero to name + image, hide secondary sections, trim footer */
+/* Mobile: keep a compact hero title while hiding the desktop-only brand label */
 @media (max-width: 768px) {
   .tech-stack-section,
   .home-section-journey {
     display: none;
   }
 
-  .VPHomeHero .text,
+  .VPHomeHero .name {
+    display: none;
+  }
+
+  .VPHomeHero .text {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0 auto;
+    font-size: 0;
+    line-height: 1;
+    text-align: center;
+  }
+
+  .VPHomeHero .text::before,
+  .VPHomeHero .text::after {
+    display: block;
+    white-space: nowrap;
+  }
+
+  .VPHomeHero .text::before {
+    content: '从入门到实战';
+    font-size: clamp(2rem, 9vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+  }
+
+  .VPHomeHero .text::after {
+    content: '系统学习 Agent 开发';
+    margin-top: 0.45rem;
+    color: var(--home-body);
+    font-size: clamp(1rem, 4.5vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+  }
+
   .VPHomeHero .tagline,
   .VPHomeHero .actions {
     display: none;
@@ -660,11 +696,6 @@ a.home-card {
   }
   .VPHomeHero .heading {
     max-width: none;
-  }
-  .VPHomeHero .text {
-    max-width: 5.5em;
-    font-size: clamp(2.35rem, 10.25vw, 2.75rem);
-    line-height: 1.02;
   }
   .VPHomeHero .tagline {
     font-size: 0.98rem;
