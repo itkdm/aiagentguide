@@ -5,6 +5,7 @@ import { useData } from 'vitepress'
 import HomeParticles from './components/HomeParticles.vue'
 import HomeTypewriter from './components/HomeTypewriter.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
+import ReadingProgress from './components/ReadingProgress.vue'
 import { useHtmlUrlRedirect } from './composables/useHtmlUrlRedirect'
 
 const { Layout } = DefaultTheme
@@ -15,6 +16,10 @@ useHtmlUrlRedirect()
 
 <template>
     <Layout>
+        <template #layout-top>
+            <ReadingProgress />
+        </template>
+
         <template #home-hero-before>
             <ClientOnly>
                 <div v-if="frontmatter.layout === 'home'" class="home-hero-background-wrapper">
