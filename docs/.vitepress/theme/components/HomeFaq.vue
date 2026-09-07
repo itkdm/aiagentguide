@@ -3,40 +3,49 @@ import { withBase } from 'vitepress'
 
 const faqs = [
   {
-    q: 'AI Agent 是什么？和普通 AI 聊天有什么区别？',
-    a: 'AI Agent，也叫 AI 智能体，是一种能够围绕目标进行判断、调用工具并持续执行任务的 AI 系统。普通聊天模型通常以"一问一答"为主，而 Agent 可以根据执行结果决定下一步，例如搜索资料、调用 API、读取文件或运行代码，直到完成目标。',
-    cta: '详细了解 AI Agent',
+    q: 'Agent 是什么？',
+    a: [
+      '我们可以把 Agent 理解成一种能够围绕目标持续完成任务的系统。它不只是回答一次问题，还会根据当前结果决定下一步，调用工具、读取信息、执行操作，直到任务完成。',
+      '如果刚接触 Agent，建议先从这个问题开始，把 Agent、Workflow、RAG 这些最容易混淆的概念先分清楚。'
+    ],
+    cta: '继续了解：Agent 入门',
     href: '/getting-started/what-is-ai-agent.html'
   },
   {
-    q: '零基础应该怎么学习 AI Agent？',
-    a: '初学 AI Agent 不需要一开始就学习复杂框架。可以先理解 LLM、Prompt、工具调用、Workflow 和 RAG 等基础概念，再理解 Agent 如何根据目标进行决策和执行，最后通过一个可以实际运行的小项目建立完整认知。',
-    cta: '从 Agent 入门开始',
+    q: 'Agent 开发应该从哪里开始？',
+    a: [
+      '我们不建议一上来就选框架、背 API。合适的顺序是先理解 Agent 的基本结构和运行方式，再逐步学习工具调用、上下文、Memory、RAG 等核心能力，最后通过项目把这些知识串起来。',
+      '这样后面无论使用什么框架，都更容易知道它到底帮我们解决了什么问题。'
+    ],
+    cta: '继续学习：Agent 开发入门',
     href: '/getting-started/'
   },
   {
-    q: '学习 AI Agent 需要先掌握哪些基础？',
-    a: '如果目标是理解和开发 AI Agent，通常需要具备基本编程能力，并了解 API、JSON 和大语言模型的基本使用方式。Prompt、工具调用、RAG、Workflow 等知识可以在学习 Agent 的过程中逐步补齐，不需要全部学完以后才能开始。',
-    cta: '动手前先看看',
-    href: '/getting-started/before-your-first-agent.html'
+    q: 'Agent 教程应该怎么学？',
+    a: [
+      '我们更推荐按照“<strong>入门认知 → 核心原理 → 框架使用 → 项目实践</strong>”这条路径来学，而不是看到一个新框架就跟着写 Demo。',
+      '教程真正重要的不是把代码跑通，而是理解为什么要这样设计。理解之后，再面对新的框架和项目，很多东西其实都能迁移。'
+    ],
+    cta: '查看：Agent 学习路线',
+    href: '/getting-started/learning-path.html'
   },
   {
-    q: 'AI Agent 和 Workflow 有什么区别？什么时候该用 Agent？',
-    a: 'Workflow 的主要执行路径通常由程序提前定义，而 Agent 会根据目标、中间结果和环境动态决定下一步。如果任务步骤清晰、结果可预测，Workflow 通常更稳定；如果任务开放、执行步骤难以提前确定，并且需要根据结果不断调整，则更适合考虑 Agent。',
-    cta: '对比 Agent、工作流与 RAG',
-    href: '/getting-started/agent-vs-chatbot-workflow-rag.html'
+    q: 'Agent 框架应该怎么选？',
+    a: [
+      '我们不会简单告诉大家哪个框架“最好”。LangGraph、AgentScope 等框架各自解决的问题和适用场景不同，真正选型时要结合项目复杂度、状态管理、工具调用、工作流编排以及团队技术栈一起判断。',
+      '我们会先把这些框架拆开讲清楚，再通过对比和项目实践，逐步建立自己的选型标准。'
+    ],
+    cta: '查看：Agent 框架',
+    href: ''
   },
   {
-    q: 'RAG 和 AI Agent 有什么区别？两者是什么关系？',
-    a: 'RAG 和 Agent 解决的问题不同。RAG 主要帮助大模型从外部知识中找到与当前问题相关的信息；Agent 更关注如何围绕目标进行决策、调用工具并完成任务。在实际系统中，RAG 可以成为 Agent 获取知识的一种工具，因此两者并不是互相替代的关系。',
-    cta: '系统学习 RAG',
-    href: '/rag/'
-  },
-  {
-    q: '什么情况下其实不需要使用 AI Agent？',
-    a: '如果任务步骤固定、输入输出明确，或者一次模型调用和普通程序就能解决，通常没有必要引入 Agent。Agent 的自主决策会带来额外的成本、延迟和不确定性。更合理的原则是先使用最简单可靠的方案，只在任务确实需要动态决策时增加 Agent。',
-    cta: '什么任务适合用 Agent',
-    href: '/getting-started/when-to-use-agent.html'
+    q: 'Agent 面试一般会问什么？',
+    a: [
+      'Agent 面试通常不会只问“某个概念是什么”，更常见的是继续追问：为什么这样设计、还有没有其他方案、项目里是怎么做的。',
+      '所以我们整理面试题的目标不是让大家背标准答案，而是把每个问题背后的原理和设计思路真正弄懂。这样面对连续追问时，我们才能把自己的判断过程讲清楚。'
+    ],
+    cta: '查看：Agent 面试题',
+    href: ''
   }
 ] as const
 </script>
@@ -45,15 +54,18 @@ const faqs = [
   <div class="home-section home-section-journey home-faq">
     <div class="wrapper">
       <h2 class="section-title">常见问题</h2>
-      <p class="section-sub">关于 AI Agent，初学者最常问的几件事。</p>
+      <p class="section-sub">关于Agent 开发，初学者最常问的几件事。</p>
       <div class="faq-list">
         <div v-for="(item, index) in faqs" :key="item.q" class="faq-item">
           <div class="faq-q">
             <span class="faq-no">{{ index + 1 }}</span>
             <h3>{{ item.q }}</h3>
           </div>
-          <p class="faq-a">{{ item.a }}</p>
-          <a class="faq-cta" :href="withBase(item.href)">{{ item.cta }} →</a>
+          <div class="faq-a">
+            <p v-for="paragraph in item.a" :key="paragraph" v-html="paragraph"></p>
+          </div>
+          <a v-if="item.href" class="faq-cta" :href="withBase(item.href)">{{ item.cta }} →</a>
+          <span v-else class="faq-cta faq-cta-disabled">{{ item.cta }}</span>
         </div>
       </div>
     </div>
@@ -142,6 +154,14 @@ const faqs = [
   color: var(--home-body);
 }
 
+.faq-a p {
+  margin: 0;
+}
+
+.faq-a p + p {
+  margin-top: 12px;
+}
+
 .faq-cta {
   display: inline-block;
   margin-left: 40px;
@@ -153,6 +173,11 @@ const faqs = [
 
 .faq-cta:hover {
   text-decoration: underline;
+}
+
+.faq-cta-disabled {
+  color: var(--home-muted);
+  cursor: default;
 }
 
 @media (max-width: 768px) {

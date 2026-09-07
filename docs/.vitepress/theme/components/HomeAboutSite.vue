@@ -1,55 +1,20 @@
 <script setup lang="ts">
-import { withBase } from 'vitepress'
-
-const steps = [
-  {
-    number: '01',
-    label: '这是什么地方',
-    title: '面向初学者的 Agent 学习指南',
-    description: '布吉岛 Agent 是一个系统化的中文 AI Agent 学习站点。我们想把“从零开始”这件事讲清楚，让你不必先追完论文也能理解智能体开发。',
-    cta: '看看定位',
-    href: '/getting-started/',
-    icon: '📍'
-  },
-  {
-    number: '02',
-    label: '能学到什么',
-    title: '概念、原理、框架到项目',
-    description: '从 Agent 是什么、它和聊天机器人有什么不同，到 Agent Loop、RAG、工作流编排、多 Agent 协作与工程落地，覆盖一条完整的学习链路。',
-    cta: '浏览栏目',
-    href: '/principles/',
-    icon: '📚'
-  },
-  {
-    number: '03',
-    label: '该怎么用',
-    title: '跟着路径从不知道到做得到',
-    description: '不需要一上来就选框架。先建立判断标准，再学原理与选型，最后动手做项目。整个站点按这条由浅入深的节奏组织。',
-    cta: '开始学习',
-    href: '/getting-started/learning-path.html',
-    icon: '🚀'
-  }
-] as const
 </script>
 
 <template>
-  <div class="home-section home-section-journey">
+  <div class="home-section home-about-site">
     <div class="wrapper">
       <h2 class="section-title">布吉岛 Agent 是什么？</h2>
-      <div class="home-flow" aria-label="关于布吉岛 Agent">
-        <template v-for="(step, index) in steps" :key="step.href">
-          <a class="home-flow-step" :href="withBase(step.href)">
-            <span class="home-flow-step-no">{{ step.number }}</span>
-            <div class="card-header">
-              <div class="home-flow-icon">{{ step.icon }}</div>
-              <span class="home-flow-step-label">{{ step.label }}</span>
-            </div>
-            <h3>{{ step.title }}</h3>
-            <p>{{ step.description }}</p>
-            <span class="home-flow-cta">{{ step.cta }}</span>
-          </a>
-          <div v-if="index < steps.length - 1" class="home-flow-connector" aria-hidden="true"></div>
-        </template>
+      <div class="about-copy">
+        <p>
+          布吉岛 Agent 是一个围绕 <strong>Agent 学习、开发与实践</strong> 持续整理的技术站点，适合正在学习 Agent、准备做项目，或者单纯对 Agent 开发感兴趣的人。
+        </p>
+        <p>
+          我们会从基础入门开始，逐步讲清 Agent 的核心原理，再继续到 LangGraph、AgentScope 等框架的理解与选型。除了概念和教程，也会一起做 Vibe Coding 项目，并结合企业级项目开发，看看一个 Agent 应该怎么真正落地。
+        </p>
+        <p>
+          同时，我们也会持续整理 Agent 面试题。重点不是背答案，而是理解问题背后的设计思路，希望到了真实面试、项目讨论或者技术选型时，我们都能知道为什么这样做，也能把自己的思路讲清楚。
+        </p>
       </div>
     </div>
   </div>
@@ -60,6 +25,10 @@ const steps = [
   max-width: 1152px;
   margin: 0 auto;
   padding: 0 24px;
+}
+
+.home-about-site {
+  background: radial-gradient(closest-side at 50% 40%, var(--vp-c-brand-soft) 0%, transparent 100%);
 }
 
 .section-title {
@@ -73,13 +42,39 @@ const steps = [
   letter-spacing: -0.5px;
 }
 
+.about-copy {
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--home-body);
+  font-size: 1.08rem;
+  line-height: 1.9;
+  text-align: center;
+}
+
+.about-copy p {
+  margin: 0;
+}
+
+.about-copy p + p {
+  margin-top: 18px;
+}
+
 @media (max-width: 768px) {
   .section-title {
     font-size: 24px;
-    margin-bottom: 40px;
+    margin-bottom: 24px;
   }
   .wrapper {
     padding: 0 16px;
+  }
+  .home-about-site {
+    padding-top: 52px;
+    padding-bottom: 52px;
+  }
+  .about-copy {
+    font-size: 1rem;
+    line-height: 1.8;
+    text-align: left;
   }
 }
 </style>

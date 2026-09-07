@@ -5,8 +5,8 @@ const steps = [
   {
     number: '01',
     label: '先打基础',
-    title: '入门学习路径',
-    description: '理解什么是 Agent、它和聊天机器人的区别，以及从哪里开始系统学习。',
+    title: '入门学习',
+    description: '先理解 Agent 是什么、适合解决什么问题，以及学习 Agent 开发前需要建立哪些基础认知。',
     cta: '从入门开始',
     href: '/getting-started/',
     icon: '🎯'
@@ -15,27 +15,27 @@ const steps = [
     number: '02',
     label: '理解系统',
     title: '原理拆解',
-    description: '深入看清 Agent Loop、上下文、工具调用、权限边界和多 Agent 协作为什么这样设计。',
+    description: '继续理解 Agent Loop、工具调用、上下文、Memory、规划与执行等核心机制，搞清楚 Agent 为什么这样工作。',
     cta: '查看原理',
     href: '/principles/',
     icon: '⚙️'
   },
   {
     number: '03',
-    label: '再做判断',
-    title: 'RAG 系统构建',
-    description: '掌握检索增强生成的架构、检索与重排、知识库构建与生产化落地的关键方法。',
-    cta: '查看 RAG',
-    href: '/rag/',
-    icon: '📚'
+    label: '理解框架',
+    title: '框架学习',
+    description: '再去学习 LangGraph、AgentScope 等框架，借助成熟工具更快地完成 Agent 项目开发。',
+    cta: '敬请期待',
+    href: '',
+    icon: '🧩'
   },
   {
     number: '04',
     label: '最后动手',
-    title: '项目实战参考',
-    description: '从真实项目中研究能力设计、系统边界、架构权衡与可复制的实施经验。',
-    cta: '查看项目',
-    href: '/projects/',
+    title: '项目实战',
+    description: '最后通过真实企业级项目开发，把前面的概念、原理和框架真正串起来。',
+    cta: '敬请期待',
+    href: '',
     icon: '💻'
   }
 ] as const
@@ -47,7 +47,13 @@ const steps = [
       <h2 class="section-title">系统化学习路径</h2>
       <div class="home-flow" aria-label="AI Agent 学习路线">
         <template v-for="(step, index) in steps" :key="step.href">
-          <a class="home-flow-step" :href="withBase(step.href)">
+          <component
+            :is="step.href ? 'a' : 'div'"
+            class="home-flow-step"
+            :class="{ 'is-disabled': !step.href }"
+            :href="step.href ? withBase(step.href) : undefined"
+            :aria-disabled="!step.href || undefined"
+          >
             <span class="home-flow-step-no">{{ step.number }}</span>
             <div class="card-header">
               <div class="home-flow-icon">{{ step.icon }}</div>
@@ -56,7 +62,7 @@ const steps = [
             <h3>{{ step.title }}</h3>
             <p>{{ step.description }}</p>
             <span class="home-flow-cta">{{ step.cta }}</span>
-          </a>
+          </component>
           <div v-if="index < steps.length - 1" class="home-flow-connector" aria-hidden="true"></div>
         </template>
       </div>
