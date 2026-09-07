@@ -1,5 +1,5 @@
 ---
-title: 布吉岛 AI Agent 开发教程与实战指南
+title: 布吉岛 Agent开发教程与项目实战
 titleTemplate: false
 summary: 布吉岛 Agent 面向中文开发者整理 AI Agent 教程与开发实战，覆盖入门认知、原理拆解、框架选型、LLM、RAG 与项目实践。
 keywords:
