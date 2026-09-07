@@ -93,7 +93,7 @@ onMounted(() => {
                         <span class="dot yellow"></span>
                         <span class="dot green"></span>
                     </div>
-                    <div class="window-title">main.py — Agent Workflow</div>
+                    <div class="window-title">Agent 开发，从一个最小示例开始</div>
                 </div>
                 <div class="window-body">
                     <div class="editor-pane">
