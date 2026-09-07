@@ -40,7 +40,7 @@ test('presents the brand and slogan on the homepage', () => {
   assert.match(homepage, /^titleTemplate: false$/m)
   assert.match(homepage, /^author: 布吉岛$/m)
   assert.match(homepage, /^  name: "布吉岛 Agent"$/m)
-  assert.match(homepage, /^  text: "从不知道，到做得到"$/m)
+  assert.match(homepage, /^  text: "从入门到实战，系统学习 Agent 开发"$/m)
   assert.match(homepage, /^lastUpdated: 2026-07-20$/m)
   assert.match(
     homeStyles,

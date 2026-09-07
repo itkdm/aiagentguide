@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 
-const targets = ['自主', '可靠', '高效']
+const targets = ['可靠', '自主', '高效']
 
 onMounted(() => {
     const tagline = document.querySelector('.VPHomeHero .tagline')

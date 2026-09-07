@@ -22,19 +22,19 @@ status: published
 
 hero:
   name: "布吉岛 Agent"
-  text: "从不知道，到做得到"
-  tagline: "系统理解 AI Agent 的核心原理、框架选型与工程实践，把零散概念变成真正能运行的智能体项目。"
+  text: "从入门到实战，系统学习 Agent 开发"
+  tagline: "系统学习 Agent，构建可靠的智能体"
   image:
     light: /hero-visual.svg
     dark: /hero-visual-dark.svg
     alt: AI Agent 架构图
   actions:
     - theme: brand
-      text: "开始构建"
+      text: "开始学习"
       link: /getting-started/
     - theme: alt
-      text: "核心原理"
-      link: /principles/
+      text: "查看学习路线"
+      link: /getting-started/learning-path.html
 
 aside: false
 ---
