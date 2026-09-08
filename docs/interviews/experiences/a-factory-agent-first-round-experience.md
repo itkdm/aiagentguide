@@ -71,5 +71,3 @@ draft: true
 - [面试](../)
 - [RAG](/rag/)
 - [Agent 是什么](/getting-started/what-is-ai-agent)
-- [通用工具原理](/principles/general-tools)
-- [通用可靠性与安全](/principles/general-reliability-safety)

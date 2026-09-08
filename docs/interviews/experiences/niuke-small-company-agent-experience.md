@@ -66,7 +66,3 @@ draft: true
 
 - [面试](../)
 - [RAG](/rag/)
-- [通用 Multi-Agent 原理](/principles/general-multi-agent)
-- [通用 Memory 原理](/principles/general-memory)
-- [通用 MCP 原理](/principles/general-mcp)
-

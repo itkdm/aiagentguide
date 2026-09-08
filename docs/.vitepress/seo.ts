@@ -10,7 +10,6 @@ const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
 
 const SECTION_TITLES: Record<string, string> = {
   'getting-started': '\u5165\u95e8',
-  principles: '\u539f\u7406',
   projects: '\u9879\u76ee',
   tools: '\u5de5\u5177',
   resources: '\u8d44\u6e90'
@@ -739,7 +738,6 @@ export function buildSitemapXml(
     '</urlset>'
   ].join('')
 }
-
 
 
 
