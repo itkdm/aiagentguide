@@ -20,7 +20,7 @@ author: 布吉岛
 这一页用于收束入门阶段最常见的术语，避免不同文章之间来回跳转时概念混乱。
 
 如果你在阅读过程中反复看到某个词，但总觉得“好像懂了，又说不清楚”，可以回到这里快速确认。  
-如果你还没有读完正文，建议至少先结合 [什么是 AI Agent](./what-is-ai-agent.md)、[Agent、聊天机器人、工作流与 RAG](./agent-vs-chatbot-workflow-rag.md) 和 [Agent 的核心组件](./core-components.md) 一起看，这样这些词不会只停留在定义层面。
+如果你还没有读完正文，建议至少先结合 [什么是 AI Agent](./what-is-ai-agent.md)、[Agent、聊天机器人、工作流与 RAG](./agent-vs-chatbot-workflow-rag.md) 和 [第一步动手前要知道什么](./before-your-first-agent.md) 一起看，这样这些词不会只停留在定义层面。
 
 ## 这页怎么用
 

@@ -290,7 +290,9 @@ Agent 更有价值的地方，通常出现在：
 对应：
 
 * [Agent 是怎么运转的](./how-agent-works.md)
-* [Agent 的核心组件](./core-components.md)
+* [第一步动手前要知道什么](./before-your-first-agent.md)
+* [从零实现一个最小 AI Agent](./minimal-ai-agent.md)
+* [从零实现一个最小 Coding Agent](./minimal-coding-agent.md)
 
 学到这里以后，也有助于我们后续学习 LangGraph、Agentscope 等框架。
 
@@ -314,7 +316,6 @@ Agent 更有价值的地方，通常出现在：
 
 我们会讲：
 
-* [第一次动手前要知道什么](./before-your-first-agent.md)
 * [新手有哪些常见误区](./common-mistakes.md)
 * [入门学习路线](./learning-path.md)
 
