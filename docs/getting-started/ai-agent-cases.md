@@ -22,7 +22,7 @@ noindex: false
 
 # Agent 有哪些应用场景：6 个典型案例
 
-## 案例 1：Coding Agent——从写代码到完成开发任务
+## Agent 应用场景案例 1：Coding Agent——从写代码到完成开发任务
 
 目前最火的 AI Agent ,莫过于**Coding Agent** 。
 
@@ -92,7 +92,7 @@ noindex: false
 
 ---
 
-## 案例 2：Deep Research Agent——自己搜索、阅读和整理资料
+## Agent 应用场景案例 2：Deep Research Agent——自己搜索、阅读和整理资料
 
 第二个非常典型的方向是 **Deep Research Agent**。
 
@@ -182,7 +182,7 @@ Synthesize
 
 ---
 
-## 案例 3：Customer Support Agent——查资料并真正处理问题
+## Agent 应用场景案例 3：Customer Support Agent——查资料并真正处理问题
 
 第三个案例是 **Customer Support Agent，也就是客服 Agent**。
 
@@ -257,7 +257,7 @@ Synthesize
 
 ---
 
-## 案例 4：Data Agent——自己查数据、分析数据
+## Agent 应用场景案例 4：Data Agent——自己查数据、分析数据
 
 我们再来看一个和开发者、企业内部系统都有紧密联系的案例：
 
@@ -361,7 +361,7 @@ Data Agent 真正厉害的地方，并不是“AI 会写 SQL”。
 
 ---
 
-## 案例 5：Browser Agent——像人一样操作网页和软件
+## Agent 应用场景案例 5：Browser Agent——像人一样操作网页和软件
 
 前面的几个 Agent，大部分都在调用 API、数据库、搜索工具或者代码工具。
 
@@ -437,7 +437,7 @@ Agent 的思路则更接近：
 
 ---
 
-## 案例 6：Travel Planning Agent——在多个约束之间完成规划
+## Agent 应用场景案例 6：Travel Planning Agent——在多个约束之间完成规划
 
 最后来看一个非常经典，同时也很容易理解的案例：
 
@@ -519,7 +519,7 @@ Agent 的思路则更接近：
 
 ---
 
-## 从这 6 个案例里，我们能看到什么
+## 从这 6 个Agent 应用场景案例里，我们能看到什么
 
 到这里，我们已经看了 6 个差别非常大的案例：
 
