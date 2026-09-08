@@ -1,10 +1,10 @@
 ---
-title: AI Agent 能做什么：6 个典型案例
-summary: 通过 6 个典型案例建立对 AI Agent 的直觉，直观理解 Agent 如何围绕目标获取信息、使用工具、做出判断并持续推进任务。
-description: "通过 6 个典型 AI Agent 案例，从 Coding Agent、Deep Research 到 Browser Agent，直观理解 Agent 如何围绕目标持续获取信息、使用工具、判断并执行任务。"
+title: Agent 有哪些应用场景：6 个典型案例
+summary: 通过 Coding Agent、Deep Research Agent、客服 Agent、Data Agent、Browser Agent 和旅行规划 Agent 6 个典型案例，了解 Agent 有哪些应用场景以及不同 Agent 如何围绕目标持续完成任务。
+description: "Agent 有哪些应用场景？通过 6 个典型 Agent 案例，从 Coding Agent、Deep Research 到 Browser Agent，直观理解 Agent 如何围绕目标持续获取信息、使用工具、判断并执行任务。"
 keywords:
-  - AI Agent 案例
-  - AI Agent 能做什么
+  - Agent 案例
+  - Agent 能做什么
   - 智能体应用案例
   - Agent 场景
 tags:
@@ -14,13 +14,13 @@ tags:
   - 入门
 author: 布吉岛
 pageClass: getting-started-cases
-lastUpdated: 2026-09-06
+lastUpdated: 2026-09-09
 status: published
 draft: false
 noindex: false
 ---
 
-# AI Agent 能做什么：6 个典型案例
+# Agent 有哪些应用场景：6 个典型案例
 
 ## 案例 1：Coding Agent——从写代码到完成开发任务
 
