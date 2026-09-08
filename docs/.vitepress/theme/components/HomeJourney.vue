@@ -13,15 +13,6 @@ const steps = [
   },
   {
     number: '02',
-    label: '理解系统',
-    title: '原理拆解',
-    description: '继续理解 Agent Loop、工具调用、上下文、Memory、规划与执行等核心机制，搞清楚 Agent 为什么这样工作。',
-    cta: '查看原理',
-    href: '/principles/',
-    icon: '⚙️'
-  },
-  {
-    number: '03',
     label: '理解框架',
     title: '框架学习',
     description: '再去学习 LangGraph、AgentScope 等框架，借助成熟工具更快地完成 Agent 项目开发。',
@@ -30,10 +21,10 @@ const steps = [
     icon: '🧩'
   },
   {
-    number: '04',
+    number: '03',
     label: '最后动手',
     title: '项目实战',
-    description: '最后通过真实企业级项目开发，把前面的概念、原理和框架真正串起来。',
+    description: '最后通过真实企业级项目开发，把前面的概念和框架真正串起来。',
     cta: '敬请期待',
     href: '',
     icon: '💻'
