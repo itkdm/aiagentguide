@@ -1,23 +1,23 @@
 ---
-title: AI Agent 入门
+title: Agent 入门教程：从基础概念到开发学习
 summary: 从最容易混淆的问题开始，建立 AI Agent 的基础认知，搞清楚 Agent 是什么、什么时候该用，以及后面应该怎么学。
 keywords:
-  - AI Agent 是什么
-  - AI Agent 适合哪些业务场景
-  - AI Agent 不适合哪些场景
-  - AI Agent 开发需要学哪些技术
+  - Agent 是什么
+  - Agent 适合哪些业务场景
+  - Agent 不适合哪些场景
+  - Agent 开发需要学哪些技术
 tags:
-  - AI Agent
+  - Agent
   - 入门
   - 基础概念
 author: 布吉岛
 pageClass: getting-started-overview
-description: "布吉岛Agent入门学习的基础指南，从 Agent、Workflow、RAG 等核心概念开始，逐步建立判断标准和完整学习路线。"
-lastUpdated: 2026-09-05
+description: "布吉岛Agent开发入门学习的基础指南，从 Agent、Workflow、RAG 等核心概念开始，逐步建立判断标准和完整学习路线。"
+lastUpdated: 2026-09-08
 status: published
 ---
 
-# AI Agent 入门
+# Agent开发 入门
 
 <div style="display: flex; flex-wrap: nowrap; align-items: flex-start; gap: 28px; margin: 18px 0 10px;">
   <!-- 图解候选：入门栏目概览图，后续需要时取消注释并恢复下方 div
