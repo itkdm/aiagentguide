@@ -1,28 +1,28 @@
 ---
 title: 从最小 Coding Agent 到 Pi：一个真实 Coding Agent 还需要什么
-description: "从最小 Coding Agent 出发，了解真实 Coding Agent 在工具调用、上下文管理、可靠性和执行环境方面还需要补充哪些能力。"
+description: "从最小 Coding Agent 到 Pi，理解真实 Coding Agent 如何处理工具调用、上下文管理、执行过程和扩展能力等工程问题。"
 summary: 本文将在最小 Coding Agent 的基础上，进一步分析 Pi 这类真实 Coding Agent 还需要解决的工程问题。
 keywords:
   - Coding Agent
-  - Pi Agent
-  - Pi Agent是什么
-  - Pi Agent教程
-  - Agent 工程实践
+  - Pi Coding Agent
+  - Coding Agent 架构
+  - Agent Runtime
   - Agent 上下文管理
-  - Agent 工具调用
+  - Coding Agent 工具调用
 tags:
   - AI Agent
   - Coding Agent
   - Pi
   - Agent 工程
 author: 布吉岛
-lastUpdated: 2026-09-08
-status: draft
+date: 2026-09-10
+lastUpdated: 2026-09-10
+status: published
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-draft: true
-noindex: true
+draft: false
+noindex: false
 ---
 
 # 从最小 Coding Agent 到 Pi：一个真实 Coding Agent 还需要什么
