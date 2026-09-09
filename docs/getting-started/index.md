@@ -316,7 +316,7 @@ Agent 更有价值的地方，通常出现在：
 
 我们会讲：
 
-* [新手有哪些常见误区](./common-mistakes.md)
+* [Agent 开发有哪些常见误区](./common-mistakes.md)
 * [入门学习路线](./learning-path.md)
 
 ## 面试时怎么准备
