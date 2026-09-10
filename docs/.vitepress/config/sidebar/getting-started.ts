@@ -19,7 +19,6 @@ export const gettingStartedSidebar: DefaultTheme.Sidebar = {
       { text: '从最小 Coding Agent 到 Pi', link: '/getting-started/from-minimal-coding-agent-to-pi' },
       { text: 'Agent 开发常见误区', link: '/getting-started/common-mistakes' },
       { text: 'Agent 开发学习路线', link: '/getting-started/learning-path' },
-      { text: '术语表', link: '/getting-started/glossary' },
       { text: 'FAQ', link: '/getting-started/faq' }
     ]
   }
