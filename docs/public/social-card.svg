@@ -1,81 +1,66 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#050A18" />
-      <stop offset="0.5" stop-color="#091830" />
-      <stop offset="1" stop-color="#0E2347" />
-    </linearGradient>
-    <radialGradient id="glowTop" cx="0.85" cy="0.15" r="0.6">
-      <stop stop-color="#22D3EE" stop-opacity="0.32" />
-      <stop offset="1" stop-color="#22D3EE" stop-opacity="0" />
-    </radialGradient>
-    <radialGradient id="glowBottom" cx="0.05" cy="0.95" r="0.55">
-      <stop stop-color="#6366F1" stop-opacity="0.28" />
-      <stop offset="1" stop-color="#6366F1" stop-opacity="0" />
-    </radialGradient>
-    <linearGradient id="headline" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="background" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
       <stop stop-color="#FFFFFF" />
-      <stop offset="0.85" stop-color="#A5E9FF" />
+      <stop offset="0.55" stop-color="#F8FBFF" />
+      <stop offset="1" stop-color="#EEF6FF" />
     </linearGradient>
-    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#22D3EE" />
-      <stop offset="1" stop-color="#818CF8" />
+    <linearGradient id="headline" x1="88" y1="0" x2="900" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A" />
+      <stop offset="0.62" stop-color="#2563EB" />
+      <stop offset="1" stop-color="#0F766E" />
     </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1010 145) rotate(135) scale(290)">
+      <stop stop-color="#BFDBFE" stop-opacity="0.7" />
+      <stop offset="1" stop-color="#DBEAFE" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#93C5FD" fill-opacity="0.34" />
+    </pattern>
   </defs>
 
-  <rect width="1200" height="630" fill="url(#bg)" />
-  <rect width="1200" height="630" fill="url(#glowTop)" />
-  <rect width="1200" height="630" fill="url(#glowBottom)" />
+  <rect width="1200" height="630" rx="20" fill="url(#background)" />
+  <circle cx="1000" cy="140" r="280" fill="url(#glow)" />
+  <path d="M760 0H1200V440C1085 385 1000 282 960 174C920 65 850 28 760 0Z" fill="url(#dots)" opacity="0.72" />
 
-  <g stroke="#7DD3FC" stroke-opacity="0.22" stroke-width="1.2" fill="none">
-    <line x1="880" y1="80" x2="990" y2="50" />
-    <line x1="990" y1="50" x2="1100" y2="120" />
-    <line x1="1100" y1="120" x2="1050" y2="240" />
-    <line x1="1050" y1="240" x2="930" y2="200" />
-    <line x1="930" y1="200" x2="880" y2="80" />
-    <line x1="1050" y1="240" x2="1140" y2="340" />
-    <line x1="930" y1="200" x2="820" y2="280" />
+  <!-- 首页同款三色循环 Logo -->
+  <g transform="translate(88 62) scale(0.58)">
+    <path d="M20.5 43.5A28 28 0 0 1 48 20" stroke="#0F172A" stroke-width="8" stroke-linecap="round" />
+    <path d="M41 11L56 20L41 29Z" fill="#0F172A" />
+    <g transform="rotate(120 48 48)">
+      <path d="M20.5 43.5A28 28 0 0 1 48 20" stroke="#3B82F6" stroke-width="8" stroke-linecap="round" />
+      <path d="M41 11L56 20L41 29Z" fill="#3B82F6" />
+    </g>
+    <g transform="rotate(240 48 48)">
+      <path d="M20.5 43.5A28 28 0 0 1 48 20" stroke="#BFDBFE" stroke-width="8" stroke-linecap="round" />
+      <path d="M41 11L56 20L41 29Z" fill="#BFDBFE" />
+    </g>
+    <circle cx="48" cy="48" r="10" fill="#0F172A" />
+    <circle cx="48" cy="48" r="4" fill="white" />
   </g>
-  <g fill="#22D3EE">
-    <circle cx="880" cy="80" r="3.5" fill-opacity="0.8" />
-    <circle cx="990" cy="50" r="4.5" />
-    <circle cx="1100" cy="120" r="3.5" fill-opacity="0.8" />
-    <circle cx="1050" cy="240" r="4.5" />
-    <circle cx="930" cy="200" r="3.5" fill-opacity="0.8" />
-    <circle cx="1140" cy="340" r="3" fill-opacity="0.6" />
-    <circle cx="820" cy="280" r="3" fill-opacity="0.6" />
-  </g>
+  <text x="158" y="100" fill="#0F172A" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="29" font-weight="750" letter-spacing="0.2">布吉岛 Agent</text>
 
-  <g transform="translate(96, 88)">
-    <polygon points="0,20 20,10 40,20 40,40 20,50 0,40" fill="url(#brand)" />
-    <circle cx="20" cy="30" r="5" fill="#050A18" />
-    <text x="60" y="36" fill="white" font-family="'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="28" font-weight="700" letter-spacing="0.5">布吉岛 Agent</text>
+  <g transform="translate(88 190)">
+    <rect width="44" height="4" rx="2" fill="#2563EB" />
+    <text x="62" y="8" fill="#2563EB" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="21" font-weight="650" letter-spacing="1.5">Agent 原理与开发实践</text>
   </g>
 
-  <g transform="translate(96, 216)">
-    <line x1="0" y1="14" x2="40" y2="14" stroke="#22D3EE" stroke-width="2.5" stroke-linecap="round" />
-    <text x="56" y="20" fill="#7DD3FC" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="600" letter-spacing="2">面向中文开发者的 AI Agent 教程</text>
+  <text x="88" y="330" fill="url(#headline)" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="75" font-weight="800" letter-spacing="-2">从入门到实战</text>
+  <text x="92" y="390" fill="#334155" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="32" font-weight="550">从不知道，到做得到 · 系统学习 Agent</text>
+
+  <line x1="88" y1="470" x2="1112" y2="470" stroke="#CBD5E1" stroke-opacity="0.72" />
+  <g fill="#475569" font-family="'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="22" font-weight="550">
+    <text x="88" y="520">入门</text>
+    <text x="238" y="520">原理</text>
+    <text x="388" y="520">框架</text>
+    <text x="538" y="520">实战</text>
+    <text x="688" y="520">工具</text>
   </g>
-
-  <text x="96" y="380" fill="url(#headline)" font-family="'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="112" font-weight="800" letter-spacing="-3">从不知道，到做得到</text>
-
-  <text x="96" y="438" fill="#CBD5E1" font-family="'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="30" font-weight="500">系统讲解 Agent 原理 · 主流框架 · 工程实战</text>
-
-  <line x1="96" y1="500" x2="1104" y2="500" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1" />
-
-  <g font-family="'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif" font-size="22" font-weight="500" fill="#CBD5E1">
-    <text x="96" y="540">入门</text>
-    <text x="226" y="540">原理</text>
-    <text x="356" y="540">框架</text>
-    <text x="486" y="540">实战</text>
-    <text x="616" y="540">工具</text>
+  <g fill="#2563EB">
+    <circle cx="200" cy="514" r="3" />
+    <circle cx="350" cy="514" r="3" />
+    <circle cx="500" cy="514" r="3" />
+    <circle cx="650" cy="514" r="3" />
   </g>
-  <g fill="#22D3EE">
-    <circle cx="186" cy="534" r="2.5" />
-    <circle cx="316" cy="534" r="2.5" />
-    <circle cx="446" cy="534" r="2.5" />
-    <circle cx="576" cy="534" r="2.5" />
-  </g>
-
-  <text x="1104" y="540" text-anchor="end" fill="#94A3B8" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="600">aiagentguide.cn</text>
+  <text x="1112" y="520" text-anchor="end" fill="#64748B" font-family="Inter, 'Helvetica Neue', Arial, sans-serif" font-size="20" font-weight="650">aiagentguide.cn</text>
 </svg>
