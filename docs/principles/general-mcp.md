@@ -23,6 +23,14 @@ draft: false
 noindex: true
 ---
 # 通用 Agent 原理：MCP
+::: warning 必读｜栏目调整说明
+
+目前，原理栏目的内容还不够浅显，也不够深入。相关基础内容已经合并到[入门栏目](/getting-started/)，建议先从入门栏目开始学习。
+
+原理栏目会继续保留。后续这里将逐步转向更细致、更深入的技术底层原理讲解，并持续替换和完善现有内容。
+
+:::
+
 
 讲完 [04-工具](./general-tools.md) 和 [06-Skill](./general-skills.md) 之后，接下来就该讲 MCP 了。
 
