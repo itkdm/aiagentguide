@@ -25,6 +25,7 @@ export const gettingStartedSidebar: DefaultTheme.Sidebar = {
   {
     text: '番外篇',
     items: [
+      { text: 'Tool Calling', link: '/getting-started/tool-calling' },
       { text: 'MCP', link: '/getting-started/mcp' },
       { text: 'Agent Skills', link: '/getting-started/agent-skills' },
       { text: 'Agent Memory', link: '/getting-started/agent-memory' },
