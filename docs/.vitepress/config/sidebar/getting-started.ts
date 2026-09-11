@@ -21,6 +21,17 @@ export const gettingStartedSidebar: DefaultTheme.Sidebar = {
       { text: 'Agent 开发学习路线', link: '/getting-started/learning-path' },
       { text: 'Agent 开发 FAQ', link: '/getting-started/faq' }
     ]
+  },
+  {
+    text: '番外篇',
+    items: [
+      { text: 'MCP', link: '/getting-started/mcp' },
+      { text: 'Agent Skills', link: '/getting-started/agent-skills' },
+      { text: 'Agent Memory', link: '/getting-started/agent-memory' },
+      { text: 'Multi-Agent', link: '/getting-started/multi-agent' },
+      { text: 'A2A', link: '/getting-started/a2a' },
+      { text: 'Agent Engineering', link: '/getting-started/agent-engineering' }
+    ]
   }
 ],
 }
