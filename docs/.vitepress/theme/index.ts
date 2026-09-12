@@ -13,10 +13,12 @@ import ImageCarousel from './components/ImageCarousel.vue'
 import SingleImagePreview from './components/SingleImagePreview.vue'
 import ContentSwitcher from './components/ContentSwitcher.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
+import ProjectList from './components/ProjectList.vue'
 import './custom.css'
 import './styles/home.css'
 import './styles/mermaid-diagram.css'
 import './styles/mindmap-diagram.css'
+import './styles/projects.css'
 import Layout from './Layout.vue'
 
 export default {
@@ -37,5 +39,6 @@ export default {
     app.component('SingleImagePreview', SingleImagePreview)
     app.component('ContentSwitcher', ContentSwitcher)
     app.component('Breadcrumb', Breadcrumb)
+    app.component('ProjectList', ProjectList)
   }
 }

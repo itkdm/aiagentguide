@@ -105,6 +105,51 @@ test('page not in sidebar without title returns empty', () => {
   assert.deepEqual(buildBreadcrumbChain('/some/unknown/page', siteSidebar), [])
 })
 
+test('project homepage includes project practice hub and project name', () => {
+  const chain = buildBreadcrumbChain(
+    '/projects/billing/',
+    siteSidebar,
+    '生产级计费系统实战'
+  )
+
+  assert.deepEqual(texts(chain), ['项目实践', 'CostFlow - AI 应用计费系统'])
+  assert.deepEqual(links(chain), ['/projects/', '/projects/billing/'])
+})
+
+test('project directory homepage keeps the lightweight project sidebar scope', () => {
+  const chain = buildBreadcrumbChain('/projects/', siteSidebar, '项目实践中心')
+
+  assert.deepEqual(texts(chain), ['概览'])
+  assert.equal(chain[0].link, '/projects/')
+})
+
+test('deep project article keeps project context before sidebar hierarchy', () => {
+  const projectSidebar = {
+    '/projects/billing/': [
+      {
+        text: '生产级计费系统实战',
+        items: [
+          { text: '概览', link: '/projects/billing/' },
+          {
+            text: '第一阶段：基础设计',
+            items: [
+              { text: '概览', link: '/projects/billing/phase-one/' },
+              { text: '计费模型设计', link: '/projects/billing/phase-one/billing-model' }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  const chain = buildBreadcrumbChain(
+    '/projects/billing/phase-one/billing-model',
+    projectSidebar,
+    '计费模型设计'
+  )
+
+  assert.deepEqual(texts(chain), ['项目实践', '生产级计费系统实战', '第一阶段：基础设计', '计费模型设计'])
+})
+
 // ---------- Case 7: 与 SEO JSON-LD 同源（position 连续、含首页） ----------
 test('breadcrumb chain aligns with BreadcrumbList JSON-LD structure', async () => {
   const { createSeoHead } = await import('./seo.ts')

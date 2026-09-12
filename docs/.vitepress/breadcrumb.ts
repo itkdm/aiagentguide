@@ -5,6 +5,21 @@ export interface BreadcrumbNode {
   link: string
 }
 
+function isProjectRoute(path: string) {
+  return path.startsWith('projects/')
+}
+
+function prependProjectHub(chain: BreadcrumbNode[], currentPath: string) {
+  if (!isProjectRoute(currentPath)) {
+    return chain
+  }
+
+  return [
+    { text: '项目实践', link: '/projects/' },
+    ...chain.filter((item) => item.text !== '全部项目')
+  ]
+}
+
 /**
  * 将任意路径统一为 clean-url 形式：
  * 去掉首尾斜杠、去掉 .html / .md 后缀、合并多余斜杠。
@@ -81,6 +96,32 @@ function resolveGroupLink(item: SidebarItem): string {
   return (firstLinked?.link as string) || ''
 }
 
+function getSidebarItems(
+  sidebar: DefaultTheme.Sidebar | DefaultTheme.MultiSidebar,
+  currentPath: string
+): SidebarItem[] {
+  if (Array.isArray(sidebar)) {
+    return sidebar as SidebarItem[]
+  }
+
+  const matchingEntries = Object.entries(sidebar)
+    .filter(([scope]) => {
+      const normalizedScope = normalizePath(scope)
+      return currentPath === normalizedScope || currentPath.startsWith(`${normalizedScope}/`)
+    })
+    .sort(([leftScope], [rightScope]) => rightScope.length - leftScope.length)
+
+  const selectedEntry = matchingEntries[0]?.[1]
+
+  if (selectedEntry) {
+    return (Array.isArray(selectedEntry) ? selectedEntry : selectedEntry.items ?? []) as SidebarItem[]
+  }
+
+  return Object.values(sidebar).flatMap((entry) =>
+    Array.isArray(entry) ? entry : entry.items ?? []
+  ) as SidebarItem[]
+}
+
 /**
  * 构建面包屑层级链（不含“首页”）。
  *
@@ -117,18 +158,14 @@ export function buildBreadcrumbChain(
     return pageTitle ? [{ text: pageTitle, link: `/${currentPath}` }] : []
   }
 
-  const groups = Array.isArray(sidebar)
-    ? sidebar
-    : Object.values(sidebar).flatMap((entry) =>
-        Array.isArray(entry) ? entry : entry.items ?? []
-      )
+  const groups = getSidebarItems(sidebar, currentPath)
 
   const rawChain = findChain(groups as SidebarItem[], currentPath)
 
   if (!rawChain) {
     // 页面不在任何 sidebar 中：合理 fallback
     if (pageTitle) {
-      return [{ text: pageTitle, link: `/${currentPath}` }]
+      return prependProjectHub([{ text: pageTitle, link: `/${currentPath}` }], currentPath)
     }
     return []
   }
@@ -152,5 +189,5 @@ export function buildBreadcrumbChain(
     }
   }
 
-  return chain
+  return prependProjectHub(chain, currentPath)
 }
