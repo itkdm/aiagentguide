@@ -38,7 +38,7 @@ sidebar: true
 
 项目不会限定在某一种语言或框架。现阶段我们会先从大多数同学比较熟悉的工程体系开始，语言上更倾向于 Java，前端则以 Vue、React 为主。
 
-[若依](https://github.com/yangzongzhuan/RuoYi-Vue)、[芋道](https://github.com/YunaiV/ruoyi-vue-pro)等二次开发框架在不少中小型企业项目中都有实际应用，后续我们也会基于这类成熟工程体系，重点开发 Agent 相关模块。随着项目增加，再逐步加入 Python、TypeScript、Go 等技术栈。
+[若依](https://github.com/yangzongzhuan/RuoYi-Vue)、[RuoYi Vue Pro](https://github.com/YunaiV/ruoyi-vue-pro)等二次开发框架在不少中小型企业项目中都有实际应用，后续我们也会基于这类成熟工程体系，重点开发 Agent 相关模块。随着项目增加，再逐步加入 Python、TypeScript、Go 等技术栈。
 
 语言只是实现方式，更重要的是理解 Agent 相关能力如何一步步进入一个可以长期维护和继续发展的系统。
 
