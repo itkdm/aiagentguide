@@ -8,12 +8,16 @@ docs/.vitepress/dist/
 .vitepress/verify-dist/
 
 # Internal agent files
+.agents/
 content-plans/
 .codex/
 .workbuddy/
 CONTENT_README.md
 AGENTS.md
 Agent.md
+
+# Local planning notes at any directory level
+info.md
 
 # Logs
 pnpm-debug.log*

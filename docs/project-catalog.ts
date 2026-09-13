@@ -12,10 +12,10 @@ export interface ProjectCatalogItem {
 
 export const projectCatalog: ProjectCatalogItem[] = [
   {
-    slug: 'billing',
+    slug: 'costflow',
     name: 'CostFlow - AI 应用计费系统',
-    href: '/projects/intro/billing/',
-    contentHref: '/projects/billing/',
+    href: '/projects/intro/costflow/',
+    contentHref: '/projects/costflow/',
     summary: '面向 AI 应用的用量、成本与计费系统',
     language: undefined
   }

@@ -38,13 +38,15 @@ CostFlow 是「项目实践」栏目的第一个项目。
 
 CostFlow 就从这里开始。
 
+<a class="project-primary-action" href="/projects/costflow/">进入 CostFlow - AI 应用计费系统</a>
+
 ## 这个项目适合谁
 
 如果你已经有一些 Java 后端基础，同时准备继续学习 AI 应用或者 Agent 开发，那么我非常推荐把 CostFlow 作为「项目实践」的第一个项目。
 
 因为你不需要突然从熟悉的后端开发跳进一个完全不同的技术体系。
 
-前期仍然会接触很多熟悉的 Java 工程问题，后面再逐渐把模型调用、Token统计、费用计算、工具执行等能力接进来。
+前期仍然会接触很多熟悉的 Java 工程问题，后面再逐渐把模型调用、Token 统计、费用计算、工具执行等能力接进来。
 
 ## 什么情况下可以先跳过
 
@@ -75,5 +77,3 @@ CostFlow 更适合想把后端工程能力和 AI 应用开发连接起来的人�
 很多学传统后端开发的同学，就会比较犹豫，我到底该不该转到 AI 应用开发？
 
 如果你也处于这种犹豫阶段，那么 CostFlow 非常适合作为一个过渡项目。
-
-<a class="project-primary-action" href="/projects/billing/">进入 CostFlow - AI 应用计费系统</a>

@@ -105,15 +105,15 @@ test('page not in sidebar without title returns empty', () => {
   assert.deepEqual(buildBreadcrumbChain('/some/unknown/page', siteSidebar), [])
 })
 
-test('project homepage includes project practice hub and project name', () => {
+test('project homepage includes project practice hub and overview', () => {
   const chain = buildBreadcrumbChain(
-    '/projects/billing/',
+    '/projects/costflow/',
     siteSidebar,
     '生产级计费系统实战'
   )
 
-  assert.deepEqual(texts(chain), ['项目实践', 'CostFlow - AI 应用计费系统'])
-  assert.deepEqual(links(chain), ['/projects/', '/projects/billing/'])
+  assert.deepEqual(texts(chain), ['项目实践', '概览'])
+  assert.deepEqual(links(chain), ['/projects/', '/projects/costflow/'])
 })
 
 test('project directory homepage keeps the lightweight project sidebar scope', () => {
@@ -125,16 +125,16 @@ test('project directory homepage keeps the lightweight project sidebar scope', (
 
 test('deep project article keeps project context before sidebar hierarchy', () => {
   const projectSidebar = {
-    '/projects/billing/': [
+    '/projects/costflow/': [
       {
         text: '生产级计费系统实战',
         items: [
-          { text: '概览', link: '/projects/billing/' },
+          { text: '概览', link: '/projects/costflow/' },
           {
             text: '第一阶段：基础设计',
             items: [
-              { text: '概览', link: '/projects/billing/phase-one/' },
-              { text: '计费模型设计', link: '/projects/billing/phase-one/billing-model' }
+              { text: '概览', link: '/projects/costflow/phase-one/' },
+              { text: '计费模型设计', link: '/projects/costflow/phase-one/billing-model' }
             ]
           }
         ]
@@ -142,7 +142,7 @@ test('deep project article keeps project context before sidebar hierarchy', () =
     ]
   }
   const chain = buildBreadcrumbChain(
-    '/projects/billing/phase-one/billing-model',
+    '/projects/costflow/phase-one/billing-model',
     projectSidebar,
     '计费模型设计'
   )

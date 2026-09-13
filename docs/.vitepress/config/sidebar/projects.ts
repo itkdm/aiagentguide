@@ -1,5 +1,5 @@
 import type { DefaultTheme } from 'vitepress'
-import { billingSidebar } from './projects/billing.ts'
+import { costflowSidebar } from './projects/costflow.ts'
 import { projectCatalog } from '../../../project-catalog.ts'
 
 export const projectsSidebar: DefaultTheme.Sidebar = {
@@ -13,5 +13,5 @@ export const projectsSidebar: DefaultTheme.Sidebar = {
       }))
     }
   ],
-  ...billingSidebar
+  ...costflowSidebar
 }

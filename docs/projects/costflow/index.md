@@ -127,7 +127,7 @@ Pricing 负责管理这些计价规则。
 
 这一整条链路。
 
-## 和  Agent 怎么连接
+## 和 Agent 怎么连接
 
 CostFlow 第一阶段不会把所有设计都限定在 Agent 上。
 

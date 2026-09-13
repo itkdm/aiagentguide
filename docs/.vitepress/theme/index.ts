@@ -14,6 +14,7 @@ import SingleImagePreview from './components/SingleImagePreview.vue'
 import ContentSwitcher from './components/ContentSwitcher.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import ProjectList from './components/ProjectList.vue'
+import PromptBlock from './components/PromptBlock.vue'
 import './custom.css'
 import './styles/home.css'
 import './styles/mermaid-diagram.css'
@@ -40,5 +41,7 @@ export default {
     app.component('ContentSwitcher', ContentSwitcher)
     app.component('Breadcrumb', Breadcrumb)
     app.component('ProjectList', ProjectList)
+    app.component('PromptBlock', PromptBlock)
+    app.component('CodingAgentPrompt', PromptBlock)
   }
 }
