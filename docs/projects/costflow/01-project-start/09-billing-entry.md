@@ -637,6 +637,4 @@ Spring AI
 
 现在问题已经明确，下一阶段我们会先调研成熟的 AI 计费方案，再据此确定 CostFlow V1 的产品边界和实现方向。
 
-下一篇：
-
-> **[先看看别人怎么做：调研 AI 计费与 Usage Billing 产品](/projects/costflow/02-solution/01-research)**
+后续我们会先调研成熟的 AI 计费方案，再据此确定 CostFlow V1 的产品边界和实现方向。
