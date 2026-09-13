@@ -641,7 +641,7 @@ chatModel.call("hello")
 
 它已经形成一套真正的聊天业务。
 
-![第一次真实模型对话成功](https://oss.aiagentguide.cn/projects/billing/costflow-figure-07-chat-success.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/billing/costflow-figure-07-chat-success.png" alt="第一次真实模型对话成功" />
 
 ---
 

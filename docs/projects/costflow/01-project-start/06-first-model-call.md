@@ -77,11 +77,11 @@ API Key
 
 列表页会展示所属平台、名称、密钥、自定义 API URL 和状态，并提供“新增”按钮。
 
-![AI API 密钥管理页面](https://oss.aiagentguide.cn/projects/billing/costflow-figure-01-api-key.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/billing/costflow-figure-01-api-key.png" alt="AI API 密钥管理页面" />
 
 点击“新增”，系统会打开已有的 API Key 表单弹窗，包含所属平台、名称、密钥、自定义 API URL 和状态。
 
-![新增 API Key 表单](https://oss.aiagentguide.cn/projects/billing/costflow-figure-02-api-key-form.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/costflow/costflow-figure-02-api-key-form.png" alt="新增 API Key 表单" />
 
 在“所属平台”中选择实际使用的平台，平台值会通过 `AiPlatformEnum` 校验。名称可以填写“我的 DeepSeek”或“CostFlow Chat”，它只是便于识别的管理名称。
 
@@ -91,11 +91,11 @@ API Key
 
 API Key 只解决“怎么访问模型服务”，还需要在 AI 模型管理页面中配置具体模型。
 
-![AI 模型管理页面](https://oss.aiagentguide.cn/projects/billing/costflow-figure-03-models.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/billing/costflow-figure-03-models.png" alt="AI 模型管理页面" />
 
 点击“新增”，填写所属平台、模型类型、API 秘钥、模型名称、模型标识、排序和状态。模型类型选择 Chat 后，还需要填写温度参数、回复 Token 数和上下文数量。
 
-![新增聊天模型表单](https://oss.aiagentguide.cn/projects/billing/costflow-figure-04-model-form.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/billing/costflow-figure-04-model-form.png" alt="新增聊天模型表单" />
 
 “API 秘钥”选择刚才创建的记录。
 
@@ -121,7 +121,7 @@ maxContexts = 10
 
 页面包含左侧对话列表、右侧当前对话、模型设置、消息列表、输入框、上下文开关、联网搜索开关和发送按钮。
 
-![AI 聊天主页面](https://oss.aiagentguide.cn/projects/billing/costflow-figure-05-chat.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/billing/costflow-figure-05-chat.png" alt="AI 聊天主页面" />
 
 点击“新建对话”。当前前端不会先弹出选择模型窗口，而是直接调用后端创建 Conversation。没有指定角色模型时，后端会自动选择启用状态、Chat 类型且排序最小的模型。
 
@@ -131,7 +131,7 @@ maxContexts = 10
 
 弹窗包含角色设定、模型、温度参数、回复数 Token 数和上下文数量。模型下拉框只会请求 Chat 类型模型。
 
-![聊天对话的模型设定弹窗](https://oss.aiagentguide.cn/projects/billing/costflow-figure-06-chat-settings.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/billing/costflow-figure-06-chat-settings.png" alt="聊天对话的模型设定弹窗" />
 
 确认选择刚刚创建的聊天模型后，点击确定。
 
@@ -144,7 +144,7 @@ maxContexts = 10
 ```
 正常情况下，模型回答会逐步出现在页面上，而不是等待完整响应后一次性刷新。
 
-![第一次真实模型对话成功](https://oss.aiagentguide.cn/projects/billing/costflow-figure-07-chat-success.png)
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/billing/costflow-figure-07-chat-success.png" alt="第一次真实模型对话成功" />
 
 ## 确认这次调用真的成功了
 
