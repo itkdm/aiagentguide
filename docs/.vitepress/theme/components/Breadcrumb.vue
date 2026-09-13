@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useData, useRoute } from 'vitepress'
+import { useData, useRoute, withBase } from 'vitepress'
 import type { DefaultTheme } from 'vitepress'
 import { buildBreadcrumbChain } from '../../breadcrumb'
 
@@ -23,6 +23,10 @@ const shouldRender = computed(() => {
   if (typeof pageClass === 'string') {
     const pageClasses = pageClass.split(/\s+/)
     if (pageClasses.includes('tools-directory') || pageClasses.includes('tool-detail-page')) {
+      return false
+    }
+
+    if (pageClasses.includes('projects-directory')) {
       return false
     }
   }
@@ -64,7 +68,7 @@ const displayItems = breadcrumbItems
     class="doc-breadcrumb"
     aria-label="面包屑导航"
   >
-    <a class="doc-breadcrumb-item doc-breadcrumb-home" href="/">
+    <a class="doc-breadcrumb-item doc-breadcrumb-home" :href="withBase('/')">
       首页
     </a>
 
@@ -73,7 +77,7 @@ const displayItems = breadcrumbItems
       <a
         v-if="item.link && index < displayItems.length - 1"
         class="doc-breadcrumb-item"
-        :href="item.link"
+        :href="withBase(item.link)"
       >
         {{ item.text }}
       </a>
