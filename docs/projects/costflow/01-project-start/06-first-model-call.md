@@ -81,7 +81,7 @@ API Key
 
 点击“新增”，系统会打开已有的 API Key 表单弹窗，包含所属平台、名称、密钥、自定义 API URL 和状态。
 
-<SingleImagePreview src="https://oss.aiagentguide.cn/projects/costflow/costflow-figure-02-api-key-form.png" alt="新增 API Key 表单" />
+<SingleImagePreview src="https://oss.aiagentguide.cn/projects/costflow/costflow-figure-02-api-key-form-v2.png" alt="新增 API Key 表单" />
 
 在“所属平台”中选择实际使用的平台，平台值会通过 `AiPlatformEnum` 校验。名称可以填写“我的 DeepSeek”或“CostFlow Chat”，它只是便于识别的管理名称。
 
