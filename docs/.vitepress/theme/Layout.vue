@@ -6,6 +6,7 @@ import HomeParticles from './components/HomeParticles.vue'
 import HomeTypewriter from './components/HomeTypewriter.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import ReadingProgress from './components/ReadingProgress.vue'
+import AnnouncementBar from './components/AnnouncementBar.vue'
 import { useHtmlUrlRedirect } from './composables/useHtmlUrlRedirect'
 
 const { Layout } = DefaultTheme
@@ -18,6 +19,9 @@ useHtmlUrlRedirect()
     <Layout>
         <template #layout-top>
             <ReadingProgress />
+            <ClientOnly>
+                <AnnouncementBar />
+            </ClientOnly>
         </template>
 
         <template #home-hero-before>

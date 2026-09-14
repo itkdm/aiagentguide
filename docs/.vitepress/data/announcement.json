@@ -1,0 +1,16 @@
+{
+  "id": "2026-09-site-update",
+  "enabled": true,
+  "content": [
+    {
+      "type": "text",
+      "value": "🎉 布吉岛 Agent 持续更新中，"
+    },
+    {
+      "type": "link",
+      "label": "先从入门栏目开始学习",
+      "href": "/getting-started/",
+      "target": "self"
+    }
+  ]
+}
