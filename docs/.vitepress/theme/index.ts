@@ -13,6 +13,7 @@ import ImageCarousel from './components/ImageCarousel.vue'
 import SingleImagePreview from './components/SingleImagePreview.vue'
 import ContentSwitcher from './components/ContentSwitcher.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
+import PlainExplanation from './components/PlainExplanation.vue'
 import './custom.css'
 import './styles/home.css'
 import './styles/mermaid-diagram.css'
@@ -37,5 +38,6 @@ export default {
     app.component('SingleImagePreview', SingleImagePreview)
     app.component('ContentSwitcher', ContentSwitcher)
     app.component('Breadcrumb', Breadcrumb)
+    app.component('PlainExplanation', PlainExplanation)
   }
 }
