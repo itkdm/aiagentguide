@@ -15,7 +15,7 @@ tags:
   - 任务编排
 author: 布吉岛
 lastUpdated: 2026-09-10
-status: published
+status: deprecated
 assets: none
 reviewed: false
 sourceType: original
