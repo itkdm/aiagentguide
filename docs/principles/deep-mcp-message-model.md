@@ -38,7 +38,7 @@ MCP 没有重新设计一套自己的 RPC （远程过程调用）消息格式�
 }
 ```
 
-`jsonrpc` 表示协议版本，`method` 表示要调用的方法，`params` 携带调用参数，`id` 则用来标识当前这一次 Request。
+`jsonrpc` 表示 JSON-RPC 协议版本，当前固定为 `"2.0"`；`method` 表示要调用的方法，`params` 携带调用参数，`id` 用来标识当前这一次 Request。MCP 自己的 Protocol Version 则由对应协议版本定义的位置携带，现代 MCP 位于 Request `_meta` 中。
 
 不管后面调用的是 `tools/list`、`tools/call`，还是 `resources/read`，在 JSON-RPC 看来，它们本质上都只是一个 Method Name。
 
@@ -151,6 +151,23 @@ Response 又不同，它不是主动产生的一种操作，而是某个 Request
 
 **Notification 是不要求对应 Response 的单向消息。**
 
+```mermaid
+flowchart LR
+    A[Request<br/>有 id] --> B[需要执行操作]
+    B --> C[Response<br/>携带相同 id]
+    A --> D[等待结果]
+
+    E[Notification<br/>没有 id] --> F[单向通知]
+    F -.不产生对应.-> G[JSON-RPC Response]
+
+    classDef request fill:#e8f3ff,stroke:#3b82f6,color:#172554
+    classDef response fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    classDef notification fill:#fff4e5,stroke:#f59e0b,color:#78350f
+    class A,B,D request
+    class C response
+    class E,F,G notification
+```
+
 这种模型从早期 MCP 一直存在，但在 `2026-07-28` 之后，有一个非常重要的变化：
 
 **Request 的方向被收紧了。**
@@ -220,6 +237,24 @@ Response.id = 102
 回来以后，Client 就知道应该完成哪一个 Pending Request。
 
 所以 JSON-RPC 的 `id` 本质上是一次 RPC 的**关联标识**。
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+
+    par 并发请求
+        C->>S: Request id=101<br/>tools/list
+        C->>S: Request id=102<br/>resources/read
+        C->>S: Request id=103<br/>another method
+    end
+
+    S-->>C: Response id=103
+    S-->>C: Response id=101
+    S-->>C: Response id=102
+
+    Note over C: pending[id] 将每个 Response<br/>关联回对应 Request
+```
 
 它不是 Tool ID，也不是 Session ID，更不是 Agent Run ID。
 

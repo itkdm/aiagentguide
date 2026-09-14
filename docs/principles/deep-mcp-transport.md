@@ -97,6 +97,24 @@ MCP 的处理方式非常简单：
 
 它没有再设计 Length Prefix，也没有引入复杂的 Binary Frame。因为 MCP Message 本身就是 JSON，而 JSON 经过序列化以后完全可以压缩成单行，换行天然可以作为消息分隔符。
 
+```mermaid
+flowchart LR
+    H[Host / MCP Client] -->|写入 stdin| P[MCP Server 子进程]
+    P -->|写出 stdout| H
+    H --> I[读取字节流]
+    I --> J{遇到换行符？}
+    J -->|否| I
+    J -->|是| K[取出一条完整 JSON-RPC Message]
+    K --> L[按 id / method 分发]
+
+    classDef process fill:#e8f3ff,stroke:#3b82f6,color:#172554
+    classDef frame fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    classDef decision fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
+    class H,P process
+    class I,K,L frame
+    class J decision
+```
+
 不过 stdio 还有一个值得注意的地方：**所有 Request、Response 和 Notification 都共享同一条 stdout 通道。**
 
 假设 Client 同时发送三个 Request，Server 的 Response 完全可以按照：
@@ -291,6 +309,27 @@ stdio 是：
 `Message B → POST B`
 
 `Message C → POST C`
+
+```mermaid
+flowchart LR
+    C[MCP Client] -->|HTTP POST<br/>JSON-RPC / MCP Message| E[MCP Endpoint]
+    E --> H[HTTP 层<br/>Method、Header、Status、Stream]
+    E --> M[MCP 层<br/>Request ID、Method、Params、Result]
+    E --> R{响应方式}
+    R -->|无需流式返回| J[application/json<br/>单个 JSON Response]
+    R -->|需要流式返回| S[text/event-stream<br/>SSE Response]
+    J --> C
+    S --> C
+
+    classDef client fill:#e8f3ff,stroke:#3b82f6,color:#172554
+    classDef endpoint fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
+    classDef layer fill:#fff4e5,stroke:#f59e0b,color:#78350f
+    classDef result fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    class C client
+    class E endpoint
+    class H,M,R layer
+    class J,S result
+```
 
 ## 为什么 Server 有时直接返回 JSON，有时却要返回 SSE？
 

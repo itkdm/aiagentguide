@@ -71,6 +71,23 @@ Server 更不需要理解整个 Agent 如何规划任务，也不需要知道用
 
 **Host 负责“我要完成什么”；Client 负责“怎么用 MCP 表达”；Server 负责“这个具体能力怎么执行”。**
 
+```mermaid
+flowchart LR
+    H[Host<br/>任务编排、模型集成、权限控制] --> C1[MCP Client 1<br/>协议适配器]
+    H --> C2[MCP Client 2<br/>协议适配器]
+    H --> C3[MCP Client 3<br/>协议适配器]
+    C1 --> S1[GitHub Server<br/>仓库、Issue、Pull Request]
+    C2 --> S2[Google Drive Server<br/>文件能力]
+    C3 --> S3[Cloudflare Server<br/>域名、DNS、Workers]
+
+    classDef host fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
+    classDef client fill:#e8f3ff,stroke:#3b82f6,color:#172554
+    classDef server fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    class H host
+    class C1,C2,C3 client
+    class S1,S2,S3 server
+```
+
 举个简单的例子。
 
 假设我们在 Codex 里接入 GitHub MCP Server，并发送消息“我想要查看我当前 GitHub 有哪些仓库”。此时，**Codex 是 Host**；Codex 内部会有一块负责 MCP 通信的代码或组件，这就是 **MCP Client**。它通常由应用开发者集成到自己的软件里，负责按照 MCP 协议向对应的 Server 发送请求、接收结果。
@@ -265,6 +282,30 @@ MCP Client 构造 `tools/call` 请求，通过 stdio 或 Streamable HTTP 发送�
 **MCP Server → MCP Client → Host → Agent Runtime → Model Context**
 
 Host 把 MCP Tool Result 转换成模型 API 可以接受的 Tool Result Message，再发起下一次模型推理。
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant H as Host / Agent Runtime
+    participant L as LLM
+    participant C as MCP Client
+    participant S as MCP Server
+
+    U->>H: 提出任务
+    H->>C: 获取 Tool Definition
+    C->>S: tools/list
+    S-->>C: Tool Schema
+    C-->>H: 返回工具定义
+    H->>L: 提供模型可理解的 Tool Schema
+    L-->>H: 生成 Tool Call 意图
+    H->>C: 映射到对应 MCP Client
+    C->>S: tools/call
+    S-->>C: Tool Result
+    C-->>H: 返回结果
+    H->>L: 注入 Tool Result
+    L-->>H: 生成最终回答
+    H-->>U: 返回结果
+```
 
 模型最终才会根据：
 
