@@ -35,9 +35,9 @@ function closeQrCode() {
     </div>
   </section>
 
-  <button v-else class="community-floating-button" type="button" @click="openQrCode">
-    <span aria-hidden="true">💬</span>
-    加入交流群
+  <button v-else class="community-side-tab" type="button" @click="openQrCode">
+    <span class="community-side-icon" aria-hidden="true">💬</span>
+    <span class="community-side-label">交流群</span>
   </button>
 
   <Teleport to="body">
@@ -126,24 +126,44 @@ function closeQrCode() {
   object-fit: contain;
 }
 
-.community-floating-button {
+.community-side-tab {
   position: fixed;
-  right: 24px;
-  bottom: 24px;
+  top: 42%;
+  right: 0;
   z-index: 20;
-  padding: 10px 16px;
-  border: 1px solid var(--vp-c-brand-1);
-  border-radius: 999px;
-  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 56px;
+  padding: 12px 8px;
+  border: 1px solid var(--vp-c-divider);
+  border-right: 0;
+  border-radius: 14px 0 0 14px;
+  color: var(--vp-c-text-2);
   background: var(--vp-c-brand-1);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
   cursor: pointer;
   font: inherit;
   font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.community-floating-button span {
-  margin-right: 4px;
+.community-side-tab:hover {
+  transform: translateX(-4px);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
+}
+
+.community-side-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.community-side-label {
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  writing-mode: vertical-rl;
 }
 
 .community-modal {
@@ -218,9 +238,10 @@ function closeQrCode() {
     font-size: 24px;
   }
 
-  .community-floating-button {
-    right: 16px;
-    bottom: 16px;
+  .community-side-tab {
+    top: 40%;
+    width: 48px;
+    padding: 10px 6px;
   }
 }
 </style>
