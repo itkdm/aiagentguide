@@ -410,7 +410,7 @@ com.example/vector-search
 
 为什么不能直接`tasks`、`ui`、`memory`？
 
-因为 Extension 是开放生态。 
+因为 Extension 是开放生态。
 
 假设：
 
