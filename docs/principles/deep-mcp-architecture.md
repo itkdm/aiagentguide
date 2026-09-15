@@ -470,3 +470,25 @@ Workflow 到达某一步 → 调 MCP Tool
 真正把二者连接起来的是 **Host / Agent Runtime 的实现**。
 
 这也是为什么架构中要强调 Host 的存在。
+
+## 总结
+
+MCP 本质上采用 Client-Server（客户端—服务器）架构。真正通过 MCP Protocol 进行通信的是 MCP Client 和 MCP Server，而在 Client 一侧，MCP 又进一步引入了 Host 这个上层应用角色，用来承载和管理一个或多个 MCP Client。
+
+其中，**Host 是整个系统的控制中心**，负责模型集成、任务编排、权限控制以及多个 MCP Server 之间的能力组合；**MCP Client 是 Host 内部的协议适配器**，负责按照 MCP 协议与具体 Server 通信；**MCP Server 则专注于暴露和执行自己的 Tools、Resources、Prompts 等能力**。
+
+一个 Host 可以同时管理多个 MCP Client，而一个 Client 实例通常面向一个特定的 MCP Server。这样不同 Server 的能力空间、生命周期、协议上下文和安全边界都能够彼此隔离，而真正的多 Server 编排仍然留在 Host 中完成。
+
+同时，LLM 并不会直接向 MCP Server 发送请求。模型只负责理解任务并产生 Tool Call 意图，Host / Agent Runtime 再把这个调用映射到对应的 MCP Client，由 Client 发出真正的 MCP `tools/call`。Tool Result 返回以后，也需要经过 Host 转换成模型能够继续理解的上下文。
+
+因此，理解 MCP 架构最重要的一点就是：
+
+**Host 负责“我要完成什么”，Client 负责“怎么用 MCP 表达”，Server 负责“这个具体能力怎么执行”。**
+
+## 相关面试题
+
+- **MCP 的架构是什么？Host、Client 和 Server 分别负责什么？**
+- **为什么一个 MCP Host 可以管理多个 Client，而一个 Client 通常只对应一个 Server？**
+- **LLM、Agent Runtime 和 MCP 是如何串联起来的？**
+- **为什么 MCP 的多 Server 编排应该由 Host 负责，而不是交给 MCP Server？**
+- **MCP 和 Tool Calling 是什么关系？LLM 会直接调用 MCP Server 吗？**
