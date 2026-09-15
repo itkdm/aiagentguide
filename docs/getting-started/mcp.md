@@ -14,7 +14,7 @@ tags:
   - Model Context Protocol
   - 入门
 author: 布吉岛
-lastUpdated: 2026-09-11
+lastUpdated: 2026-09-15
 status: published
 assets: none
 reviewed: true
@@ -99,7 +99,27 @@ MCP 做的事情与此类似：让不同外部系统按照同一套规则向 Age
 
 **模型上下文协议。**
 
-官方目前将它定义为一个开放标准，用来连接 AI 应用与存放数据、工具和其他能力的外部系统。
+这里有一个很重要的关键词：**协议**。
+
+协议不是某个工具，也不是某个 SDK，而是通信双方共同遵守的一组规则。
+
+比如两个系统要互相通信，至少要先约定：
+
+```text
+双方分别是谁
+消息应该长什么样
+应该按照什么顺序交互
+成功和错误如何表示
+双方支持哪些能力
+```
+
+HTTP 就是一种大家都熟悉的协议。浏览器和 Web 服务器并不需要提前约定一套私有格式，而是按照 HTTP 的规则发送请求、返回响应。
+
+MCP 做的事情也类似，只是它面对的是 AI 应用和外部能力。官方将 MCP 定义为一个开放协议，用来规范 LLM 应用与外部数据源、工具和其他能力之间的连接。
+
+**MCP 是一套让 AI 应用与外部能力按照统一规则进行通信和协作的协议。**
+
+MCP 使用 JSON-RPC 表示消息，并定义 Host、Client、Server 如何初始化连接、协商能力、发现 Tools/Resources/Prompts，以及调用完成后如何返回结果。
 
 可以先这样理解：
 
@@ -114,7 +134,7 @@ MCP 进一步解决：
 
 例如 GitHub 提供了一个 MCP Server。
 
-以后不同 MCP Host 就可以按照统一协议连接它，而不是每个 Host 都重新理解 GitHub 的内部实现。
+以后不同 MCP Host 就可以按照同一套协议连接它，而不是每个 Host 都重新理解 GitHub 的内部实现。
 
 ---
 
@@ -243,11 +263,75 @@ MCP Server 又有本地和远程两种常见形态。
 
 远程 Server 则运行在网络上的服务器中，例如 Notion、Sentry 等 SaaS 服务可以直接提供一个远程 MCP 地址。
 
-对于我们使用者来说，两者最终的体验都很接近：
+这里还需要把两个容易混淆的分类分开：
 
-> **先让 Host 连接这个 Server，再使用 Server 暴露出来的能力。**
+```text
+本地 / 远程
+→ Server 部署在哪里
 
-具体数据到底怎样传输、不同 Transport 有什么区别，则属于协议实现层的问题，入门阶段我们先不展开，如果感兴趣的话，大家可以看我们后续出的原理栏目的讲解。
+stdio / Streamable HTTP
+→ MCP 消息通过什么方式传输
+```
+
+MCP 协议规定“双方应该怎样交流”，Transport 则负责“这些消息具体怎么送过去”。
+
+### stdio：适合本地 Server
+
+`stdio` 是 standard input/output 的缩写，也就是标准输入和标准输出。
+
+使用这种方式时，MCP Client 会启动一个 MCP Server 子进程，双方通过进程的 `stdin` 和 `stdout` 交换 MCP 消息：
+
+```text
+Host
+  ↓ 启动子进程
+MCP Server
+  ↓ stdin / stdout
+JSON-RPC 消息
+```
+
+它的特点是：
+
+* 不需要启动 HTTP 服务
+* 不需要对外暴露端口
+* Server 通常和 Host 在同一台电脑上运行
+* 日志一般写入 `stderr`，不能把普通日志混进 `stdout`
+
+所以本地文件、代码仓库和桌面应用这类场景，经常会使用 `stdio`。比如一个 Coding Agent 需要读取当前项目目录，就可以由 Host 启动一个本地文件系统 MCP Server。
+
+### Streamable HTTP：适合远程 Server
+
+`Streamable HTTP` 是通过 HTTP 访问 MCP Server 的传输方式。
+
+Server 独立运行，并提供一个 MCP 地址。Client 通过 HTTP 请求发送 MCP 消息，Server 再返回结果；在需要时，还可以使用 SSE（Server-Sent Events）传输流式消息。
+
+```text
+Host
+  ↓ HTTP POST / GET
+MCP Endpoint
+  ↓
+独立运行的 MCP Server
+```
+
+它更适合：
+
+* 远程部署的 MCP 服务
+* SaaS 产品提供的 MCP 接口
+* 企业内部统一部署的 MCP Server
+* 多个 Host 连接同一个 Server
+
+我们前面看到的 Notion MCP 地址，就属于这种使用方式。由于请求会经过网络，认证、Origin 校验、权限控制和 HTTPS 都需要认真处理。
+
+因此，第一次配置 MCP 时可以先这样判断：
+
+```text
+需要 Host 在本机启动一个 Server
+→  stdio
+
+已经有一个可访问的 MCP URL
+→  Streamable HTTP
+```
+
+这两种方式承载的仍然是同一套 MCP 协议，区别只是消息传输的通道不同。
 
 ---
 
@@ -537,7 +621,7 @@ MCP Server 能把真实系统能力交给 Agent，也意味着它可能获得真
 
 一个文件系统 Server 可能能够读取文件，一个 GitHub Server 可能能够修改仓库，一个数据库 Server 甚至可能拥有写入权限。
 
-我们不要完全详细 MCP ，权限越大，风险越大。
+我们不要因为 MCP 看起来方便，就忽略它背后的权限风险。
 
 尤其是从网络上找到第三方 Server 时，需要确认来源、查看它需要什么权限，以及它到底会访问哪些数据。Claude Code 官方文档也明确提醒，从外部内容获取信息的 MCP Server 可能带来 Prompt Injection 等风险。
 
@@ -554,7 +638,10 @@ MCP Server 能把真实系统能力交给 Agent，也意味着它可能获得真
 → 外部系统的连接方式太碎
 
 MCP 是什么
-→ AI 应用连接外部能力的开放标准
+→ AI 应用与外部能力进行通信和协作的开放协议
+
+怎么传输
+→ 本地常用 stdio，远程常用 Streamable HTTP
 
 谁在参与
 → Host / Client / Server
@@ -573,9 +660,8 @@ Server 能提供什么
 
 如果还想继续了解：
 
-> MCP 底层到底怎样通信？
-> 不同 Transport 有什么区别？
-> 协议消息到底长什么样？
+> MCP 的 JSON-RPC 消息长什么样？
+> 初始化和能力协商具体怎么进行？
 > 为什么 2026 年又从 Stateful Core 改成 Stateless Core？
 
 这些就不再属于我们当前入门阶段的问题了。
