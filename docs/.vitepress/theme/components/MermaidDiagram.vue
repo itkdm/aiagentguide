@@ -120,7 +120,7 @@ async function renderDiagram() {
         if (preview.isOpen.value && previewCanvasRef.value) {
             syncPreviewFromMainSvg()
             await waitForPaint()
-            previewViewport.reset()
+            previewViewport.fit()
         }
     } catch (err) {
         error.value = err instanceof Error ? err.message : 'Mermaid render failed.'
@@ -170,7 +170,7 @@ watch(
         await nextTick()
         syncPreviewFromMainSvg()
         await waitForPaint()
-        previewViewport.reset()
+        previewViewport.fit()
     },
     { flush: 'post' }
 )
