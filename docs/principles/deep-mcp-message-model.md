@@ -22,6 +22,65 @@ noindex: true
 
 # 深入 MCP：MCP 的消息模型是怎么设计的？
 
+```mermaid
+flowchart TB
+    A[业务意图] --> B[MCP Method + Params]
+    B --> M[MCP / JSON-RPC Message]
+
+    subgraph MSG[消息语义]
+        direction LR
+
+        RQ[Request<br/>有 id，需要结果]
+        RS[Response<br/>携带相同 id]
+        NT[Notification<br/>无 id，不要求 Response]
+
+        RQ -->|通过 id 关联| RS
+    end
+
+    M --> RQ
+    M --> NT
+
+    subgraph CTX[协议上下文]
+        direction LR
+
+        L[Legacy<br/>initialize 建立协议上下文<br/>后续消息依赖 Connection / Session]
+        N[Modern<br/>每条 Request 通过 _meta<br/>携带 protocolVersion / clientCapabilities]
+    end
+
+    M -. 不同协议版本决定<br/>消息如何被理解 .-> L
+    M -.-> N
+
+    subgraph TRANSPORT[Transport 只负责承载消息]
+        direction LR
+
+        S[stdio]
+        H[Streamable HTTP]
+    end
+
+    RQ --> T[Wire Message]
+    RS --> T
+    NT --> T
+
+    L -.-> V[按 MCP 版本解释和编码消息]
+    N -.-> V
+    V --> T
+
+    T --> S
+    T --> H
+
+    classDef business fill:#fff7ed,stroke:#f97316,color:#7c2d12
+    classDef message fill:#eff6ff,stroke:#3b82f6,color:#1e3a8a
+    classDef response fill:#ecfdf5,stroke:#10b981,color:#065f46
+    classDef context fill:#f5f3ff,stroke:#8b5cf6,color:#5b21b6
+    classDef transport fill:#f8fafc,stroke:#64748b,color:#334155
+
+    class A,B business
+    class M,RQ,NT message
+    class RS response
+    class L,N,V context
+    class T,S,H transport
+```
+
 
 ## MCP 为什么选择 JSON-RPC 2.0？
 
@@ -1120,3 +1179,31 @@ SDK 必须先知道：
 **Transport → JSON-RPC Message → 当前协议版本 Schema 校验 → Wire Codec → MCP Public Object → 业务 Handler**
 
 后面我们还会继续往 Transport 和真实 Request 生命周期下深入了解。
+
+## 总结
+
+MCP 并没有重新设计一套底层 RPC 消息格式，而是建立在 **JSON-RPC 2.0** 之上。JSON-RPC 负责定义 Request、Response、Notification、Request ID 和错误响应这些通用消息机制，MCP 则在此基础上进一步定义 `tools/call`、`resources/read` 等 Method 的具体语义。
+
+从消息类型来看，MCP 最基础的 Wire Message 仍然是 **Request、Response 和 Notification**。Request 携带 `id`，表示发送方需要得到结果；Response 使用相同的 `id` 与原 Request 建立关联；Notification 没有 `id`，因此它只表达单向事件，不要求对应的 JSON-RPC Response。也正因为 Request 和 Response 通过 `id` 关联，多个 MCP Request 才可以并发执行，而不需要按照发送顺序返回结果。
+
+`2026-07-28` 之后，MCP 的消息模型又发生了一个重要变化：协议开始从依赖连接上下文转向 **Self-contained Request（自描述请求）**。旧版中，Protocol Version、Client Capabilities 等信息主要通过 `initialize` 建立并保存在 Connection / Session Context 中；新版则要求每条 Request 自己在 `_meta` 中携带理解当前请求所需要的协议上下文，从而减少对前置 Session State 的依赖。
+
+与此同时，新版 MCP 也收紧了消息方向。Server 不再独立向 Client 发起 JSON-RPC Request，而是把需要 Client 继续提供输入的情况放回当前 Client Request 的生命周期中。为了表达这种更丰富的结果状态，新版 Result 又引入了 `resultType`：JSON-RPC 的 `result / error` 负责区分“调用成功还是失败”，而 MCP 的 `complete / input_required` 则进一步描述“这次成功响应是否已经真正完成”。
+
+因此，理解 MCP 消息模型时，可以抓住几条主线：
+
+- **JSON-RPC 决定消息的基本结构，MCP 决定消息在协议中的具体含义。**
+- **Request、Response 和 Notification 构成最基础的消息关系，Request ID 负责关联一次 RPC。**
+- **现代 MCP 把重要协议上下文放进每条 Request，使消息本身能够被独立理解。**
+- **`_meta` 用来承载协议级和横切 Metadata，而不污染具体 Method 的业务参数。**
+- **`resultType` 在 JSON-RPC 成功响应之上进一步表达 MCP 操作究竟已经完成，还是仍然需要继续交互。**
+
+## 相关面试题
+
+- **MCP 的消息模型是怎么设计的？**
+- **MCP 为什么选择 JSON-RPC 2.0，而不是自己设计一套消息协议？**
+- **MCP 中 Request、Response 和 Notification 有什么区别？Request ID 有什么作用？**
+- **为什么新版 MCP 取消了 `initialize` 和协议级 Session，并要求每条 Request 能够自描述？**
+- **`_meta` 在新版 MCP 的消息模型中承担什么作用？**
+- **为什么新版 MCP 不再让 Server 独立向 Client 发起 Request？**
+- **MCP 为什么要引入 `resultType`？`complete` 和 `input_required` 有什么区别？**
