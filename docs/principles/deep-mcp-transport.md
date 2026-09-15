@@ -33,7 +33,8 @@ stdio 主要用于本地进程之间通信，Client 启动一个 MCP Server 子�
 
 Streamable HTTP 则主要面向远程 MCP Server，每一条 Client Message 都通过 HTTP POST 发送，Server 再通过普通 JSON Response 或 SSE Response 返回结果。
 
-注意：**Transport 只负责“消息怎么过去”，不负责定义“消息是什么意思”。**
+**Transport 只负责“消息怎么过去”，不负责定义“消息是什么意思”。**
+
 
 无论一条 `tools/call` 最终通过 stdio 还是 HTTP 发送，它仍然是同一条 MCP `tools/call`。Transport 可以规定消息怎样分帧、怎样传输 Metadata、连接怎样结束，但不能重新定义 `tools/call` 的业务语义。
 
@@ -77,25 +78,21 @@ Client 持有 Server 子进程的标准输入输出 Pipe。Client 想发送消�
 
 MCP 的处理方式非常简单：
 
-> **一条 MCP Message 占一行，通过换行符分隔。**
+```text
+一条 MCP Message 占一行，通过换行符分隔。
+```
 
 当前规范明确要求，每一条消息都是一个完整的 JSON-RPC Request、Response 或 Notification，消息之间通过换行分隔，而且一条消息内部不能包含嵌入式换行。所有消息都必须使用 UTF-8 编码。
 
-因此 stdio 真正的 Wire Format 可以理解成：
-
-`JSON-RPC + \n`
-
-再来一条：
-
-`JSON-RPC + \n`
-
 接收方不断读取字节，遇到换行就知道：
 
-> 一条完整 MCP Message 收到了。
+```text
+一条完整 MCP Message 收到了。
+```
 
 这套设计虽然简单，但却非常实用。
 
-它没有再设计 Length Prefix，也没有引入复杂的 Binary Frame。因为 MCP Message 本身就是 JSON，而 JSON 经过序列化以后完全可以压缩成单行，换行天然可以作为消息分隔符。
+它没有再设计 Length Prefix（长度前缀），也没有引入复杂的 Binary Frame（二进制帧）。因为 MCP Message 本身就是 JSON，而 JSON 经过序列化以后完全可以压缩成单行，换行天然可以作为消息分隔符。
 
 ```mermaid
 flowchart LR
@@ -115,13 +112,11 @@ flowchart LR
     class J decision
 ```
 
-不过 stdio 还有一个值得注意的地方：**所有 Request、Response 和 Notification 都共享同一条 stdout 通道。**
+不过 stdio 有一个需要注意的地方：
 
-假设 Client 同时发送三个 Request，Server 的 Response 完全可以按照：
+**所有 Request、Response 和 Notification 都共享同一条 stdout 通道。**
 
-`Response 3 → Response 1 → Response 2`
-
-的顺序写回 stdout。
+假设 Client 同时发送三个 Request，Server 的 Response 完全可以按照 `Response 3 → Response 1 → Response 2` 的顺序写回 stdout。
 
 stdio 并不会给每个 Request 建立一条独立的数据流。
 
@@ -129,23 +124,15 @@ stdio 并不会给每个 Request 建立一条独立的数据流。
 
 所以 stdio Transport 解决的是：
 
-> 一条 Message 从哪里开始、在哪里结束，以及字节如何在两个进程之间传递。
+```text
+一条 Message 从哪里开始、在哪里结束，以及字节如何在两个进程之间传递。
+```
 
 JSON-RPC `id` 解决的是：
 
-> 这条 Response 到底属于哪个 Request。
-
-当前规范还特别指出，stdio 的本质其实并不是“必须使用 stdin/stdout”这么简单。除去进程生命周期部分以后，它真正的 Wire Pattern 是：
-
-> **在可靠的双向字节流上，一行一条 JSON-RPC Message。**
-
-因此，如果你基于 Unix Domain Socket 或 TCP 等可靠字节流来实现自定义 Transport，官方建议直接复用 stdio 的‘换行分隔’帧格式，而不必重新设计消息边界。
-
-这也说明 stdio 其实可以拆成两个问题理解：
-
-一部分是**进程模型**：Client 启动 Server 子进程。
-
-另一部分是**消息模型**：双方在可靠 Byte Stream 上发送一行一条的 MCP Message。
+```text
+这条 Response 到底属于哪个 Request。
+```
 
 ## 为什么 stdio 的 stdout 不能随便输出日志？
 
@@ -159,7 +146,7 @@ JSON-RPC `id` 解决的是：
 
 但如果这个程序正在作为 stdio MCP Server 运行，这样做可能直接把协议通信破坏掉。
 
-原因就是刚才讲的 Message Framing。
+原因就是刚才讲的 Message Framing（消息分帧）。
 
 对于 MCP Client 来说，Server 的 stdout 不是普通终端输出，而是一条**纯协议通道**。
 
@@ -189,11 +176,11 @@ Client 读到第一行以后，会尝试把：
 
 当成 JSON-RPC Message 解析。
 
-当然解析失败。
+解析失败。
 
 所以当前规范直接规定：
 
-> Server **MUST NOT** 向 stdout 写入任何不是合法 MCP Message 的内容。
+> Server **禁止** 向 stdout 写入任何不是合法 MCP Message 的内容。
 
 同样，Client 也不能向 Server 的 stdin 塞入非 MCP Message。
 
@@ -203,13 +190,15 @@ Client 读到第一行以后，会尝试把：
 
 Server 可以把 UTF-8 日志输出到 `stderr`。Client 可以选择捕获、转发或者直接忽略这些内容，而且 Client 不应该因为 stderr 出现输出，就认为 MCP Server 一定发生了错误。
 
-官方 TypeScript SDK 的 stdio 文档甚至专门拿 `console.log()` 举例：只要往 stdout 插入一条普通 Debug Log，Host 就会尝试把这条日志解析成协议消息。官方示例因此使用 `console.error()` 输出 Server Ready 等日志，因为它进入的是 stderr。
+官方 TypeScript SDK 的 stdio 文档就专门拿 `console.log()` 举例：只要往 stdout 插入一条普通 Debug Log，Host 就会尝试把这条日志解析成协议消息。官方示例因此使用 `console.error()` 输出 Server Ready 等日志，因为它进入的是 stderr。
 
 ## Streamable HTTP 是怎么传输 MCP 消息的？
 
 stdio 适合：
 
-> Host 和 MCP Server 运行在同一台机器。
+```text
+Host 和 MCP Server 运行在同一台机器。
+```
 
 但如果 MCP Server 部署在另外一台服务器、Cloudflare Worker、云函数或者企业内部服务里，Client 显然不能再通过本地 stdin/stdout 和它通信。
 
@@ -288,15 +277,19 @@ Request ID、Method、Params、MCP Metadata、Result。
 
 同样，HTTP `200 OK` 也不能简单等价于：
 
-> MCP Tool 执行成功。
+```text
+MCP Tool 执行成功。
+```
 
 它只说明 HTTP 层成功完成了这次响应过程。内部真正的 MCP Message 仍然可能携带不同的协议结果。
 
 当前 Streamable HTTP 还有一个特点：
 
-> **一条 Client JSON-RPC Message 对应一次新的 HTTP POST。**
+```text
+一条 Client JSON-RPC Message 对应一次新的 HTTP POST。
+```
 
-所以它和 stdio 的长 Byte Stream 完全不同。
+所以它和 stdio 的长字节流完全不同。
 
 stdio 是：
 
@@ -359,11 +352,11 @@ Server 很快就能算出最终结果，而且执行期间没有任何额外消�
 
 假设 Tool 执行需要几十秒，中间 Server 希望不断告诉 Client：
 
-> 已经完成 20%。
-
-> 正在处理第三个文件。
-
-> 当前阶段已经结束。
+```text
+已经完成 20%。
+正在处理第三个文件。
+当前阶段已经结束。
+```
 
 如果只允许最后返回一个 JSON Response，那么 Server 必须等所有工作完成以后一次性返回。
 
@@ -401,25 +394,9 @@ Server 很快就能算出最终结果，而且执行期间没有任何额外消�
 
 注意： **SSE 并不是第三种 MCP Transport。**
 
-当前标准 Transport 仍然是`stdio`和`Streamable HTTP`。
+当前标准 Transport 仍然是 `stdio` 和 `Streamable HTTP` 。
 
 SSE 只是 **Streamable HTTP 在 Server 需要通过同一次 Response 发送多条消息时采用的流式响应机制**。
-
-官方 Rust SDK 直接强调：没有一个需要单独配置的“SSE Transport”，SSE 是 Streamable HTTP 的实现细节。
-
-所以：
-
-`application/json`
-
-适合：
-
-> 一次 Response 就足够。
-
-`text/event-stream`
-
-适合：
-
-> 当前 Request 的生命周期中还需要连续发送多条相关消息。
 
 Server 可以根据当前请求选择其中一种，而 Client 必须有能力处理两种情况。
 
@@ -441,7 +418,9 @@ MCP 在 `2024-11-05` 使用的还不是 Streamable HTTP，而是一套叫 **HTTP
 
 连接建立以后，Server 还要先通过 SSE 发送一个 `endpoint` Event，告诉 Client：
 
-> 你以后应该把 POST 发到哪里。
+```text
+你以后应该把 POST 发到哪里。
+```
 
 大概可以理解成：
 
@@ -489,11 +468,11 @@ Server 还可能维护一条独立 GET SSE Stream，用来主动向 Client 发�
 
 此时 Server 必须知道：
 
-> 这个 POST 属于哪个 Client？
-
-> 这条 GET SSE 又属于哪个 Client？
-
-> 它们是不是同一组协议交互？
+```text
+这个 POST 属于哪个 Client？
+这条 GET SSE 又属于哪个 Client？
+它们是不是同一组协议交互？
+```
 
 `MCP-Session-Id` 就为这些逻辑相关的交互提供了一个连接点。
 
@@ -515,7 +494,9 @@ Client Capabilities
 
 Server 不再依赖：
 
-> “这个 Client 在之前的 initialize 里告诉过我什么。”
+```text
+“这个 Client 在之前的 initialize 里告诉过我什么。”
+```
 
 同时 Server 也不再主动发起独立 JSON-RPC Request。
 
@@ -531,17 +512,18 @@ Server 不再依赖：
 
 **独立 GET Stream Endpoint。**
 
-所以这次演进可以理解成：
+```mermaid
+flowchart LR
+    A[2024-11-05<br/>HTTP with SSE<br/><br/>GET SSE：Server → Client<br/>POST：Client → Server<br/>Session + endpoint event] --> B[2025-03-26<br/>Streamable HTTP<br/><br/>统一 MCP Endpoint<br/>POST 返回 JSON 或 SSE<br/>仍保留独立 GET SSE 和 Session]
+    B --> C[2026-07-28<br/>现代 Transport<br/><br/>每条 Request 独立 POST<br/>按需使用 request-scoped SSE<br/>移除协议级 Session 和独立 GET Stream]
 
-`2024：用 GET SSE + POST 拼出双向通道`
-
-↓
-
-`2025：统一成 Streamable HTTP Endpoint，但仍保留 GET Stream 和 Session`
-
-↓
-
-`2026：每个 Request 独立 POST，SSE 只在具体 Request 需要流式返回时出现，长期行为也必须显式建立`
+    classDef legacy fill:#fff4e5,stroke:#f59e0b,color:#78350f
+    classDef streamable fill:#e8f3ff,stroke:#3b82f6,color:#172554
+    classDef modern fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    class A legacy
+    class B streamable
+    class C modern
+```
 
 ## 为什么新版 HTTP Request 又增加了 `Mcp-Method`、`Mcp-Name` 这些 Header？
 
@@ -588,7 +570,9 @@ Observability System
 
 这些基础设施并不一定希望解析一遍 JSON-RPC Body，才能知道：
 
-> 这是什么 MCP 操作？
+```text
+这是什么 MCP 操作？
+```
 
 例如 Gateway 想做：
 
@@ -600,7 +584,9 @@ Observability System
 
 或者想统计：
 
-> `get_weather` 一分钟到底调用了多少次？
+```text
+get_weather 一分钟到底调用了多少次？
+```
 
 如果这些信息只存在 JSON Body 中，Gateway 必须理解 MCP 的 JSON Schema、读取 Body，再解析：
 
@@ -662,7 +648,9 @@ Observability System
 
 有些 Gateway 甚至在请求进入 MCP Runtime 之前，就需要知道：
 
-> 这是哪个 MCP Revision？
+```text
+这是哪个 MCP Revision？
+```
 
 然后决定应该转给：
 
@@ -676,7 +664,9 @@ Modern Handler。
 
 不过这里必须强调一个原则：
 
-> **Header 不是协议真相源。**
+```text
+Header 不是协议真相源。
+```
 
 真正的 MCP 信息仍然存在 JSON-RPC Body 中。
 
@@ -720,7 +710,9 @@ Header。
 
 这样 Gateway 甚至可以根据具体业务参数：
 
-> 不同 Region 路由到不同后端。
+```text
+不同 Region 路由到不同后端。
+```
 
 不过能够被镜像的参数受到严格限制，只允许适合安全表示为 Header 的 Primitive 类型。
 
@@ -728,11 +720,15 @@ Header。
 
 早期 MCP 更多关注的是：
 
-> Client 和 Server 能不能通信。
+```text
+Client 和 Server 能不能通信。
+```
 
 到了现在，协议已经开始认真考虑：
 
-> MCP Request 真正进入企业网络以后，Gateway、WAF、Load Balancer、Observability 这些基础设施怎么理解它。
+```text
+MCP Request 真正进入企业网络以后，Gateway、WAF、Load Balancer、Observability 这些基础设施怎么理解它。
+```
 
 这也是 MCP 从“开发者本地工具协议”逐渐走向真正远程基础设施协议时必然需要解决的问题。
 
@@ -740,7 +736,9 @@ Header。
 
 两种 Transport 最容易被简单总结成：
 
-> stdio 是本地，HTTP 是远程。
+```text
+stdio 是本地，HTTP 是远程。
+```
 
 这个结论并没有错，但其实只说到表面。
 
@@ -770,19 +768,25 @@ Server 是独立运行的网络服务，不由某一个 Client 启动。
 
 stdio 依靠：
 
-> newline
+```text
+newline
+```
 
 划分 Message。
 
 Streamable HTTP 则拥有：
 
-> HTTP Request Body
+```text
+HTTP Request Body
+```
 
 作为消息边界。
 
 HTTP Server 不需要自己扫描字节流寻找换行，因为 Web Server 已经知道：
 
-> 这个 Body 到这里结束。
+```text
+这个 Body 到这里结束。
+```
 
 Response 方式同样不同。
 
@@ -824,10 +828,14 @@ Client 调用：
 
 Transport 解决的是：
 
-> **怎么送到那里。**
+```text
+怎么送到那里。
+```
 
 MCP Core 解决的是：
 
-> **送过去的东西到底是什么意思。**
+```text
+送过去的东西到底是什么意思。
+```
 
 这也是为什么 MCP 可以同时拥有 stdio 和 Streamable HTTP，而不需要维护两套完全不同的 Tool、Resource 和 Prompt 协议。
