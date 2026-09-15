@@ -1,0 +1,61 @@
+name: Collect Bing crawl data
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bing-crawl-monitor
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+      BING_CRAWL_HOST: aiagentguide.cn
+      BING_CRAWL_SITEMAP_URL: https://aiagentguide.cn/sitemap.xml
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 20
+
+      - name: Collect previous complete six-hour window
+        run: node scripts/bing-crawl-collect.mjs --output "$RUNNER_TEMP/bing-crawl-output"
+
+      - name: Prepare monitoring data branch
+        env:
+          DATA_DIR: ${{ runner.temp }}/bing-crawl-data
+        run: |
+          set -euo pipefail
+          git fetch origin bing-crawl-data || true
+          if git show-ref --verify --quiet refs/remotes/origin/bing-crawl-data; then
+            git worktree add "$DATA_DIR" origin/bing-crawl-data
+          else
+            git worktree add --detach "$DATA_DIR" HEAD
+            git -C "$DATA_DIR" switch --orphan bing-crawl-data
+            git -C "$DATA_DIR" rm -rf .
+          fi
+          mkdir -p "$DATA_DIR/data"
+          cp -R "$RUNNER_TEMP/bing-crawl-output/"* "$DATA_DIR/data/"
+
+      - name: Commit monitoring data
+        env:
+          DATA_DIR: ${{ runner.temp }}/bing-crawl-data
+        run: |
+          set -euo pipefail
+          git -C "$DATA_DIR" add data
+          git -C "$DATA_DIR" -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m "data: collect Bing crawl window" || exit 0
+          git -C "$DATA_DIR" push origin HEAD:bing-crawl-data
