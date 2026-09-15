@@ -1,7 +1,7 @@
 ---
 title: 深入 MCP：MCP 的消息是怎么传输的？
 description: "深入理解 MCP stdio 和 Streamable HTTP Transport 的消息传输方式与生命周期。"
-summary: 从消息分帧、HTTP 请求、SSE 到 Stateless Core，拆解 MCP 消息如何在 Client 和 Server 之间传输。
+summary: 从消息分帧、HTTP 请求、SSE 到无状态协议核心，拆解 MCP 消息如何在 Client 和 Server 之间传输。
 keywords:
   - 深入 MCP
   - MCP 原理
@@ -24,7 +24,7 @@ noindex: true
 
 ```mermaid
 flowchart TB
-    A[MCP / JSON-RPC Message<br/>协议语义由 MCP Core 定义] --> B{Transport Binding}
+    A[MCP / JSON-RPC Message<br/>协议语义由 MCP 协议层定义] --> B{Transport Binding}
 
     B --> C[stdio]
     C --> C1[Client 启动 MCP Server 子进程]
@@ -138,9 +138,7 @@ flowchart LR
     class J decision
 ```
 
-不过 stdio 有一个需要注意的地方：
-
-**所有 Request、Response 和 Notification 都共享同一条 stdout 通道。**
+不过 stdio 有一个需要注意的地方。
 
 假设 Client 同时发送三个 Request，Server 的 Response 完全可以按照 `Response 3 → Response 1 → Response 2` 的顺序写回 stdout。
 
@@ -858,10 +856,45 @@ Transport 解决的是：
 怎么送到那里。
 ```
 
-MCP Core 解决的是：
+MCP 协议层解决的是：
 
 ```text
 送过去的东西到底是什么意思。
 ```
 
 这也是为什么 MCP 可以同时拥有 stdio 和 Streamable HTTP，而不需要维护两套完全不同的 Tool、Resource 和 Prompt 协议。
+
+## 总结
+
+MCP 协议层负责定义 Message 的结构和协议语义，而 **Transport 负责把这些 Message 真正从 Client 传递到 Server，再把结果传回来**。当前 `2026-07-28` 规范提供两种标准 Transport：stdio 和 Streamable HTTP。无论底层使用哪一种 Transport，`tools/call`、`resources/read` 等 MCP 操作本身的协议含义都不会因此改变。
+
+stdio 面向本地进程通信。MCP Client 启动 Server 子进程，通过 `stdin` 和 `stdout` 交换 JSON-RPC Message。由于 stdio 本质上只是连续的字节流，因此 MCP 使用换行符划分消息边界：每一行都是一条完整的 JSON-RPC Message。也正因为 stdout 是纯协议通道，Server 不能随意向 stdout 输出普通日志，调试信息应该写入 stderr。
+
+Streamable HTTP 则主要面向远程 MCP Server。Client 发送的每条 JSON-RPC Request 或 Notification 都通过一次独立的 HTTP POST 发送到 MCP Endpoint。这里存在两层协议：HTTP 负责 Method、Header、Body、Status 和 Response Stream，JSON-RPC / MCP 则负责 Request ID、Method、Params 和 Result。两层不能混为一谈。
+
+对于 JSON-RPC Request，Server 可以直接返回一个 `application/json` Response，也可以打开 `text/event-stream`，在同一条 HTTP Response Stream 中先发送与当前 Request 相关的 Notification，最后再发送真正的 JSON-RPC Response。这里的 SSE 并不是第三种 MCP Transport，而只是 Streamable HTTP 的一种流式响应方式。
+
+MCP 的 HTTP Transport 也经历了明显演进：早期 HTTP+SSE 使用独立 GET SSE 与 POST 两条通道；之后 Streamable HTTP 将双方统一到一个 MCP Endpoint；到了 `2026-07-28`，协议进一步移除了独立 GET Stream 和协议级 Session，让每条 Request 都拥有更加独立的 HTTP 生命周期。
+
+现代 Streamable HTTP 还通过 `Mcp-Method`、`Mcp-Name`、`MCP-Protocol-Version` 等 Header，把 JSON-RPC Body 中的重要信息镜像到 HTTP 层，使 Gateway、WAF、Load Balancer 和 Rate Limiter 不解析完整 Body 也能够识别 MCP 流量。Header 与 Body 必须保持一致，否则不同基础设施可能对同一条请求产生不同理解。
+
+因此，理解 MCP Transport 最重要的是区分两层职责：
+
+- **MCP 协议层决定“这条消息是什么意思”。**
+- **Transport 决定“这条消息怎样到达另一端”。**
+- **stdio 在长期共享的字节流上复用 MCP Message。**
+- **Streamable HTTP 将每次 MCP Exchange 映射到独立的 HTTP Request / Response 边界。**
+- **SSE 是 Streamable HTTP 的流式响应机制，而不是一种独立 Transport。**
+
+底层传输方式虽然不同，但 MCP 刻意保持上层 Tool、Resource、Prompt 等协议语义一致，这也是同一套 MCP 能够同时运行在本地进程和远程网络环境中的基础。
+
+## 相关面试题
+
+- **MCP 的 Transport 是什么？Transport 和协议语义有什么区别？**
+- **MCP 的 stdio Transport 是怎么传输和划分消息边界的？**
+- **为什么 stdio MCP Server 不能随便使用 `console.log()` 向 stdout 输出日志？**
+- **Streamable HTTP 是怎么传输 MCP 消息的？HTTP Request 和 MCP Request 有什么区别？**
+- **MCP 中为什么有时返回普通 JSON，有时返回 SSE？SSE 是一种独立的 Transport 吗？**
+- **MCP 的 HTTP Transport 为什么从 HTTP+SSE 演进到现在的 Streamable HTTP？**
+- **`Mcp-Method`、`Mcp-Name` 和 `MCP-Protocol-Version` 这些 HTTP Header 有什么作用？**
+- **stdio 和 Streamable HTTP 的本质区别是什么？**
