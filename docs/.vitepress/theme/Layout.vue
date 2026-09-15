@@ -8,6 +8,7 @@ import Breadcrumb from './components/Breadcrumb.vue'
 import ReadingProgress from './components/ReadingProgress.vue'
 import AnnouncementBar from './components/AnnouncementBar.vue'
 import CommunityGroup from './components/CommunityGroup.vue'
+import LastUpdated from './components/LastUpdated.vue'
 import { useHtmlUrlRedirect } from './composables/useHtmlUrlRedirect'
 
 const { Layout } = DefaultTheme
@@ -41,6 +42,10 @@ useHtmlUrlRedirect()
 
         <template #doc-before>
             <Breadcrumb />
+        </template>
+
+        <template #doc-footer-before>
+            <LastUpdated v-if="frontmatter.layout !== 'home'" />
         </template>
 
         <template #layout-bottom>
