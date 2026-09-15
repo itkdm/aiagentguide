@@ -4,6 +4,7 @@ import HomeTechStack from './components/HomeTechStack.vue'
 import HomeDemo from './components/HomeDemo.vue'
 import HomeAboutSite from './components/HomeAboutSite.vue'
 import HomeFaq from './components/HomeFaq.vue'
+import CommunityGroup from './components/CommunityGroup.vue'
 import ToolAutoPreview from './components/ToolAutoPreview.vue'
 import ToolsDirectory from './components/ToolsDirectory.vue'
 import AgentLoopVisualizer from './components/AgentLoopVisualizer.vue'
@@ -32,6 +33,7 @@ export default {
     app.component('HomeDemo', HomeDemo)
     app.component('HomeAboutSite', HomeAboutSite)
     app.component('HomeFaq', HomeFaq)
+    app.component('CommunityGroup', CommunityGroup)
     app.component('ToolAutoPreview', ToolAutoPreview)
     app.component('ToolsDirectory', ToolsDirectory)
     app.component('AgentLoopVisualizer', AgentLoopVisualizer)

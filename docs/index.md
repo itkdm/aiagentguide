@@ -45,6 +45,8 @@ aside: false
 
 <HomeAboutSite />
 
+<CommunityGroup />
+
 <HomeJourney />
 
 <HomeFaq />

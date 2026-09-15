@@ -53,6 +53,6 @@ export const siteLogo = {
 
 export const siteFooter = {
   message:
-    '<span class="footer-brand">布吉岛 Agent · 从不知道，到做得到</span><span class="footer-sep">·</span><a class="footer-link" href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">豫ICP备2025137611号-5</a><span class="footer-sep">·</span><a class="footer-link" href="https://aiagentguide.cn/sitemap.xml" target="_blank" rel="noreferrer">sitemap.xml</a><span class="footer-sep">·</span><span class="footer-contact">有问题或合作欢迎联系</span><a class="footer-link" href="mailto:hello@aiagentguide.cn">hello@aiagentguide.cn</a>',
+    '<span class="footer-brand">布吉岛 Agent · 从不知道，到做得到</span><span class="footer-sep">·</span><a class="footer-link" href="https://beian.miit.gov.cn/" target="_blank" rel="noreferrer">豫ICP备2025137611号-5</a><span class="footer-sep">·</span><a class="footer-link" href="https://aiagentguide.cn/sitemap.xml" target="_blank" rel="noreferrer">sitemap.xml</a><span class="footer-sep">·</span><a class="footer-link" href="/#community">加入交流群</a><span class="footer-sep">·</span><span class="footer-contact">有问题或合作欢迎联系</span><a class="footer-link" href="mailto:hello@aiagentguide.cn">hello@aiagentguide.cn</a>',
   copyright: 'Copyright © 2026 布吉岛'
 }

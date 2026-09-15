@@ -7,6 +7,7 @@ import HomeTypewriter from './components/HomeTypewriter.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import ReadingProgress from './components/ReadingProgress.vue'
 import AnnouncementBar from './components/AnnouncementBar.vue'
+import CommunityGroup from './components/CommunityGroup.vue'
 import { useHtmlUrlRedirect } from './composables/useHtmlUrlRedirect'
 
 const { Layout } = DefaultTheme
@@ -40,6 +41,10 @@ useHtmlUrlRedirect()
 
         <template #doc-before>
             <Breadcrumb />
+        </template>
+
+        <template #layout-bottom>
+            <CommunityGroup v-if="frontmatter.layout !== 'home'" compact />
         </template>
 
     </Layout>
