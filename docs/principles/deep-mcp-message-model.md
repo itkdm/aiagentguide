@@ -25,9 +25,9 @@ noindex: true
 
 ## MCP 为什么选择 JSON-RPC 2.0？
 
-MCP 没有重新设计一套自己的 RPC （远程过程调用）消息格式，而是直接建立在 **JSON-RPC 2.0** 之上。
+MCP 并没有重新设计一套自己的 RPC （远程过程调用）消息格式，而是直接建立在 **JSON-RPC 2.0** 之上。
 
-一条最基本的 MCP Request，底层仍然是这样的结构：
+一条最基本的 MCP Request，底层是这样的结构：
 
 ```json
 {
@@ -38,7 +38,7 @@ MCP 没有重新设计一套自己的 RPC （远程过程调用）消息格式�
 }
 ```
 
-`jsonrpc` 表示 JSON-RPC 协议版本，当前固定为 `"2.0"`；`method` 表示要调用的方法，`params` 携带调用参数，`id` 用来标识当前这一次 Request。MCP 自己的 Protocol Version 则由对应协议版本定义的位置携带，现代 MCP 位于 Request `_meta` 中。
+`jsonrpc` 表示 JSON-RPC 协议版本，当前固定为 `"2.0"`；`method` 表示要调用的方法，`params` 携带调用参数，`id` 用来标识当前这一次 Request。
 
 不管后面调用的是 `tools/list`、`tools/call`，还是 `resources/read`，在 JSON-RPC 看来，它们本质上都只是一个 Method Name。
 
@@ -46,7 +46,88 @@ MCP 没有重新设计一套自己的 RPC （远程过程调用）消息格式�
 
 RPC 协议其实已经解决很多 MCP 不需要重新解决的问题了，比如怎么表示一次远程方法调用？怎么区分请求和通知？多个并发请求的 Response 怎么找到原来的 Request？调用不存在的方法怎么办？参数错误怎么办？成功结果和协议错误怎么区分？
 
-JSON-RPC 2.0 已经给出了解决方案。
+这些 JSON-RPC 2.0 已经给出了解决方案。
+
+
+<PlainExplanation title="先看没有 JSON-RPC 会发生什么">
+
+假设 MCP 想定义一个：
+
+```text
+调用工具 search
+参数 q = "MCP"
+```
+
+最简单当然可以自己约定：
+
+```json
+{
+  "action": "call_tool",
+  "tool": "search",
+  "arguments": {
+    "q": "MCP"
+  }
+}
+```
+
+问题马上就来了。
+
+Server 返回结果应该长什么样？
+
+```json
+{
+  "data": "..."
+}
+```
+
+那如果同时发了 10 个请求，我怎么知道这个结果对应哪一个？
+
+于是你增加：
+
+```json
+{
+  "requestId": 123,
+  "data": "..."
+}
+```
+
+如果失败呢？
+
+```json
+{
+  "requestId": 123,
+  "success": false,
+  "errorCode": 500,
+  "errorMessage": "..."
+}
+```
+
+如果有一种消息我只想通知对方，不要求回复呢？
+
+又要定义：
+
+```json
+{
+  "type": "notification",
+  "message": "..."
+}
+```
+
+再继续下去，你会发现 MCP 自己开始设计：
+
+```text
+请求长什么样
+响应长什么样
+如何匹配请求和响应
+错误长什么样
+通知长什么样
+方法叫什么
+参数放在哪里
+```
+
+而这些问题，JSON-RPC 已经解决过了，所以MCP 没必要重新发明一套消息调用协议。
+
+</PlainExplanation>
 
 MCP 真正需要定义的是 JSON-RPC 不知道的东西，例如：
 
@@ -78,7 +159,9 @@ JSON-RPC 规定消息格式以及 Request、Response、Notification 之间的关
 
 Request 表示：
 
-> 我要你执行一个操作，而且我需要知道结果。
+```text
+我要你执行一个操作，而且我需要知道结果。
+```
 
 例如：
 
@@ -119,13 +202,17 @@ Request 表示：
 
 如果协议层处理失败，则会返回 `error`，而不是 `result`。
 
-当前 `2026-07-28` Schema 中，正常成功响应被建模为 `JSONRPCResultResponse`，包含 `jsonrpc`、`id` 和 `result`；错误响应则是 `JSONRPCErrorResponse`，包含 `error`。MCP 继续保留 JSON-RPC 的 `-32700`、`-32600`、`-32601`、`-32602`、`-32603` 等基础错误码。
+当前 `2026-07-28` Schema 中，正常成功响应被建模为 `JSONRPCResultResponse`，包含 `jsonrpc`、`id` 和 `result`；
+
+错误响应则是 `JSONRPCErrorResponse`，包含 `error`。MCP 继续保留 JSON-RPC 的 `-32700`、`-32600`、`-32601`、`-32602`、`-32603` 等基础错误码。
 
 Notification 与 Request 最大的区别，就是没有 `id`。
 
 它表达的是：
 
-> 我告诉你一件事，但不需要你返回一个 JSON-RPC Response。
+```text
+我告诉你一件事，但不需要你返回一个 JSON-RPC Response。
+```
 
 因此 Notification 很适合表示状态变化、进度或者取消等单向事件。
 
@@ -137,7 +224,9 @@ Notification 与 Request 最大的区别，就是没有 `id`。
 
 这意味着发送 Notification 之后，发送方不能再期待：
 
-> “稍后请用 JSON-RPC Response 告诉我刚才那个 Notification 是否执行成功。”
+```text
+“稍后请用 JSON-RPC Response 告诉我刚才那个 Notification 是否执行成功。”
+```
 
 因为协议根本没有提供用来关联这个 Response 的 Request ID。
 
@@ -174,7 +263,7 @@ flowchart LR
 
 以前 MCP 不只是 Client 向 Server 发 Request，Server 同样可以主动向 Client 发起 Request。`2025-11-25` 的 Schema 中就明确存在 `sampling/createMessage` 这类 **Server → Client Request**。
 
-新版不再采用这种核心消息流。
+新版就不再采用这种核心消息流。
 
 当前 Transport 规范要求 Transport 承载的是：
 
@@ -182,7 +271,9 @@ flowchart LR
 
 **Server → Client：Response / Notification**
 
-Server 不再直接写出独立 JSON-RPC Request。stdio 规范甚至明确要求 Server **MUST NOT** 向 stdout 写 JSON-RPC Request。
+Server 不再直接写出独立 JSON-RPC Request。
+
+stdio 规范甚至明确要求 Server 禁止向 stdout 写 JSON-RPC Request。
 
 为什么要发生这个变化，我们后面还会继续看到。
 
@@ -190,7 +281,7 @@ Server 不再直接写出独立 JSON-RPC Request。stdio 规范甚至明确要�
 
 如果一次只允许发送一个 Request，那么 Response 怎么找到 Request 似乎不是问题。
 
-但真正的 MCP Client 不可能永远串行工作。
+但实际上 MCP Client 不可能永远串行工作。
 
 假设 Client 同时发出三条 Request：
 
@@ -206,35 +297,11 @@ Server 并不需要按照 101、102、103 的顺序完成。
 
 所以 Response 不能依赖：
 
-> “我收到的第一个 Response，一定对应我发出的第一个 Request。”
-
-真正建立关联的是：
-
-**Request ID。**
-
-当前 MCP Schema 中：
-
-```ts
-type RequestId = string | number;
-```
-
-Request 必须带 `id`，成功 Response 同样带 `id`。
-
-Client 内部实际很容易形成类似这样的结构：
-
 ```text
-pending[101] -> tools/list
-pending[102] -> resources/read
-pending[103] -> another request
+“我收到的第一个 Response，一定对应我发出的第一个 Request。”
 ```
 
-当：
-
-```text
-Response.id = 102
-```
-
-回来以后，Client 就知道应该完成哪一个 Pending Request。
+真正建立关联的是：**Request ID。**
 
 所以 JSON-RPC 的 `id` 本质上是一次 RPC 的**关联标识**。
 
@@ -264,29 +331,35 @@ sequenceDiagram
 
 ID、Token、Cursor、Handle、State。
 
-它们看起来都可能只是一个 string，但它们所解决的问题完全不同。
+虽然它们看起来都只是一个 string，但它们解决的问题完全不同。
 
 例如 Request ID 解决的是：
 
-> 这个 Response 属于哪一个 Request？
+```text
+这个 Response 属于哪一个 Request？
+```
 
 它并不负责：
 
-> 这个请求属于哪个用户？
+```text
+这个请求属于哪个用户？
+```
 
 也不负责：
 
-> 这是 Agent 的第几轮执行？
+```text
+这是 Agent 的第几轮执行？
+```
 
 更不负责：
 
-> 多轮业务操作之间如何恢复状态？
+```text
+多轮业务操作之间如何恢复状态？
+```
 
 这些属于另外的层次。
 
 ## 为什么早期 MCP 需要先 `initialize`，还要维护 Session？
-
-这里必须先区分两个概念。
 
 早期 MCP 中，**`initialize` 是协议生命周期的必要步骤**；而 Streamable HTTP 中的 `MCP-Session-Id` 则是 Server 可以选择启用的协议级 Session 机制，并不是所有 Transport 都必须使用 Session ID。
 
@@ -344,13 +417,17 @@ notifications/initialized
 
 所以旧版协议的逻辑就很像：
 
-> 我们先见一次面，把双方是谁、支持什么、用哪个协议版本都讲清楚，后面的消息就基于这次握手建立起来的上下文继续通信。
+```text
+我们先见一次面，把双方是谁、支持什么、用哪个协议版本都讲清楚，后面的消息就基于这次握手建立起来的上下文继续通信。
+```
 
 这在协议设计上非常自然。
 
 例如 Client 在 `initialize` 时已经告诉 Server：
 
-> 我支持 Sampling。
+```text
+我支持 Sampling。
+```
 
 那么后面 Server 就不需要每收到一条 Request，都让 Client再重新声明一次 Sampling Capability。
 
@@ -358,17 +435,7 @@ notifications/initialized
 
 Server 只要完成初始化，就可以把这些信息保存下来。
 
-TypeScript SDK 的实现直到现在仍然能看到这段历史。
-
-当前 SDK 为了兼容旧协议，`Server` 内部依然存在：
-
-`_clientCapabilities`
-
-`_clientVersion`
-
-`_negotiatedProtocolVersion`
-
-这些连接级状态。源码同时明确指出，`2026-07-28` 之后，Client Capability 应该从**当前请求的 Envelope（请求封装，即包裹本次请求及其元数据的外层结构）**中读取，而不是继续依赖 initialization 阶段保存的值。
+但是 `2026-07-28` 之后，Client Capability 应该从当前请求的 **Envelope**（请求封装，即包裹本次请求及其元数据的外层结构）中读取，而不是继续依赖 initialization 阶段保存的值。
 
 如果使用旧版 Streamable HTTP，Server 还可以在 `InitializeResult` 对应的 HTTP Response 中返回：
 
@@ -378,11 +445,13 @@ TypeScript SDK 的实现直到现在仍然能看到这段历史。
 
 Server 就可以根据 Session ID 找回：
 
-> 这还是刚才那个 Client 的后续交互。
+```text
+这还是刚才那个 Client 的后续交互。
+```
 
 旧版规范甚至定义了 Session 终止、404 后重新 initialize，以及通过 HTTP DELETE 主动结束 Session 等行为。
 
-这套模型并不是“错误设计”。
+现在这套模型已经逐渐移除了，其实并不是设计错误。
 
 事实上，对于长连接或者单实例程序来说，它很合理。
 
@@ -418,13 +487,13 @@ Client 是谁、Client 支持哪些 Capability、双方使用什么 Protocol Ver
 
 如果 B 没有共享刚才的 Session Context，就会发现：
 
-> 这条请求到底是谁的？
+```text
+这条请求到底是谁的？
+它使用哪个 MCP 版本？
+Client 支持哪些能力？
+```
 
-> 它使用哪个 MCP 版本？
-
-> Client 支持哪些能力？
-
-于是系统通常会走向两个方向。
+于是系统开始走向两个方向。
 
 第一种是：
 
@@ -442,25 +511,29 @@ Client 是谁、Client 支持哪些 Capability、双方使用什么 Protocol Ver
 
 但一个本来只是想提供“标准化外部能力”的协议，开始给基础设施增加新的要求：
 
-Server 必须保存协议 Session。
+- Server 必须保存协议 Session。
 
-负载均衡必须理解粘性连接。
+- 负载均衡必须理解粘性连接。
 
-多个实例需要共享 Session State。
+- 多个实例需要共享 Session State。
 
-Server 实例挂掉以后还要考虑状态恢复。
+- Server 实例挂掉以后还要考虑状态恢复。
 
-Session 还需要过期和清理。
+- Session 还需要过期和清理。
 
 这时候问题已经不只是实现麻烦。
 
 真正的问题是：
 
-> **一条 MCP Request 已经不能只靠自己被理解了。**
+```text
+一条 MCP Request 已经不能只靠自己被理解了。
+```
 
 它必须依赖：
 
-> “这个 Request 之前还发生过什么？”
+```text
+“这个 Request 之前还发生过什么？”
+```
 
 而 `2026-07-28` 做出的核心改变，就是把这层依赖拆掉。
 
@@ -476,70 +549,68 @@ Session 还需要过期和清理。
 
 MCP 官方把这次变化直接定义为从旧模型走向 **Stateless Core**。
 
-大家不要误解这里的 Stateless 。
+大家不要误解这里的 Stateless （无状态）。
 
 它并不是说：
 
-> MCP Server 从今以后不能保存任何状态。
+```text
+MCP Server 从今以后不能保存任何状态。
+```
 
 一个 Tool 完全可能访问数据库，一个复杂业务操作也完全可能需要跨调用保存业务状态。
 
 新版删除的是：
 
-> **“理解当前 MCP Request 必须依赖一个之前建立好的协议 Session”这种状态。**
+```text
+“理解当前 MCP Request 必须依赖一个之前建立好的协议 Session”这种状态。
+```
 
 这叫**协议级状态**。
 
 业务级状态仍然可以存在。
 
-换句话说，变化不是：
-
-> Stateful Application → Stateless Application
-
-而是：
-
-> Session-dependent Protocol → Self-contained Request Protocol
-
-这两者差别很大。
-
 也正因为如此，`2026-07-28` 之后最重要的设计变化并不是“少了一个 initialize Method”。
 
 真正的变化是：
 
-> **以前存在于初始化上下文里的协议事实，现在必须在每次 Request 上重新变得可见。**
+```text
+以前存在于初始化上下文里的协议事实，现在必须在每次 Request 上重新变得可见。
+```
 
 ## 没有握手以后，一条 MCP Request 为什么必须能够“自己说明自己”？
 
 看当前 `2026-07-28` 的 `RequestMetaObject`，会发现两个字段已经变成 Required：
 
 ```text
-io.modelcontextprotocol/protocolVersion
-io.modelcontextprotocol/clientCapabilities
+io.modelcontextprotocol/protocolVersion  （MCP协议版本）
+io.modelcontextprotocol/clientCapabilities （客户端支持的MCP能力）
 ```
 
-同时还有一个 SHOULD：
+同时还有一个建议字段：
 
 ```text
-io.modelcontextprotocol/clientInfo
+io.modelcontextprotocol/clientInfo （客户端信息）
 ```
 
 也就是说，Client 发送一条 Request 时，要直接在当前 Request 的 `_meta` 里告诉 Server：
 
-> 我这条请求使用什么 MCP Protocol Version。
+```text
+我这条请求使用什么 MCP Protocol Version。
+```
 
 以及：
 
-> 对于这条请求，我声明哪些 Client Capabilities。
+```text
+对于这条请求，我声明哪些 Client Capabilities。
+```
 
 更关键的是，规范直接要求：
 
-> Server **MUST NOT infer capabilities from prior requests**。
-
-也就是说，即使上一个 Request 已经声明：
-
 ```text
-sampling: supported
+Server MUST NOT infer capabilities from prior requests
 ```
+
+也就是说，即使上一个 Request 已经声明支持 `sampling` 能力，
 
 Server 也不能推断：那这一次你肯定还支持。
 
@@ -583,15 +654,15 @@ Request B
 
 Server 不必先去共享存储查询：
 
-> “这个 Session 初始化的时候到底声明了什么？”
+```text
+“这个 Session 初始化的时候到底声明了什么？”
+```
 
-官方也明确指出，这种变化使普通 Round-Robin Load Balancer 成为可能，不再要求为了 MCP 协议 Session 保存共享状态。
+这种变化使普通 Round-Robin Load Balancer 成为可能，不再要求为了 MCP 协议 Session 保存共享状态。
 
 当然，这种设计不是没有代价。
 
-最明显的代价就是：
-
-> **重复。**
+最明显的代价就是 **重复。**
 
 以前 Protocol Version、Client Capabilities 可能只交换一次。
 
@@ -603,17 +674,21 @@ Server 不必先去共享存储查询：
 
 而且新版并不是说 Client 永远不能提前了解 Server。
 
-`server/discover` 仍然存在，Server 必须支持它，Client 可以通过它提前了解 Server 支持的现代协议版本和 Capabilities；但这个 Discovery 不再是像旧版 `initialize` 一样的强制前置握手。Schema 明确说明 Client 可以不调用 `server/discover`，而通过 per-request `_meta` 直接发起实际 Request。
+新版本引入了`server/discover` ，Server 必须支持它，Client 可以通过它提前了解 Server 支持的现代协议版本和 Capabilities；但这个 Discovery 不再是像旧版 `initialize` 一样的强制前置握手。Schema 明确说明 Client 可以不调用 `server/discover`，而通过 per-request `_meta` 直接发起实际 Request。
 
 这一点尤其关键。
 
 旧版：
 
-> 先协商，后工作。
+```text
+先协商，后工作。
+```
 
 新版：
 
-> 可以先发现，但工作请求本身必须足够自描述。
+```text
+可以先发现，但工作请求本身必须足够自描述。
+```
 
 这是一种完全不同的协议思路。
 
@@ -633,7 +708,9 @@ sampling/createMessage
 
 Server 告诉 Client：
 
-> 我需要你帮我调用一次模型。
+```text
+我需要你帮我调用一次模型。
+```
 
 旧版 `roots/list`、Elicitation 等能力同样存在类似的反向请求模式。
 
@@ -641,7 +718,9 @@ Server 告诉 Client：
 
 但放进 Stateless Core 后，就出现了一个根本问题：
 
-> **Server 怎样在没有 Client Request 的情况下，主动找到 Client 并向它发起一个新的 RPC？**
+```text
+Server 怎样在没有 Client Request 的情况下，主动找到 Client 并向它发起一个新的 RPC？
+```
 
 如果采用 HTTP：
 
@@ -653,7 +732,9 @@ Request A → Server
 
 Server 处理一半发现：
 
-> 我还需要 Client 给我一些信息。
+```text
+我还需要 Client 给我一些信息。
+```
 
 如果 Server 直接发一个新的 Request B：
 
@@ -677,11 +758,19 @@ Server → Response A
 
 原本简单的一次 RPC 就变成了：
 
-```text
-Client → Request A
-Server → Request B
-Client → Response B
-Server → Response A
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as Server
+
+    C->>S: Request A
+    activate S
+    Note over S: 处理到一半，需要 Client 提供额外信息
+    S->>C: Request B
+    C-->>S: Response B
+    Note over S: 收到 B 的结果，继续处理 A
+    S-->>C: Response A
+    deactivate S
 ```
 
 这意味着 A 的执行过程已经跨越了双方。
@@ -690,7 +779,9 @@ Server → Response A
 
 而且它又把协议重新拉回：
 
-> “双方之间存在一条长期、双向、可以随时互相发 RPC 的逻辑连接。”
+```text
+“双方之间存在一条长期、双向、可以随时互相发 RPC 的逻辑连接。”
+```
 
 这和 Stateless Core 想减少连接级依赖的方向是冲突的。
 
@@ -702,17 +793,23 @@ Server → Response A
 
 但这里也不能理解为：
 
-> Sampling、Elicitation 这些能力没了。
+```text
+Sampling、Elicitation 这些能力没了。
+```
 
 真正改变的是**表达方式**。
 
 以前是：
 
-> Server 再开一个 Request。
+```text
+Server 再开一个 Request。
+```
 
 现在变成：
 
-> Server 告诉 Client：“当前 Request 还不能完成，我还需要一些输入。”
+```text
+Server 告诉 Client：“当前 Request 还不能完成，我还需要一些输入。”
+```
 
 于是原本“反向 RPC”的关系，被重新折叠回：
 
@@ -722,7 +819,9 @@ Server → Response A
 
 只要记住这次协议演进最关键的一点：
 
-> **新版不是把双向能力删除了，而是把“双向独立 RPC”改造成“Client 主导的请求生命周期”。**
+```text
+新版不是把双向能力删除了，而是把“双向独立 RPC”改造成“Client 主导的请求生命周期”。
+```
 
 这也是为什么 `2026-07-28` 的核心调用方向变得比过去更加清晰。
 
@@ -734,13 +833,7 @@ Server → Response A
 
 但新版以后，它的重要程度发生了明显变化。
 
-以前最关键的协议上下文主要存在于：
-
-```text
-initialize
-```
-
-以及 Connection / Session。
+以前最关键的协议上下文主要存在于`initialize`以及 Connection / Session。
 
 现在这些连接级信息被拆掉以后，Request 必须自己携带协议上下文，于是 `_meta` 成为了非常自然的承载位置。
 
@@ -782,11 +875,15 @@ version
 
 所以 `_meta` 的角色不是：
 
-> 随便放点不重要的附加字段。
+```text
+随便放点不重要的附加字段。
+```
 
 更准确地说，它提供了一层：
 
-> **不污染具体 Method 业务参数，又可以让协议和扩展携带横切 Metadata 的 Envelope。**
+```text
+不污染具体 Method 业务参数，又可以让协议和扩展携带横切 Metadata 的 Envelope。
+```
 
 例如：
 
@@ -821,23 +918,27 @@ params
 
 解决：
 
-> 我要调用什么？
+```text
+我要调用什么？
+```
 
 `_meta`
 
 解决：
 
-> 这条请求应该在什么协议上下文里被理解？
+```text
+这条请求应该在什么协议上下文里被理解？
+```
 
 这种分层其实非常重要。
 
-另外，`clientInfo` 虽然也在 Request `_meta` 中，但当前规范只要求 Client **SHOULD** 提供，并明确指出它是 Self-reported，主要用于展示、日志和调试；Server 不应该基于它做安全决策。
+另外，`clientInfo` 虽然也在 Request `_meta` 中，但当前规范只要求 Client **应该** 提供，并明确指出它是 Self-reported，主要用于展示、日志和调试；Server 不应该基于它做安全决策。
 
 这也是协议设计中一个很重要的安全原则：
 
-> **“对方自称是谁”不等于“对方被认证成了谁”。**
-
-Identity Display 和 Authentication Identity 并不是一回事。
+```text
+“对方自称是谁”不等于“对方被认证成了谁”。
+```
 
 ## 为什么新版 Response 又增加了 `resultType`？
 
@@ -857,7 +958,9 @@ Identity Display 和 Authentication Identity 并不是一回事。
 
 Client 基本可以理解为：
 
-> 这个 Request 成功完成了。
+```text
+这个 Request 成功完成了。
+```
 
 但新版已经不能简单这么理解。
 
@@ -886,9 +989,9 @@ input_required
 
 `input_required` 表示：
 
-> Server 现在还不能完成原来的 Request，需要 Client 提供更多输入。
-
-这里最有意思的是：
+```text
+Server 现在还不能完成原来的 Request，需要 Client 提供更多输入。
+```
 
 `input_required` 并不是：
 
@@ -906,11 +1009,15 @@ result
 
 因为从协议语义来看：
 
-> Server 并没有执行失败。
+```text
+Server 并没有执行失败。
+```
 
 它只是告诉 Client：
 
-> 当前操作进入了一个需要额外输入的合法状态。
+```text
+当前操作进入了一个需要额外输入的合法状态，需要 Client 提供更多信息。
+```
 
 如果把这种情况表示成：
 
@@ -918,11 +1025,7 @@ result
 error
 ```
 
-那么 Client 很容易把它和：
-
-Method 不存在、参数错误、Server 内部异常
-
-混在一起。
+那么 Client 很容易把它和Method 不存在、参数错误、Server 内部异常混在一起。
 
 而 `resultType` 给成功 Response 增加了另一层区分：
 
@@ -936,71 +1039,17 @@ MCP Result 层：
 
 这就是两层状态机。
 
-第一层由 JSON-RPC：
+第一层由 JSON-RPC `result / error` 解决。
 
-```text
-result / error
-```
-
-解决。
-
-第二层由 MCP：
-
-```text
-resultType
-```
-
-解决。
+第二层由 `MCPresultType` 解决。
 
 这也是为什么新版 `Result` Schema 要强制要求 `resultType`。
 
-同时为了向后兼容，如果 Client 收到旧协议 Server 返回的 Result，没有 `resultType`，规范要求把它视为：
-
-```text
-complete
-```
-
-而不是直接判定协议错误。
-
-这个细节非常能体现协议演进中对兼容性的考虑。
-
-新增字段并不意味着：
-
-> 所有旧 Server 立刻全部不能用了。
-
-而是定义一个明确的缺省语义：
-
-> 旧时代没有 `resultType`，等价于“过去的普通结果都是 complete”。
-
-另外一个很有意思的实现细节是，当前 TypeScript SDK **不会把这些 Wire-level 字段全部直接暴露给业务代码**。
-
-官方迁移文档明确说明：
-
-`resultType`
-
-以及 Request Envelope 中的 Protocol Version、Client Capabilities 等字段属于 **wire-level bookkeeping**。
-
-SDK 会在内部解析和消费它们，业务 Handler 通常拿到的是更加干净的 Public Type。
-
-这说明理解规范和只会调用 SDK 是两件完全不同的事情。
-
-我们写：
-
-```ts
-server.registerTool(...)
-```
-
-的时候可能完全看不到 `resultType`。
-
-但并不代表 Wire 上没有它。
-
-SDK 只是替我们把这层协议复杂度藏起来了。
+同时为了向后兼容，如果 Client 收到旧协议 Server 返回的 Result，没有 `resultType`，规范要求把它视为 `complete` 而不是直接判定协议错误。
 
 ## 一条 MCP 消息从 SDK 对象到 Wire Message 到底经历了什么？
 
-这一点很容易被 SDK 的高层 API 掩盖。
-
-我们开发者写 MCP Server 时，通常不会自己手动拼：
+我们写 MCP Server 时，通常不会自己手动拼：
 
 ```json
 {
@@ -1028,11 +1077,15 @@ modern
 
 `2024-10-07` 到 `2025-11-25` 属于 legacy era：
 
-> 使用 `initialize`，基于旧版 Wire Behavior。
+```text
+使用 initialize，基于旧版 Wire Behavior。
+```
 
 `2026-07-28` 开始进入 modern era：
 
-> 没有 initialize，每条 Request 携带 `_meta` Envelope。
+```text
+没有 initialize，每条 Request 携带 _meta Envelope。
+```
 
 所以同一个高层 API，例如：
 
@@ -1044,7 +1097,9 @@ listTools()
 
 SDK 必须先知道：
 
-> 当前连接属于哪个 Protocol Era？
+```text
+当前连接属于哪个 Protocol Era？
+```
 
 然后使用对应的 Wire Codec。
 
@@ -1055,14 +1110,6 @@ SDK 必须先知道：
 如果是 Modern：
 
 就需要把 Protocol Version、Client Capabilities 等信息编码进每次 Request 的 `_meta`。
-
-这也是为什么官方 TypeScript SDK 到现在仍然保留：
-
-Legacy Codec
-
-Modern Codec
-
-以及 Version Negotiation 相关逻辑。
 
 所以从最底层看，一次消息真正经历的是：
 

@@ -26,6 +26,43 @@ noindex: true
 
 这一章我们不再重复这些基础概念，而是深入了解一下 MCP 的架构。
 
+```mermaid
+flowchart LR
+    U[User<br/>提出任务] --> H
+
+    subgraph H[Host / Agent Runtime]
+        direction TB
+        O[任务编排<br/>权限与生命周期管理]
+        L[LLM<br/>理解任务、选择 Tool、继续推理]
+        O <--> L
+        O --> C1
+        O --> C2
+        O --> C3
+    end
+
+    subgraph MCP[MCP 连接边界]
+        direction TB
+        C1[MCP Client 1] -.->|Transport| S1[MCP Server 1<br/>GitHub 能力]
+        C2[MCP Client 2] -.->|Transport| S2[MCP Server 2<br/>Google Drive 能力]
+        C3[MCP Client 3] -.->|Transport| S3[MCP Server 3<br/>Cloudflare 能力]
+    end
+
+    S1 --> G1[GitHub API 或业务服务]
+    S2 --> G2[Google Drive API 或业务服务]
+    S3 --> G3[Cloudflare API 或业务服务]
+
+    classDef user fill:#fff7ed,stroke:#f97316,color:#7c2d12
+    classDef host fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
+    classDef client fill:#e8f3ff,stroke:#3b82f6,color:#172554
+    classDef server fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    classDef external fill:#f8fafc,stroke:#64748b,color:#334155
+    class U user
+    class H,O,L host
+    class C1,C2,C3 client
+    class S1,S2,S3 server
+    class G1,G2,G3 external
+```
+
 先想一个问题：当我们说“一个 Agent 接入了 MCP”，到底是谁在和 MCP Server 通信呢？
 
 是大模型吗？
@@ -198,7 +235,9 @@ MCP Server 根本不会直接和 LLM 通信。
 
 假设用户对一个 Agent 说：
 
-> 帮我看一下这个项目最近有没有新的 Bug Issue。
+```text
+帮我看一下这个项目最近有没有新的 Bug Issue。
+```
 
 Host 中的 Agent Runtime 首先需要让模型知道它有哪些 Tool。
 
@@ -222,7 +261,9 @@ Host 需要根据自己使用的模型供应商，把 MCP Tool 转换成这个�
 
 模型得到的是：
 
-> “你现在有一个叫 `search_issues` 的工具，它接受这些参数。”
+```text
+“你现在有一个叫 `search_issues` 的工具，它接受这些参数。”
+```
 
 模型根据用户请求产生一个 Tool Call，例如：
 
@@ -269,6 +310,82 @@ sequenceDiagram
     L-->>H: 生成最终回答
     H-->>U: 返回结果
 ```
+
+<PlainExplanation title="这张图应该怎样理解">
+
+这张图的顺序可以这样理解：
+
+1. 用户向 Host 提出任务。
+2. Host 让对应的 MCP Client 获取 Tool Definition。实际项目中，这一步通常发生在连接建立后，也可能从缓存读取，不一定每次提问都重新执行。
+3. MCP Client 向 MCP Server 发送：
+
+   ```text
+   tools/list
+   ```
+
+   请求 Server 列出自己提供的 Tools。
+
+4. MCP Server 返回 Tool Definition，包括：
+
+   ```text
+   Tool 名称
+   Tool 描述
+   输入参数 Schema
+   其他 Tool 元数据
+   ```
+
+5. MCP Client 把 MCP Server 返回的 Tool Definition 交给 Host。
+6. Host 不能把这份 MCP Tool Definition 原样交给模型，而是要根据具体模型供应商的格式，把它转换成模型能够理解的 Tool Schema，然后连同用户问题一起发送给 LLM。
+7. LLM 判断当前任务是否需要调用 Tool。如果需要，它只会生成一个 Tool Call 意图，例如：
+
+   ```text
+   调用 search_issues
+   参数是 repo=xxx
+   ```
+
+   此时模型还没有直接调用 MCP Server。
+
+8. Host 收到模型生成的 Tool Call 后，根据 Tool 名称找到它属于哪个 MCP Server，再选择对应的 MCP Client。
+9. 被选中的 MCP Client 向对应的 MCP Server 发送：
+
+   ```text
+   tools/call
+   ```
+
+   并携带 Tool 名称和参数。
+
+10. MCP Server 执行真正的业务逻辑，例如调用 GitHub API，然后将结果作为 MCP Tool Result 返回给 MCP Client。
+11. MCP Client 把结果交给 Host。
+12. Host 再把 MCP Tool Result 转换成模型 API 能理解的消息，放回对话上下文中，让 LLM 继续推理。
+13. LLM 根据：
+
+   ```diff
+   用户问题
+   + Tool Call
+   + Tool Result
+   ```
+
+   生成最终回答。
+
+14. Host 把最终回答返回给用户。
+
+最重要的是区分两条链路：
+
+```text
+Host ↔ LLM
+```
+
+负责模型理解、Tool 选择和继续推理。
+
+```text
+MCP Client ↔ MCP Server
+```
+
+负责 Tool 的发现、调用和结果返回。
+
+Host 位于两者中间，负责把模型的 Tool Call 转换成 MCP 的 `tools/call`，再把 MCP 的 Tool Result 转换回模型能够理解的内容。
+
+</PlainExplanation>
 
 模型最终才会根据：
 
