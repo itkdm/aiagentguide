@@ -9,6 +9,7 @@ import ReadingProgress from './components/ReadingProgress.vue'
 import AnnouncementBar from './components/AnnouncementBar.vue'
 import CommunityGroup from './components/CommunityGroup.vue'
 import LastUpdated from './components/LastUpdated.vue'
+import ContentLock from './components/ContentLock.vue'
 import { useHtmlUrlRedirect } from './composables/useHtmlUrlRedirect'
 
 const { Layout } = DefaultTheme
@@ -42,6 +43,9 @@ useHtmlUrlRedirect()
 
         <template #doc-before>
             <Breadcrumb />
+            <ClientOnly>
+                <ContentLock v-if="frontmatter.layout !== 'home' && frontmatter.contentLock === true" />
+            </ClientOnly>
         </template>
 
         <template #doc-footer-before>

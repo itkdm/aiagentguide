@@ -8,6 +8,11 @@
   --vp-nav-screen-bg-color: rgba(255, 255, 255, 0.96);
 }
 
+/* Added only by the client-side article unlock flow; SSG HTML remains complete. */
+.content-lock-hidden {
+  display: none !important;
+}
+
 .dark {
   --vp-nav-bg-color: rgba(10, 14, 23, 0.82);
   --vp-nav-screen-bg-color: rgba(10, 14, 23, 0.96);

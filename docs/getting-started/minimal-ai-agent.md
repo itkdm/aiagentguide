@@ -21,6 +21,7 @@ status: published
 assets: none
 reviewed: false
 sourceType: original
+contentLock: true
 draft: false
 noindex: false
 ---

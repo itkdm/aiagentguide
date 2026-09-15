@@ -23,6 +23,7 @@ noindex: false
 assets: none
 reviewed: true
 sourceType: original
+contentLock: true
 ---
 
 # A2A 是什么：让独立 Agent 能够互相协作

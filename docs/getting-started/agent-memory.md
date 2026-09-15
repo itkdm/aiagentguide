@@ -23,6 +23,7 @@ noindex: false
 assets: none
 reviewed: true
 sourceType: original
+contentLock: true
 ---
 
 # Agent Memory 是什么：让 Agent 记住真正重要的信息

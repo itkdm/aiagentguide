@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 defineProps<{
   compact?: boolean
 }>()
 
 const isOpen = ref(false)
+const isSideTabVisible = ref(true)
+const isSideTabReady = ref(false)
+const sideTabDismissedStorageKey = 'bujidao-community-side-tab-dismissed'
 
 function openQrCode() {
   isOpen.value = true
@@ -14,6 +17,24 @@ function openQrCode() {
 function closeQrCode() {
   isOpen.value = false
 }
+
+function closeSideTab() {
+  isSideTabVisible.value = false
+  try {
+    window.localStorage.setItem(sideTabDismissedStorageKey, 'true')
+  } catch {
+    // Some privacy modes block localStorage; the current-session close still works.
+  }
+}
+
+onMounted(() => {
+  try {
+    isSideTabVisible.value = window.localStorage.getItem(sideTabDismissedStorageKey) !== 'true'
+  } catch {
+    isSideTabVisible.value = true
+  }
+  isSideTabReady.value = true
+})
 </script>
 
 <template>
@@ -35,10 +56,13 @@ function closeQrCode() {
     </div>
   </section>
 
-  <button v-else class="community-side-tab" type="button" @click="openQrCode">
-    <span class="community-side-icon" aria-hidden="true">💬</span>
-    <span class="community-side-label">交流群</span>
-  </button>
+  <div v-else-if="isSideTabReady && isSideTabVisible" class="community-side-tab" role="group" aria-label="交流群入口">
+    <button class="community-side-trigger" type="button" @click="openQrCode">
+      <span class="community-side-icon" aria-hidden="true">💬</span>
+      <span class="community-side-label">交流群</span>
+    </button>
+    <button class="community-side-close" type="button" aria-label="关闭交流群侧边栏" title="关闭" @click="closeSideTab">×</button>
+  </div>
 
   <Teleport to="body">
     <div v-if="isOpen" class="community-modal" role="dialog" aria-modal="true" aria-label="布吉岛 Agent 交流群二维码" @click.self="closeQrCode">
@@ -131,12 +155,20 @@ function closeQrCode() {
   top: 42%;
   right: 0;
   z-index: 20;
+  width: 56px;
+  padding: 0;
+  border: 0;
+  border-radius: 14px 0 0 14px;
+}
+
+.community-side-trigger {
   display: flex;
+  width: 100%;
+  min-height: 108px;
+  padding: 16px 8px 12px;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  width: 56px;
-  padding: 12px 8px;
   border: 1px solid var(--vp-c-divider);
   border-right: 0;
   border-radius: 14px 0 0 14px;
@@ -149,9 +181,40 @@ function closeQrCode() {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.community-side-tab:hover {
+.community-side-trigger:hover {
   transform: translateX(-4px);
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
+}
+
+.community-side-close {
+  position: absolute;
+  top: -8px;
+  right: 4px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  color: var(--vp-c-text-2);
+  background: var(--vp-c-bg);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.community-side-close:hover {
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg-soft);
+}
+
+.community-side-close:focus-visible,
+.community-side-trigger:focus-visible {
+  outline: 2px solid var(--vp-c-brand-1);
+  outline-offset: 3px;
 }
 
 .community-side-icon {
@@ -241,7 +304,11 @@ function closeQrCode() {
   .community-side-tab {
     top: 40%;
     width: 48px;
-    padding: 10px 6px;
+  }
+
+  .community-side-trigger {
+    min-height: 96px;
+    padding: 12px 6px 10px;
   }
 }
 </style>
