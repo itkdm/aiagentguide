@@ -7,18 +7,12 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
     link: '/principles/'
   },
   {
-    text: '原理详解',
+    text: '深入 MCP',
+    collapsed: true,
     items: [
-      { text: '01-Agent 架构', link: '/principles/general-agent-architecture' },
-      { text: '02-核心循环', link: '/principles/general-core-loop' },
-      { text: '03-规划', link: '/principles/general-planning' },
-      { text: '04-工具', link: '/principles/general-tools' },
-          { text: '05-记忆', link: '/principles/general-memory' },
-          { text: '06-Skill', link: '/principles/general-skills' },
-          { text: '07-MCP', link: '/principles/general-mcp' },
-          { text: '08-Harness Engineering', link: '/principles/general-harness-engineering' },
-          { text: '09-多 Agent', link: '/principles/general-multi-agent' },
-          { text: '10-可靠性与安全', link: '/principles/general-reliability-safety' }
+      { text: 'MCP 架构', link: '/principles/deep-mcp-architecture' },
+      { text: 'MCP 消息模型', link: '/principles/deep-mcp-message-model' },
+      { text: 'MCP 传输方式', link: '/principles/deep-mcp-transport' }
     ]
   }
 ],
