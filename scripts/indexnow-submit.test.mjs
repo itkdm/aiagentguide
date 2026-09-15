@@ -1,7 +1,13 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
-import { filesToIndexNowUrls, pathToIndexNowUrl } from './indexnow-submit.mjs'
+import {
+  filesToIndexNowUrls,
+  isIndexableMarkdown,
+  pathToIndexNowUrl,
+  shouldSubmitIndexNowFile,
+  shouldSubmitIndexNowVersions
+} from './indexnow-submit.mjs'
 
 const siteUrl = 'https://aiagentguide.cn/'
 
@@ -46,4 +52,28 @@ test('deduplicates urls and ignores unsupported files', () => {
     'https://aiagentguide.cn/',
     'https://aiagentguide.cn/social-card.svg'
   ])
+})
+
+test('recognizes the same indexability rules as the site', () => {
+  assert.equal(isIndexableMarkdown('docs/tools/example.md', '---\nnoindex: true\n---\n'), false)
+  assert.equal(isIndexableMarkdown('docs/tools/example.md', '---\nstatus: published\n---\n'), true)
+  assert.equal(isIndexableMarkdown('docs/tools/index.md', '# Tools\n'), true)
+  assert.equal(isIndexableMarkdown('docs/tools/nested/index.md', '# Nested\n'), false)
+})
+
+test('submits when either the previous or current version is indexable', () => {
+  const blocked = '---\nnoindex: true\n---\n'
+  const published = '---\nstatus: published\n---\n'
+
+  assert.equal(shouldSubmitIndexNowVersions('docs/tools/example.md', blocked, blocked), false)
+  assert.equal(shouldSubmitIndexNowVersions('docs/tools/example.md', published, blocked), true)
+  assert.equal(shouldSubmitIndexNowVersions('docs/tools/example.md', blocked, published), true)
+  assert.equal(shouldSubmitIndexNowVersions('docs/tools/example.md', published, published), true)
+})
+
+test('fails when the IndexNow base commit cannot be resolved', () => {
+  assert.throws(
+    () => shouldSubmitIndexNowFile('docs/tools/astronclaw.md', { beforeSha: 'missing-commit' }),
+    /Unable to resolve IndexNow base commit: missing-commit/
+  )
 })

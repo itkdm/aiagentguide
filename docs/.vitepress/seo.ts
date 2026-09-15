@@ -3,6 +3,7 @@ import path from 'node:path'
 
 import type { DefaultTheme, HeadConfig, PageData } from 'vitepress'
 import { buildBreadcrumbChain } from './breadcrumb.ts'
+import { isIndexablePage as isSharedIndexablePage } from '../../scripts/indexability.mjs'
 
 const DESCRIPTION_MAX_LENGTH = 160
 const DEFAULT_SOCIAL_IMAGE = 'social-card.svg'
@@ -148,12 +149,6 @@ function getFrontmatterRecord(pageData: Pick<PageData, 'frontmatter'>) {
   return (pageData.frontmatter ?? {}) as FrontmatterLike
 }
 
-function isImplicitlyIndexableOverviewPage(relativePath = '') {
-  const normalizedPath = relativePath.replace(/\\/g, '/')
-
-  return normalizedPath === 'index.md' || /^[^/]+\/index\.md$/.test(normalizedPath)
-}
-
 function normalizeTextValue(value: unknown) {
   return cleanText(String(value ?? ''))
 }
@@ -199,10 +194,6 @@ function normalizeDateValue(value: unknown) {
   const parsed = new Date(normalized)
 
   return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString()
-}
-
-function normalizeStatusValue(value: unknown) {
-  return normalizeTextValue(value).toLowerCase()
 }
 
 function resolveSitemapLastModified(frontmatter: FrontmatterLike, lastModified?: string) {
@@ -362,19 +353,7 @@ function resolveAuthor(pageData: Pick<PageData, 'frontmatter'>) {
 export function isIndexablePage(
   pageData: Pick<PageData, 'frontmatter' | 'isNotFound' | 'relativePath'>
 ) {
-  const frontmatter = getFrontmatterRecord(pageData)
-
-  if (pageData.isNotFound || Boolean(frontmatter.draft || frontmatter.noindex)) {
-    return false
-  }
-
-  const normalizedStatus = normalizeStatusValue(frontmatter.status)
-
-  if (normalizedStatus) {
-    return normalizedStatus === 'published'
-  }
-
-  return isImplicitlyIndexableOverviewPage(pageData.relativePath)
+  return isSharedIndexablePage(pageData)
 }
 
 function isNoIndexPage(pageData: Pick<PageData, 'frontmatter' | 'isNotFound' | 'relativePath'>) {
@@ -739,5 +718,3 @@ export function buildSitemapXml(
     '</urlset>'
   ].join('')
 }
-
-

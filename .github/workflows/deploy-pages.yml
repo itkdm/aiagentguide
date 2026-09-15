@@ -126,7 +126,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         uses: actions/checkout@v5
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Collect changed documentation files
         if: ${{ github.event_name == 'push' }}
@@ -138,33 +138,43 @@ jobs:
 
             if (!before || /^0+$/.test(before)) {
               core.notice('Skipping IndexNow submission because no previous commit SHA is available.')
-              core.setOutput('files', '')
+              core.setOutput('changes', '[]')
               return
             }
 
-            const { owner, repo } = context.repo
-            const basehead = `${before}...${context.sha}`
-            const response = await github.rest.repos.compareCommitsWithBasehead({
-              owner,
-              repo,
-              basehead
-            })
+            const { execFileSync } = require('node:child_process')
+            const diff = execFileSync(
+              'git',
+              ['diff', '--name-status', '--find-renames', `${before}...${context.sha}`],
+              { encoding: 'utf8' }
+            )
 
-            const files = (response.data.files || [])
-              .map((file) => file.filename)
-              .filter((file) => file.startsWith('docs/'))
+            const changes = diff
+              .split(/\r?\n/)
+              .filter(Boolean)
+              .map((line) => {
+                const [, firstPath, secondPath] = line.split('\t')
+                const path = secondPath || firstPath
 
-            if (!files.length) {
+                return {
+                  path,
+                  ...(secondPath ? { previousPath: firstPath } : {})
+                }
+              })
+              .filter(({ path }) => path.startsWith('docs/'))
+
+            if (!changes.length) {
               core.notice('No documentation changes detected for IndexNow submission.')
-              core.setOutput('files', '')
+              core.setOutput('changes', '[]')
               return
             }
 
-            core.notice(`Collected ${files.length} changed documentation file(s) for IndexNow submission.`)
-            core.setOutput('files', files.join('\n'))
+            core.notice(`Collected ${changes.length} changed documentation file(s) for IndexNow submission.`)
+            core.setOutput('changes', JSON.stringify(changes))
 
       - name: Submit changed URLs to IndexNow
-        if: ${{ github.event_name == 'push' && steps.changed-files.outputs.files != '' }}
+        if: ${{ github.event_name == 'push' && steps.changed-files.outputs.changes != '[]' }}
         env:
-          INDEXNOW_FILE_PATHS: ${{ steps.changed-files.outputs.files }}
+          INDEXNOW_FILE_CHANGES: ${{ steps.changed-files.outputs.changes }}
+          INDEXNOW_BEFORE_SHA: ${{ github.event.before }}
         run: node ./scripts/indexnow-submit.mjs
