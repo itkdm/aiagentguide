@@ -22,6 +22,32 @@ noindex: true
 
 # 深入 MCP：MCP 的消息是怎么传输的？
 
+```mermaid
+flowchart TB
+    A[MCP / JSON-RPC Message<br/>协议语义由 MCP Core 定义] --> B{Transport Binding}
+
+    B --> C[stdio]
+    C --> C1[Client 启动 MCP Server 子进程]
+    C1 --> C2[stdin / stdout<br/>换行分隔 JSON-RPC Message]
+    C2 <--> S[MCP Server]
+
+    B --> H[Streamable HTTP]
+    H --> H1[POST MCP Endpoint<br/>每条 Client Message 对应一次 POST]
+    H1 --> S
+    S -. 仅 Streamable HTTP .-> H2{Server Response}
+    H2 --> H3[application/json<br/>单个 JSON Response]
+    H2 --> H4[text/event-stream<br/>request-scoped SSE]
+
+    classDef message fill:#e8f3ff,stroke:#3b82f6,color:#172554
+    classDef transport fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
+    classDef detail fill:#fff4e5,stroke:#f59e0b,color:#78350f
+    classDef server fill:#ecfdf5,stroke:#10b981,color:#064e3b
+    class A message
+    class B,C,H,H2 transport
+    class C1,C2,H1,H3,H4 detail
+    class S server
+```
+
 
 MCP 定义了一条 Message 应该是什么结构、`method` 表达什么含义，但 JSON-RPC Message 本身并不会凭空从 Client 跑到 Server。
 
