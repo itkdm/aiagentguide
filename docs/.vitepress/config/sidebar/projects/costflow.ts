@@ -17,6 +17,16 @@ export const costflowSidebar: DefaultTheme.Sidebar = {
         { text: '08-读懂调用链', link: '/projects/costflow/01-project-start/08-call-chain' },
         { text: '09-找到计费入口', link: '/projects/costflow/01-project-start/09-billing-entry' }
       ]
+    },
+    {
+      text: '02｜确定方案',
+      collapsed: true,
+      items: [
+        {
+          text: '01-调研成熟计费系统',
+          link: '/projects/costflow/02-solution/01-research-billing-systems'
+        }
+      ]
     }
   ]
 }
