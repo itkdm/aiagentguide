@@ -13,7 +13,7 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
       { text: 'MCP 架构', link: '/principles/deep-mcp-architecture' },
       { text: 'MCP 消息模型', link: '/principles/deep-mcp-message-model' },
       { text: 'MCP 传输方式', link: '/principles/deep-mcp-transport' },
-      { text: 'MCP 是怎么协商协议版本和能力的？', link: '/principles/deep-mcp-negotiation' },
+      { text: 'MCP 版本与能力协商', link: '/principles/deep-mcp-negotiation' },
       { text: 'MCP Server 是怎么描述自己能力的？', link: '/principles/deep-mcp-capabilities' },
       { text: 'MCP Tool 是怎么接入模型调用链的？', link: '/principles/deep-mcp-tool-model' },
       { text: '一次请求需要多轮交互时怎么办？', link: '/principles/deep-mcp-mrtr' },
