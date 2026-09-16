@@ -809,3 +809,37 @@ flowchart TD
     class B,R2 decision
     class D1,D2,D3,P1,S1,S2,S3,S4 discovery
 ```
+
+## 总结
+
+MCP 的协议版本和能力协商，并不是通过一次固定的握手把结果永久绑定到连接上。到了 `2026-07-28`，MCP 已经转向以 **每条 Request 自描述** 为基础的协议模型：Request 自己携带 Protocol Version 和当前可用的 Client Capabilities，Server 根据当前 Request 独立判断自己能否正确处理。
+
+`server/discover` 为现代 MCP 提供了一种提前发现 Server 信息的方式。Client 可以通过它一次性获得 Server 支持的 Protocol Version、Server Capabilities、Server Info 和 instructions 等信息。但 `server/discover` 并不是新版的 `initialize`：Server 必须实现它，Client 却可以选择不调用，直接发送正常 RPC。调用 `server/discover` 也不会建立一段隐藏的协商状态，后续 Request 仍然必须携带自己的版本和能力声明。
+
+协议版本不匹配时，Server 会返回 `UnsupportedProtocolVersionError`，并告诉 Client 自己支持哪些版本。Client 再从双方共同支持的版本中选择合适的版本并重新发送 Request。因此现代 MCP 的版本协商不是“握手一次，以后固定”，而是：
+
+**Request 声明版本 → Server 接受或拒绝 → 不兼容时返回支持列表 → Client 选择共同版本并重试。**
+
+Capabilities 则描述协议双方分别具备什么能力。Server Capabilities 更关注“Server 能提供什么”，例如 Tools、Resources、Prompts；Client Capabilities 更关注“处理当前 Request 时，Client 能配合什么”，例如 Elicitation、Sampling 等。尤其是在现代 MCP 中，Client Capabilities 是**请求级契约**：Server 不能根据之前的 Request 推断当前 Request 仍然具备相同能力。
+
+最后，MCP 还必须解决新旧协议共存的问题。`2025-11-25` 及以前属于依赖 `initialize` 的 Legacy Era，而 `2026-07-28` 开始进入基于 per-request `_meta` 的 Modern Era。一个同时兼容两种协议的 Client，需要先根据 Transport 判断 Server 属于哪个 Era；如果确认是 Modern，再进行具体的 Protocol Version 选择。
+
+因此，理解 MCP 的版本与能力协商，可以抓住几个核心点：
+
+- **`server/discover`** 用于发现 Server 支持的版本和能力，但不是强制握手。
+- **现代 MCP 的 Protocol Version 跟随每条 Request，而不是绑定在一次 Connection 上。**
+- **版本不兼容时，通过 `UnsupportedProtocolVersionError` 返回支持列表，再由 Client 选择共同版本。**
+- **Server Capabilities 描述 Server 能提供什么，Client Capabilities 描述当前 Request 中 Client 能配合什么。**
+- **Client Capabilities 不能从历史 Request 推断，必须以当前 Request 的声明为准。**
+- **Legacy / Modern Era Detection 和 Modern Era 内部的 Version Negotiation 是两个不同的问题。**
+
+## 相关面试题
+
+- **MCP 是怎么协商协议版本和能力的？**
+- **`server/discover` 有什么作用？它和 `tools/list`、`resources/list` 有什么区别？**
+- **为什么 `server/discover` 不能理解成新版的 `initialize`？**
+- **现代 MCP 是怎么选择 Client 和 Server 都支持的 Protocol Version 的？**
+- **为什么 MCP 版本协商不能简单选择双方支持的“最高版本”？**
+- **Client Capabilities 和 Server Capabilities 有什么区别？**
+- **为什么新版 MCP 要让 Client Capabilities 跟随每一次 Request 发送？**
+- **Legacy、Modern 和 Dual-era 分别是什么？新旧 MCP Client 和 Server 是怎么兼容的？**
