@@ -1,9 +1,10 @@
 ---
 title: "参考成熟项目：AI 用量与计费系统是怎么设计的"
-description: "通过 New API 的网关、预扣、结算和退款链路，理解一次 AI 模型请求如何完成额度计费。"
-summary: "参考 New API 的计费架构，理解 AI 模型请求中的用量、额度预扣、差额结算和失败补偿。"
+description: "通过 New API 与 Sub2API 的架构和计费流程，理解 AI 模型请求中的用量统计、价格计算与额度结算，为 CostFlow 设计提供参考。"
+summary: "对比 New API 与 Sub2API 的网关、用量、定价和额度结算方式，为 AI 应用计费系统设计建立整体认识。"
 keywords:
   - New API 计费
+  - Sub2API 计费
   - AI API 网关计费
   - Usage Billing
   - CostFlow
@@ -25,7 +26,7 @@ noindex: true
 
 在真正开始设计我们的方案之前，我们先来了解一下其他项目的实践方案。
 
-这次我们重点参考借鉴 `New API`、`Sub2API`、`Langfuse`。
+这次我们重点参考借鉴 `New API` 和 `Sub2API`。
 
 它们解决的问题并不完全相同：
 
@@ -35,9 +36,6 @@ New API
 
 Sub2API
 → AI API 网关，重点看 Usage、Cost、余额等数据怎么落下来
-
-Langfuse
-→ AI 应用观测平台，重点看应用内部的一次模型调用怎么表示
 ```
 
 我们不会照搬其中任何一个项目，重点参考他们的逻辑设计，比如一次模型调用怎么进入计费链路？，参考他们的数据模型，比如真实 Usage 和 Cost 怎么保存？。
