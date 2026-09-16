@@ -25,6 +25,10 @@ export const costflowSidebar: DefaultTheme.Sidebar = {
         {
           text: '01-调研成熟计费系统',
           link: '/projects/costflow/02-solution/01-research-billing-systems'
+        },
+        {
+          text: '02-确定 CostFlow V1',
+          link: '/projects/costflow/02-solution/02-costflow-v1-scope'
         }
       ]
     }
