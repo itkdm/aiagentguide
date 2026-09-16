@@ -583,24 +583,16 @@ Server 应该返回什么结构化结果。
 
 ```mermaid
 flowchart TD
-    A[Client 构造 Tool Call] --> B[提交 inputSchema]
+    A[Client 构造 Tool Call<br/>name + arguments] --> B[Server 按 inputSchema<br/>校验 arguments]
     B --> C{输入校验通过？}
-    C -->|否| D[返回参数错误<br/>Handler 不执行]
+    C -->|否| D[Invalid Params<br/>Handler 不执行]
     C -->|是| E[执行 Tool Handler]
-    E --> F[生成 structuredContent]
-    F --> G{声明了 outputSchema？}
-    G -->|否| H[返回 Tool Result]
-    G -->|是| I{输出校验通过？}
-    I -->|否| J[返回输出结构错误]
-    I -->|是| H
-
-    classDef request fill:#e8f3ff,stroke:#3b82f6,color:#172554
-    classDef decision fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
-    classDef success fill:#ecfdf5,stroke:#10b981,color:#064e3b
-    classDef error fill:#fff4e5,stroke:#f59e0b,color:#78350f
-    class A,B,E,F,H request
-    class C,G,I decision
-    class D,J error
+    E --> F{是否声明 outputSchema？}
+    F -->|否| G[返回 Tool Result]
+    F -->|是| H[生成 structuredContent]
+    H --> I{符合 outputSchema？}
+    I -->|否| J[输出结果不符合契约]
+    I -->|是| G
 ```
 
 ## 为什么 Tool Result 同时需要 `content` 和 `structuredContent`？
@@ -1369,3 +1361,40 @@ Prompt。
 **Resource 定义“有什么数据可以访问”。**
 
 **Prompt 定义“可以怎样开始一次预定义交互”。**
+
+## 总结
+
+MCP Server 描述自己的能力，并不是简单返回一张“接口列表”，而是把能力拆成 **Tools、Resources 和 Prompts** 三种不同的 Primitive。三者解决的问题不同，也对应不同的控制模型：
+
+- **Tools：Model-controlled**，更适合让模型根据当前上下文决定是否调用。
+- **Resources：Application-controlled**，更适合作为 Host 可以发现、读取、引用和管理的上下文数据。
+- **Prompts：User-controlled**，更适合作为用户主动选择的预定义交互模板。
+
+Tool 的核心是 **Tool Definition**。`tools/list` 返回的不是 Server 内部函数本身，而是 `name`、`description`、`inputSchema`、可选的 `outputSchema`、`annotations` 等描述信息。`name` 用于协议调用，`description` 和参数说明会影响模型对 Tool 的理解，而 `annotations` 只是行为提示，不能被当作可信的安全保证。
+
+Tool 使用 JSON Schema 描述参数和结构化结果，使调用双方能够共享一份机器可理解的类型契约。`inputSchema` 用来约束调用参数，`outputSchema` 可以描述结构化结果。Tool 执行完成以后，`content` 更适合模型和用户直接理解，而 `structuredContent` 更适合程序继续消费；它和大模型的 Structured Output 并不是同一个概念。
+
+Resource 和 Tool 最大的区别在于：**Tool 的核心身份是操作，Resource 的核心身份是 URI。** Resource 通过 URI 建立稳定的寻址模型，Client 可以发现、读取、引用甚至监听它的变化。对于无法枚举的大规模资源空间，MCP 又提供 Resource Template，通过 RFC 6570 URI Template 描述“一类资源”，而不是提前列出所有具体 URI。
+
+Prompt 则解决另一类问题。它不是简单保存一段字符串，而是让 Server 向 Client 暴露 **可发现、可参数化、结构化的对话模板**。Client 可以通过 `prompts/list` 发现 Prompt，再通过 `prompts/get` 获得真正的 Prompt Messages。Prompt Message 还可以包含文本、图片、音频、Resource Link 或 Embedded Resource，因此它表达的是完整的对话结构，而不仅仅是一段文本。
+
+所以理解这三种 Primitive 时，可以抓住三个最核心的区别：
+
+- **Tool 定义“可以做什么”。**
+- **Resource 定义“有什么数据可以访问”。**
+- **Prompt 定义“可以怎样开始一次预定义交互”。**
+
+它们并不是三种互相替代的实现方式，而是 MCP 为不同交互语义设计的三种标准能力模型。
+
+## 相关面试题
+
+- **MCP Server 是怎么描述自己能力的？Tools、Resources 和 Prompts 有什么区别？**
+- **为什么 MCP 不把所有能力都统一设计成 Tool？**
+- **`tools/list` 返回的到底是什么？Tool Definition 中哪些字段最重要？**
+- **Tool 的 `name`、`title`、`description` 和 `annotations` 分别有什么作用？**
+- **为什么 MCP Tool 要使用 JSON Schema？`inputSchema` 和 `outputSchema` 分别解决什么问题？**
+- **Tool Result 中 `content` 和 `structuredContent` 有什么区别？**
+- **MCP Resource 为什么使用 URI，而不是像 Tool 一样只使用 `name`？**
+- **Resource Template 是什么？它为什么需要使用 URI Template？**
+- **MCP Prompt 为什么要成为独立的一等能力？它和普通 Prompt 字符串、Tool 有什么区别？**
+- **MCP 中 Model-controlled、Application-controlled 和 User-controlled 分别是什么意思？**
