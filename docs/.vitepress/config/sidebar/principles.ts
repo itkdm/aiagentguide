@@ -15,7 +15,7 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
       { text: 'MCP 传输方式', link: '/principles/deep-mcp-transport' },
       { text: 'MCP 版本与能力协商', link: '/principles/deep-mcp-negotiation' },
       { text: 'MCP 三类核心能力', link: '/principles/deep-mcp-capabilities' },
-      { text: 'MCP Tool 是怎么接入模型调用链的？', link: '/principles/deep-mcp-tool-model' },
+      { text: 'MCP Tool 调用链', link: '/principles/deep-mcp-tool-model' },
       { text: '一次请求需要多轮交互时怎么办？', link: '/principles/deep-mcp-mrtr' },
       { text: 'MCP 怎么处理长时间运行的请求和持续通知？', link: '/principles/deep-mcp-long-running' },
       { text: 'Remote MCP 的 Authorization 到底是怎么工作的？', link: '/principles/deep-mcp-authorization' },

@@ -590,3 +590,46 @@ sequenceDiagram
     H->>H: 转换结果与错误表达
     H-->>L: Tool Result<br/>关联 call_abc123
 ```
+
+## 总结
+
+MCP Tool 并不会直接进入大模型。MCP 负责的是 MCP Client 与 MCP Server 之间的 Tool 发现和调用，而真正把这些 Tool 接入模型 Tool Calling 的，是位于两套协议之间的 Host / Agent Runtime。
+
+因此，一个完整的 MCP Tool 调用链实际上跨越了两个不同的协议边界：
+
+**MCP Server ↔ MCP Client ↔ Host ↔ Model Provider ↔ LLM**
+
+Server 通过 `tools/list` 暴露 MCP Tool Definition，Host 再把这些定义转换成模型 Provider 能够理解的 Tool Definition。不同 Provider 的 Tool Calling 格式并不相同，所以这一步本质上是一层协议适配，而不是简单把 MCP 返回的 JSON 原样转发给模型。
+
+当 Host 同时连接多个 MCP Server 时，还需要解决 Tool Name 冲突。MCP 只要求 Tool Name 在单个 Server 内唯一，因此不同 Server 完全可以同时存在一个叫 `search` 的 Tool。Host 通常会通过 Namespacing 为模型构造全局唯一的名称，例如：
+
+`mcp__github__search`
+
+模型看到的是 Namespaced Tool Name，而真正发送给 MCP Server 的仍然是原始的 `search`。因此 Host 必须能够在“模型 Tool 空间”和“MCP Server Tool 空间”之间完成双向路由。
+
+MCP Tool 转换成模型 Tool 时也会发生字段投影。完整 MCP Tool 可以包含 `name`、`description`、`inputSchema`、`outputSchema`、`annotations`、`icons` 等信息，但模型进行 Tool Selection 和参数生成时通常主要需要 `name`、`description` 和 `inputSchema`。其他信息仍然可以留在 Host 中用于 UI、安全策略、结果校验等用途。
+
+模型真正返回 Tool Call 以后，也不能直接把它当成 MCP `tools/call`。模型 Provider 自己的 Tool Call ID 和 MCP JSON-RPC Request ID 属于两套不同的关联机制：前者用于把模型 Tool Result 对应回某一次模型 Tool Call，后者用于把 MCP Response 对应回某一次 MCP Request。Host 必须分别维护这两条调用链。
+
+Tool Result 返回时还要进行一次反向适配。MCP 的 `CallToolResult` 可以包含 Text、Image、Audio、Resource Link、Embedded Resource、`structuredContent` 和 `isError` 等信息，但模型 Provider 未必能够完整表达这些类型。Host 因此需要根据 Provider 能力进行保留、降级、裁剪或重新编码，同时控制真正进入模型 Context 的内容大小和安全边界。
+
+所以 MCP Tool 接入模型调用链，本质上并不是：
+
+**MCP Tool → LLM**
+
+而是：
+
+**MCP Tool → Host 聚合与投影 → Provider Tool → Model Tool Call → Host 路由 → MCP `tools/call` → MCP Result → Host 再适配 → Provider Tool Result**
+
+理解这一层 Host Bridge（桥接层），才能真正理解 MCP 为什么可以和不同模型 Provider 配合使用。
+
+## 相关面试题
+
+- **MCP Tool 是怎么接入大模型 Tool Calling 链路的？**
+- **MCP Tool 和模型 Provider 的 Tool Calling 是同一套协议吗？**
+- **为什么 Host 同时连接多个 MCP Server 时需要对 Tool Name 做 Namespacing？**
+- **MCP Tool 转换成模型 Tool Definition 时，哪些字段通常会保留，哪些字段可能只留在 Host 内部？**
+- **模型返回的 Tool Call 为什么不能直接当成 MCP `tools/call`？**
+- **Provider Tool Call ID 和 MCP JSON-RPC Request ID 有什么区别？**
+- **MCP Tool Result 为什么不能总是原样交给模型？Host 需要做哪些适配？**
+- **为什么说真正“支持 MCP”的通常是 Host / Agent Runtime，而不只是底层 LLM？**
