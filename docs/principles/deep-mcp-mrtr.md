@@ -1070,3 +1070,54 @@ MRTR 真正有价值的地方，也并不是让 MCP “支持多问用户几个�
 但整个业务过程仍然能够继续。
 
 这才是 MRTR 在新版 MCP 中真正解决的问题。
+
+## 总结
+
+MCP 中并不是所有 Request 都能够一次完成。一个 Tool、Resource 或 Prompt 在处理过程中，可能还需要用户输入、模型生成结果或者 Client 提供 Roots 等额外信息。`2026-07-28` 引入的 MRTR（Multi Round-Trip Requests，多轮往返请求），就是为这种场景设计的。
+
+旧版 MCP 允许 Server 在处理 Client Request 的过程中，再反向向 Client 发起 `elicitation/create`、`sampling/createMessage`、`roots/list` 等 Request。这样会形成嵌套的双向 RPC，不仅让 Transport 和请求生命周期更加复杂，也意味着原来的 Request 可能需要长时间保持未完成状态。
+
+MRTR 改变了这种模型。Server 如果发现当前信息不足，不再向 Client 发起一条独立 Request，而是结束当前 Request，返回：
+
+`InputRequiredResult`
+
+并通过：
+
+`resultType = input_required`
+
+告诉 Client：
+
+**这一轮已经正常结束，但整个操作还需要更多输入。**
+
+Client 收集完这些信息以后，再重新发送原来的 Method。新的 Request 与上一轮完全独立，因此必须使用新的 JSON-RPC Request ID。
+
+`InputRequiredResult` 可以携带 `inputRequests`。它是一个由 Server 分配 Key 的 Map，每一个 Key 对应一项需要 Client 完成的输入请求。Client 完成以后，再使用相同 Key 将结果放入 `inputResponses`。这种设计既解决了 Request 与 Response 的关联，也允许多个互相独立的输入在同一轮中被处理。
+
+如果一次操作需要跨多轮保存上下文，Server 还可以返回 `requestState`。它是一个只对 Server 有意义的 Opaque String（不透明字符串）。Client 不应该解析、修改或依赖其中的内容，只需要在下一轮 Retry 时原样带回。
+
+这种设计让 MRTR 不必依赖原来的 Server Instance。第一轮可以由 Server A 处理，下一轮完全可以被负载均衡到 Server B；只要新的实例能够验证并恢复 `requestState`，就可以继续处理。因此 MRTR 很适合 MCP 当前的 Stateless（无状态）协议模型，也不要求为了多轮交互强制使用 Sticky Session。
+
+但 `requestState` 会经过 Client 再返回 Server，因此 Server 必须把它当成不可信输入。如果其中的数据会影响授权、资源访问或者业务行为，就必须保护其完整性，并根据实际场景考虑用户身份、过期时间、原始请求绑定以及 Replay（重放）等问题。
+
+从 Wire 层来看，一次 MRTR 实际可能包含多条独立 Request：
+
+**Request → InputRequiredResult → 收集输入 → Retry → InputRequiredResult → Retry → Complete Result**
+
+而官方 SDK 可以通过 Input Required Driver 把这套循环封装起来。应用代码仍然可能只是一次 `callTool()`，SDK 在内部负责处理 `inputRequests`、收集 `inputResponses`、回传 `requestState`、生成新的 Request ID 并继续 Retry，直到获得最终结果或达到最大轮数。
+
+因此，MRTR 最核心的设计思想可以概括成一句话：
+
+**不要把一个 Request 挂起来等待额外输入，而是结束当前 Request，把需要的信息显式返回给 Client，再通过一条新的自包含 Request 继续执行。**
+
+## 相关面试题
+
+- **MCP 中一次 Request 需要多轮交互时是怎么处理的？什么是 MRTR？**
+- **为什么新版 MCP 要用 MRTR 替代旧版的 Server → Client Request？**
+- **`InputRequiredResult` 是什么？为什么 `input_required` 被设计成正常 Result 而不是 Error？**
+- **哪些 MCP Request 可以返回 `InputRequiredResult`？**
+- **`inputRequests` 和 `inputResponses` 为什么设计成 Map？它们是怎么关联的？**
+- **`requestState` 是什么？为什么 Client 必须把它当成不透明字符串？**
+- **为什么 MRTR 每一轮 Retry 都必须使用新的 JSON-RPC Request ID？**
+- **MRTR 为什么能够支持 Stateless Server，而不依赖 Sticky Session？**
+- **`requestState` 有哪些安全风险？Server 为什么必须对它进行完整性校验？**
+- **官方 SDK 是怎么把多轮 MRTR 封装成看起来像一次普通调用的？**
