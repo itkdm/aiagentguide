@@ -11,13 +11,13 @@ tags:
   - 原理
   - MCP
 author: 布吉岛
-lastUpdated: 2026-09-14
-status: draft
-draft: true
+lastUpdated: 2026-09-17
+status: published
+draft: false
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-noindex: true
+noindex: false
 ---
 
 # 深入 MCP：MCP 是怎么协商协议版本和能力的？

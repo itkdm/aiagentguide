@@ -13,13 +13,13 @@ tags:
   - Agent Loop
   - Agent 工程
 author: 布吉岛
-lastUpdated: 2026-09-13
+lastUpdated: 2026-09-17
 status: published
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
 draft: false
-noindex: true
+noindex: false
 
 
 ---
