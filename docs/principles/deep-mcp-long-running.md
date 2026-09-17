@@ -71,7 +71,7 @@ Response
 
 Client 发出 Request，Server 执行，最后返回 Response。
 
-如果 Server 需要执行一分钟，那么这一分钟里 Request 依然处于**In-flight（正在执行中）**状态。
+如果 Server 需要执行一分钟，那么这一分钟里 Request 依然处于正在执行中状态。
 
 这时候 Client 最少需要区分三件事：
 
@@ -134,8 +134,6 @@ Server 不需要固定每五秒报告一次，也不保证一定发送 Progress�
 ```
 
 至于 Server 是否发送、多久发送一次，仍然由 Server 决定。
-
-因此准确的关系应该是：
 
 ```text
 Request
@@ -393,7 +391,7 @@ Request 开始
     └── 10min → 即使仍有 Progress，也必须结束等待
 ```
 
-这和 MRTR 那篇里看到的：
+这和 MRTR 中的：
 
 ```text
 timeout
@@ -440,7 +438,7 @@ Cancellation 表面上很简单：
 Client 不想继续等了，让 Server 停止。
 ```
 
-但实际落到不同 Transport 上以后，取消信号并不一样。
+但实际上，不同 Transport 取消信号并不一样。
 
 ### stdio 为什么需要 `notifications/cancelled`？
 
@@ -510,7 +508,7 @@ requestId = 102
 尝试。
 ```
 
-Cancellation 不是事务回滚保证。
+Server 收到 notifications/cancelled 后，应该尽快停止对应 Request 的后续工作，但 MCP 不保证这个 Request 一定能被立即、完整、无副作用地终止。
 
 ### 为什么 HTTP 不需要再发送取消 Notification？
 
@@ -833,13 +831,7 @@ Request Filter
 
 只是 Client 希望建立什么 Subscription。
 
-而：
-
-```text
-Acknowledgment
-```
-
-才是 Server 最终同意的 Subscription。
+而 `Acknowledgment` 才是 Server 最终同意的 Subscription。
 
 这实际上形成了一次非常轻量的 Negotiation（协商）。
 
@@ -992,7 +984,7 @@ Client 断线一天以后回来，仍然能找到它。
 
 而真正能够脱离当前 Connection 长期存在的工作，需要另外一种模型：
 
-**Task。**
+**Task。**（后文介绍）
 
 所以这一篇里真正应该理解的是三个不同生命周期：
 
