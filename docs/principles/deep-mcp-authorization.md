@@ -40,17 +40,18 @@ https://mcp.example.com
 
 这时候核心就不再是：
 
-> Client 能不能访问这个 MCP Server？
+```text
+Client 能不能访问这个 MCP Server？
+```
 
 而是：
 
-> Client 代表的是谁？
-
-> 用户到底允许它访问哪些能力？
-
-> 这个 Access Token 是不是专门发给当前 MCP Server 的？
-
-> Client 第一次看到一个完全陌生的 MCP Server，又怎么知道该去哪里登录？
+```text
+Client 代表的是谁？
+用户到底允许它访问哪些能力？
+这个 Access Token 是不是专门发给当前 MCP Server 的？
+Client 第一次看到一个完全陌生的 MCP Server，又怎么知道该去哪里登录？
+```
 
 MCP 没有自己重新设计一套账号和 Token 协议，而是建立在 OAuth 2.1 及相关标准之上。
 
@@ -72,7 +73,9 @@ MCP Authorization 是可选能力，主要面向 HTTP Transport。
 
 也就是：
 
-> 一个服务既负责用户登录，又负责签发 Token，还负责真正执行 MCP Request。
+```text
+一个服务既负责用户登录，又负责签发 Token，还负责真正执行 MCP Request。
+```
 
 这当然能实现。
 
@@ -124,11 +127,15 @@ MCP Server
 
 用户完成登录，只能证明：
 
-> Authorization Server 知道这个用户是谁。
+```text
+Authorization Server 知道这个用户是谁。
+```
 
 并不能自动证明：
 
-> 当前 Client 可以访问这个 MCP Server 的所有资源。
+```text
+当前 Client 可以访问这个 MCP Server 的所有资源。
+```
 
 身份和资源授权不是一回事。
 
@@ -162,15 +169,21 @@ Token Endpoint 是什么？
 
 如果 MCP 要实现真正的开放生态，就不能要求：
 
-> 每增加一个 MCP Server，都在 Client 代码里手动写一份 OAuth 配置。
+```text
+每增加一个 MCP Server，都在 Client 代码里手动写一份 OAuth 配置。
+```
 
 所以 Remote MCP Authorization 很重要的一部分其实不是：
 
-> 怎么登录。
+```text
+怎么登录。
+```
 
 而是：
 
-> **怎么发现授权系统。**
+```text
+怎么发现授权系统。
+```
 
 当前流程存在两层 Discovery（发现）。
 
@@ -200,11 +213,15 @@ Authorization Server Metadata
 
 MCP Server 声明的是：
 
-> **哪些 Authorization Server 有资格给我签发 Token？**
+```text
+哪些 Authorization Server 有资格给我签发 Token？
+```
 
 Authorization Server 自己声明的是：
 
-> **如果你要和我走 OAuth，我的 Endpoint 和能力是什么？**
+```text
+如果你要和我走 OAuth，我的 Endpoint 和能力是什么？
+```
 
 ### 第一步：发现 MCP Server 信任谁
 
@@ -241,7 +258,9 @@ resource_metadata
 
 也就是告诉 Client：
 
-> 要访问我，请去这个 Authorization Server 获得凭证。
+```text
+要访问我，请去这个 Authorization Server 获得凭证。
+```
 
 当前规范要求 Client 支持从 `WWW-Authenticate` 获取 Metadata 地址。
 
@@ -263,7 +282,9 @@ https://example.com/.well-known/oauth-protected-resource/public/mcp
 
 所以：
 
-> **Client 并不需要提前知道授权系统地址。**
+```text
+Client 并不需要提前知道授权系统地址。
+```
 
 它可以从 Resource Server 自己开始发现。
 
@@ -387,7 +408,9 @@ client_id
 
 但这样会严重限制：
 
-> 任意 Client 动态连接任意 MCP Server。
+```text
+任意 Client 动态连接任意 MCP Server。
+```
 
 因此当前 MCP 支持三种 Client Registration（客户端注册）方式。
 
@@ -414,7 +437,9 @@ client_id = xxx
 
 它有一个非常有意思的设计：
 
-> `client_id` 本身就是一个 HTTPS URL。
+```text
+client_id 本身就是一个 HTTPS URL。
+```
 
 例如：
 
@@ -424,11 +449,15 @@ https://agent.example.com/oauth/client.json
 
 这个 URL 同时承担：
 
-> Client Identifier（客户端标识）
+```text
+Client Identifier（客户端标识）
+```
 
 和：
 
-> Client Metadata 的入口。
+```text
+Client Metadata 的入口。
+```
 
 Authorization Server 看到：
 
@@ -470,11 +499,15 @@ metadata.client_id
 
 这套设计实际上把 Client 身份从：
 
-> Authorization Server 数据库里的一条预注册记录
+```text
+Authorization Server 数据库里的一条预注册记录
+```
 
 变成：
 
-> **Client 自己托管的一份可以被 Authorization Server 动态验证的身份描述。**
+```text
+Client 自己托管的一份可以被 Authorization Server 动态验证的身份描述。
+```
 
 这特别适合 MCP。
 
@@ -492,7 +525,9 @@ Client B × Server 3
 
 Client ID Metadata Document 让：
 
-> 第一次见面也可以建立 Client Identity。
+```text
+第一次见面也可以建立 Client Identity。
+```
 
 ### 为什么 Dynamic Client Registration 反而退居兼容方案？
 
@@ -562,11 +597,15 @@ Redirect URI 是什么。
 
 但对于一个通用 MCP Client 来说：
 
-> 收到一串 Authorization Code 并不意味着可以无条件拿去换 Token。
+```text
+收到一串 Authorization Code 并不意味着可以无条件拿去换 Token。
+```
 
 它必须确认：
 
-> 这串 Code 真的是刚才那次正确授权过程产生的。
+```text
+这串 Code 真的是刚才那次正确授权过程产生的。
+```
 
 这里当前 MCP 特别强调几层保护。
 
@@ -616,7 +655,9 @@ code_verifier
 
 不是：
 
-> 对方也许支持，我们先发过去试试。
+```text
+对方也许支持，我们先发过去试试。
+```
 
 如果无法确认支持，Client 不应该继续授权流程。
 
@@ -634,7 +675,9 @@ state
 
 它解决的是：
 
-> 当前 Callback 是否属于我之前发出去的那一次 Authorization Request。
+```text
+当前 Callback 是否属于我之前发出去的那一次 Authorization Request。
+```
 
 ### `iss` 解决的是“到底哪个 Authorization Server 返回的”
 
@@ -663,7 +706,9 @@ B 的 Token Endpoint
 
 因此 Client 在真正跳转用户以前，就应该记录：
 
-> 当前 Flow 期望的 `issuer` 是谁。
+```text
+当前 Flow 期望的 issuer 是谁。
+```
 
 Authorization Response 如果提供：
 
@@ -687,11 +732,15 @@ Client 必须按照规则验证它是否和之前记录的 Authorization Server 
 
 因为通用 MCP Host 面对的不是：
 
-> 一个固定网站登录自己的唯一 OAuth 服务。
+```text
+一个固定网站登录自己的唯一 OAuth 服务。
+```
 
 而是：
 
-> **同时连接许多互不相关 Remote MCP Server 的动态 OAuth Client。**
+```text
+同时连接许多互不相关 Remote MCP Server 的动态 OAuth Client。
+```
 
 这让“当前 Authorization Result 究竟属于谁”变得格外重要。
 
@@ -723,7 +772,9 @@ Jira MCP
 
 用户已经登录，并不代表：
 
-> Authorization Server 发出的任意 Access Token 都应该被三个 MCP Server 接受。
+```text
+Authorization Server 发出的任意 Access Token 都应该被三个 MCP Server 接受。
+```
 
 真正安全的 Token 应该回答两个问题：
 
@@ -749,7 +800,9 @@ resource=https://mcp.example.com
 
 明确告诉 Authorization Server：
 
-> 我现在申请的 Token 是准备用来访问这个 Resource Server。
+```text
+我现在申请的 Token 是准备用来访问这个 Resource Server。
+```
 
 所以最终 Access Token 不只是：
 
@@ -771,7 +824,9 @@ files:read
 
 MCP Server 收到 Token 后必须验证：
 
-> 这个 Token 是否真的以我为目标资源。
+```text
+这个 Token 是否真的以我为目标资源。
+```
 
 如果 Token 的 Audience 是：
 
@@ -825,7 +880,9 @@ api.github.com
 
 最简单的实现似乎是：
 
-> Client 给我的 Token，我直接转给 GitHub。
+```text
+Client 给我的 Token，我直接转给 GitHub。
+```
 
 但这是错误的。
 
@@ -851,7 +908,9 @@ GitHub API
 
 如果 MCP Server 还需要访问上游 GitHub API，它应该作为新的 OAuth Client，获取：
 
-> **专门面向 GitHub API 的另一份 Token。**
+```text
+专门面向 GitHub API 的另一份 Token。
+```
 
 形成：
 
@@ -877,7 +936,9 @@ GitHub API
 
 它背后的根本原因就是：
 
-> **Token 的安全意义不仅是“谁登录了”，还包括“谁可以消费这份 Token”。**
+```text
+Token 的安全意义不仅是“谁登录了”，还包括“谁可以消费这份 Token”。
+```
 
 ```mermaid
 flowchart LR
@@ -890,11 +951,15 @@ flowchart LR
 
 解决了：
 
-> Token 发给谁。
+```text
+Token 发给谁。
+```
 
 还要解决：
 
-> Token 到底允许做什么。
+```text
+Token 到底允许做什么。
+```
 
 这就是：
 
@@ -914,7 +979,9 @@ files:delete
 
 一个用户最开始只是说：
 
-> 帮我看看这个文档写了什么。
+```text
+帮我看看这个文档写了什么。
+```
 
 Client 真正需要的只有：
 
@@ -937,7 +1004,9 @@ admin
 
 也就是：
 
-> 当前操作需要多少权限，就尽量只获得多少权限。
+```text
+当前操作需要多少权限，就尽量只获得多少权限。
+```
 
 当前 MCP 的 Scope 机制因此支持一个很重要的模式：
 
@@ -959,7 +1028,9 @@ WWW-Authenticate
 
 直接告诉 Client：
 
-> 当前基础访问需要什么 Scope。
+```text
+当前基础访问需要什么 Scope。
+```
 
 例如：
 
@@ -990,7 +1061,9 @@ scopes_supported
 
 后来用户说：
 
-> 帮我修改这个文件。
+```text
+帮我修改这个文件。
+```
 
 当前 Access Token 只有：
 
@@ -1023,11 +1096,15 @@ WWW-Authenticate: Bearer
 
 401 更接近：
 
-> 当前没有可接受的认证凭证。
+```text
+当前没有可接受的认证凭证。
+```
 
 而 403 `insufficient_scope` 表示：
 
-> 我已经知道你是谁，而且 Token 本身也有效，但它没有执行当前操作需要的权限。
+```text
+我已经知道你是谁，而且 Token 本身也有效，但它没有执行当前操作需要的权限。
+```
 
 Client 收到以后，再发起新的 Authorization Flow，请求：
 
@@ -1056,7 +1133,9 @@ files:read + files:write
 
 看到 Access Token 权限不够以后，一个 Client 可能会想：
 
-> 我不是有 Refresh Token 吗？Refresh 一次，把 `files:write` 加进去不就好了？
+```text
+我不是有 Refresh Token 吗？Refresh 一次，把 files:write 加进去不就好了？
+```
 
 不行。
 
@@ -1106,7 +1185,9 @@ Refresh
 
 它实际上参与了：
 
-> **权限逐步提升协议。**
+```text
+权限逐步提升协议。
+```
 
 ```mermaid
 sequenceDiagram
@@ -1163,7 +1244,9 @@ PKCE + 用户授权
 
 而是：
 
-> **让一个事先不认识 MCP Server 的通用 Client，可以从一个 Server URL 开始，动态发现正确的身份系统、证明自己的 Client 身份、让用户安全完成授权，并拿到只针对当前 MCP Server、只拥有当前所需权限的凭证。**
+```text
+让一个事先不认识 MCP Server 的通用 Client，可以从一个 Server URL 开始，动态发现正确的身份系统、证明自己的 Client 身份、让用户安全完成授权，并拿到只针对当前 MCP Server、只拥有当前所需权限的凭证。
+```
 
 这也是为什么当前 MCP Authorization 看起来涉及很多标准：
 
@@ -1177,4 +1260,6 @@ MCP 自己真正新增的东西很少。
 
 它选择做的是：
 
-> **把已经存在的安全标准按照 MCP 的动态连接场景组合起来，而不是重新发明一套只属于 MCP 的账号和 Token 系统。**
+```text
+把已经存在的安全标准按照 MCP 的动态连接场景组合起来，而不是重新发明一套只属于 MCP 的账号和 Token 系统。
+```

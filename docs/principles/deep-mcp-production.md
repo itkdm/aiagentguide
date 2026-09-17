@@ -109,7 +109,9 @@ Server B
 
 就可能出现：
 
-> Server B 根本不知道前面发生了什么。
+```text
+Server B 根本不知道前面发生了什么。
+```
 
 所以生产部署通常需要：
 
@@ -135,7 +137,9 @@ clientCapabilities
 
 多轮交互也不再依赖：
 
-> Server 暂停一个 Handler，然后等待 Client 从原连接回应。
+```text
+Server 暂停一个 Handler，然后等待 Client 从原连接回应。
+```
 
 而是通过：
 
@@ -173,7 +177,9 @@ Server C
 
 只要 C 能根据当前 Request 重新获得所需信息，就不必知道：
 
-> 第一轮到底是谁处理的。
+```text
+第一轮到底是谁处理的。
+```
 
 这让普通 Round-robin Load Balancer 变得可行，也减少了协议层对 Sticky Session 的依赖。
 
@@ -187,7 +193,9 @@ deploy_application
 
 用户要求：
 
-> 部署一个新的生产环境。
+```text
+部署一个新的生产环境。
+```
 
 这次 Tool Call 可能创建：
 
@@ -270,7 +278,9 @@ tasks/get(taskId)
 
 那新的 Server Instance 必须知道：
 
-> 这个 `taskId` 对应什么任务。
+```text
+这个 taskId 对应什么任务。
+```
 
 所以真正状态可能存放在：
 
@@ -292,7 +302,9 @@ Server A Memory
 
 否则 Server A 一挂：
 
-> Task 也跟着消失。
+```text
+Task 也跟着消失。
+```
 
 以前：
 
@@ -326,7 +338,9 @@ taskId
 
 因此：
 
-> **MCP 消除的是协议必须依赖的 Connection State，不是业务系统天然需要的 State。**
+```text
+MCP 消除的是协议必须依赖的 Connection State，不是业务系统天然需要的 State。
+```
 
 ```mermaid
 flowchart LR
@@ -418,7 +432,9 @@ Status Code
 
 如果要根据 MCP Method 路由，最原始的方式就是：
 
-> Gateway 读取整个 JSON Body，然后理解 JSON-RPC。
+```text
+Gateway 读取整个 JSON Body，然后理解 JSON-RPC。
+```
 
 例如：
 
@@ -434,7 +450,9 @@ Status Code
 
 但这意味着每一个 Gateway、WAF、Rate Limiter 都要：
 
-> 理解 MCP Message Format。
+```text
+理解 MCP Message Format。
+```
 
 成本很高。
 
@@ -449,7 +467,9 @@ Mcp-Name: delete_repository
 
 Gateway 不需要理解 JSON-RPC，也可以直接知道：
 
-> 这是一个 `tools/call`。
+```text
+这是一个 tools/call。
+```
 
 而且调用的是：
 
@@ -507,7 +527,9 @@ Mcp-Name
 
 真正服务的是：
 
-> **HTTP Infrastructure。**
+```text
+HTTP Infrastructure。
+```
 
 它让应用层 MCP Semantic（语义）可以被传统网关理解。
 
@@ -524,7 +546,9 @@ Mcp-Name: search_documents
 
 让 Gateway 认为：
 
-> 这是一个低风险搜索 Tool。
+```text
+这是一个低风险搜索 Tool。
+```
 
 但 JSON Body 实际是：
 
@@ -646,7 +670,9 @@ ttlMs = 300000
 
 表示：
 
-> 这个结果接下来 5 分钟可以被 Client 认为仍然 Fresh。
+```text
+这个结果接下来 5 分钟可以被 Client 认为仍然 Fresh。
+```
 
 那么：
 
@@ -739,11 +765,15 @@ delete_report
 
 所以 Cache 不能只回答：
 
-> 这个 Server 的 tools/list 是什么？
+```text
+这个 Server 的 tools/list 是什么？
+```
 
 还要回答：
 
-> **在哪一个 Authorization Context 下？**
+```text
+在哪一个 Authorization Context 下？
+```
 
 因此 Private Cache 至少需要按类似：
 
@@ -801,7 +831,9 @@ delete_database
 
 如果 Client 只能等 TTL：
 
-> 还要八分钟才会发现。
+```text
+还要八分钟才会发现。
+```
 
 所以 MCP 还需要：
 
@@ -1014,11 +1046,15 @@ tools/list(cursor)
 
 这解决的是：
 
-> **一次 Wire Response 不应该无限大。**
+```text
+一次 Wire Response 不应该无限大。
+```
 
 但它解决不了：
 
-> Host 最终到底把多少 Tool 暴露给模型？
+```text
+Host 最终到底把多少 Tool 暴露给模型？
+```
 
 即使分 5 页取完 500 个 Tool，最后不还是 500 个 Tool
 
@@ -1036,7 +1072,9 @@ Task-aware Tool Selection（任务感知工具选择）
 
 例如用户问：
 
-> 分析财务报表。
+```text
+分析财务报表。
+```
 
 Host 根本没必要同时把：
 
@@ -1127,7 +1165,9 @@ Prompt Cache
 
 所以一个看起来微不足道的：
 
-> Tool List 顺序是否稳定。
+```text
+Tool List 顺序是否稳定。
+```
 
 最终可能影响：
 
@@ -1141,7 +1181,9 @@ Prompt Cache Hit Rate
 
 这也是 MCP 从“协议设计”走向“生产工程”时非常典型的一种问题：
 
-> Server 返回的数据虽然语义一样，但稳定性仍然会影响下游 LLM 系统成本。
+```text
+Server 返回的数据虽然语义一样，但稳定性仍然会影响下游 LLM 系统成本。
+```
 
 所以生产环境中的 Tool Catalog 应该同时考虑：
 
@@ -1159,13 +1201,17 @@ Prompt Cache Hit Rate
 
 而不是只看：
 
-> `tools/list` 能不能返回成功。
+```text
+tools/list 能不能返回成功。
+```
 
 ## 为什么有日志还远远不等于可观测？
 
 假设用户反馈：
 
-> Agent 调 GitHub 的时候卡住了。
+```text
+Agent 调 GitHub 的时候卡住了。
+```
 
 真正的调用链可能是：
 
@@ -1201,7 +1247,9 @@ request failed
 
 但仍然不知道：
 
-> 哪些日志属于同一次用户操作。
+```text
+哪些日志属于同一次用户操作。
+```
 
 这就是：
 
@@ -1292,7 +1340,9 @@ flowchart LR
 
 这时候用户说：
 
-> MCP 很慢。
+```text
+MCP 很慢。
+```
 
 你可以看到：
 
@@ -1305,7 +1355,9 @@ GitHub API             4200ms
 
 立即知道：
 
-> MCP Protocol 本身并不慢。
+```text
+MCP Protocol 本身并不慢。
+```
 
 真正慢的是下游 API。
 
@@ -1314,7 +1366,9 @@ GitHub API             4200ms
 
 Tracing 适合分析：
 
-> 某一次请求。
+```text
+某一次请求。
+```
 
 Metrics 适合回答：
 
@@ -1385,7 +1439,9 @@ logging/setLevel
 
 Client 可以告诉 Server：
 
-> 后面都发 debug 日志。
+```text
+后面都发 debug 日志。
+```
 
 现代版本则把日志偏好放进 Request `_meta`：
 
@@ -1407,7 +1463,9 @@ warning
 
 这和整个 Stateless 设计是一致的：
 
-> 不再依赖 Connection 保存“当前 Log Level”。
+```text
+不再依赖 Connection 保存“当前 Log Level”。
+```
 
 需要的上下文继续随 Request 自己携带。
 
@@ -1439,7 +1497,9 @@ Gateway Routing
 
 但仍然不能得出：
 
-> 系统一定可靠。
+```text
+系统一定可靠。
+```
 
 因为协议正确和业务正确之间还有很长距离。
 
@@ -1485,7 +1545,9 @@ Timeout
 
 问题在于：
 
-> 业务副作用重复发生了。
+```text
+业务副作用重复发生了。
+```
 
 JSON-RPC Request ID 解决的是：
 
@@ -1552,11 +1614,15 @@ timeout = 30s
 
 这只能说明：
 
-> Client 不再等结果。
+```text
+Client 不再等结果。
+```
 
 不能说明：
 
-> Server 已经停止执行。
+```text
+Server 已经停止执行。
+```
 
 可能发生：
 
@@ -1577,11 +1643,15 @@ GitHub 删除成功
 
 用户看到：
 
-> 失败。
+```text
+失败。
+```
 
 实际系统：
 
-> Repository 已经删了。
+```text
+Repository 已经删了。
+```
 
 Cancellation 同样存在 Race Condition（竞争条件）。
 
@@ -1615,7 +1685,9 @@ unknown
 
 甚至需要：
 
-> 查询最终状态，而不是看到 Timeout 就直接认为失败。
+```text
+查询最终状态，而不是看到 Timeout 就直接认为失败。
+```
 
 ### Stateless 也不意味着无限扩容
 
@@ -1687,7 +1759,9 @@ Bulkhead
 
 而不是：
 
-> Server 能接多少 Request，就一股脑全部往下游打。
+```text
+Server 能接多少 Request，就一股脑全部往下游打。
+```
 
 ### Tool 之间甚至可能需要不同的资源策略
 
@@ -1856,19 +1930,19 @@ Side Effect
 
 核心解决的是：
 
-> **Agent 和外部能力之间应该如何建立一个统一、可互操作的协议边界。**
+```text
+Agent 和外部能力之间应该如何建立一个统一、可互操作的协议边界。
+```
 
 系统：
 
-> 如何扩容。
-
-> 如何限流。
-
-> 如何持久化。
-
-> 如何保证扣款只发生一次。
-
-> 如何追踪跨服务调用。
+```text
+如何扩容。
+如何限流。
+如何持久化。
+如何保证扣款只发生一次。
+如何追踪跨服务调用。
+```
 
 这些仍然是分布式系统本身的问题。
 
@@ -1918,8 +1992,12 @@ traceparent
 
 这些设计体现的是：
 
-> MCP 正在尽量成为分布式系统里的一层协议，而不是把整个分布式系统重新包进 MCP。
+```text
+MCP 正在尽量成为分布式系统里的一层协议，而不是把整个分布式系统重新包进 MCP。
+```
 
 这也是整个“深入 MCP”系列我们一定要记住的：
 
-> **MCP 的价值不是替我们消灭所有工程问题，而是把 Agent 与能力之间稳定出一个标准化，一个协议，让剩下的问题重新回到我们已经熟悉的分布式系统、权限、安全和业务工程中。**
+```text
+MCP 的价值不是替我们消灭所有工程问题，而是把 Agent 与能力之间稳定出一个标准化，一个协议，让剩下的问题重新回到我们已经熟悉的分布式系统、权限、安全和业务工程中。
+```

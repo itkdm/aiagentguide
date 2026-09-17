@@ -76,11 +76,15 @@ Skills
 
 所以协议设计真正困难的地方，不是：
 
-> 怎样不断加入新功能。
+```text
+怎样不断加入新功能。
+```
 
 而是：
 
-> **哪些能力值得让整个生态永久承担兼容成本，哪些能力应该允许独立发展。**
+```text
+哪些能力值得让整个生态永久承担兼容成本，哪些能力应该允许独立发展。
+```
 
 这就是 MCP Extension Framework（扩展框架）存在的真正原因。
 
@@ -108,7 +112,9 @@ Client 后续查询结果
 
 那么是不是意味着：
 
-> Tasks 应该直接成为所有 MCP 实现都必须理解的 Core Feature （核心功能）？
+```text
+Tasks 应该直接成为所有 MCP 实现都必须理解的 Core Feature （核心功能）？
+```
 
 不一定。
 
@@ -133,7 +139,9 @@ Observability Tool
 
 甚至未来所有新版本都要考虑：
 
-> 这个功能以前的语义还能不能继续工作？
+```text
+这个功能以前的语义还能不能继续工作？
+```
 
 这就是 Core 的兼容成本。
 
@@ -149,7 +157,9 @@ tools/call
 
 那么以后 MCP 即使继续演进，也不能轻易说：
 
-> 这个方法不好用了，删掉吧。
+```text
+这个方法不好用了，删掉吧。
+```
 
 因为可能已经有：
 
@@ -163,7 +173,9 @@ tools/call
 
 所以一个能力进入 Core，本质上意味着：
 
-> **协议向整个生态承诺，未来会长期维护这套语义。**
+```text
+协议向整个生态承诺，未来会长期维护这套语义。
+```
 
 这和普通应用增加一个 Feature 完全不同。
 
@@ -191,7 +203,9 @@ v3 remove
 
 而不是：
 
-> 这个功能看起来很高级。
+```text
+这个功能看起来很高级。
+```
 
 比如：
 
@@ -221,11 +235,15 @@ Skills over MCP
 
 如果这些全部直接进入 Core：
 
-> 协议就会逐渐把“可选生态能力”变成“所有实现的永久负担”。
+```text
+协议就会逐渐把“可选生态能力”变成“所有实现的永久负担”。
+```
 
 因此 Extension 的第一层价值就是：
 
-> **把 Core 的稳定面和生态的创新面拆开。**
+```text
+把 Core 的稳定面和生态的创新面拆开。
+```
 
 ```mermaid
 flowchart LR
@@ -251,13 +269,17 @@ Core 尽量只保存真正基础、稳定、普遍适用的协议能力。
 
 所以 Extension 并不是：
 
-> 不够重要的功能才放这里。
+```text
+不够重要的功能才放这里。
+```
 
 恰恰相反。
 
 有些能力可能非常重要，只是：
 
-> **现在还没有成熟到值得冻结进 Core。**
+```text
+现在还没有成熟到值得冻结进 Core。
+```
 
 ## Extension 和普通 Capability 到底有什么区别？
 
@@ -273,7 +295,9 @@ prompts
 
 Server 会声明：
 
-> 我支持哪些能力。
+```text
+我支持哪些能力。
+```
 
 Client 也会声明自己的 Capability。
 
@@ -296,7 +320,9 @@ Client 也会声明自己的 Capability。
 
 这里表达的是：
 
-> 当前这个 Server 支持 MCP Core 已经定义好的 Tools 和 Resources。
+```text
+当前这个 Server 支持 MCP Core 已经定义好的 Tools 和 Resources。
+```
 
 双方都已经知道：
 
@@ -308,7 +334,9 @@ tools
 
 Capability 只是在回答：
 
-> **你支不支持？**
+```text
+你支不支持？
+```
 
 但 Extension 不一样。
 
@@ -324,7 +352,9 @@ Capability 只是在回答：
 
 这里实际上是在说：
 
-> 我支持一整套 Core 之外的额外协议语义。
+```text
+我支持一整套 Core 之外的额外协议语义。
+```
 
 这套 Extension 可能新增：
 
@@ -382,11 +412,15 @@ tasks extension
 
 前者是：
 
-> Core 已知能力的支持情况。
+```text
+Core 已知能力的支持情况。
+```
 
 后者是：
 
-> **额外协议模块是否存在。**
+```text
+额外协议模块是否存在。
+```
 
 ### 为什么 Extension Identifier 必须带 Vendor Prefix？
 
@@ -426,7 +460,9 @@ memory
 
 表示：
 
-> 长期 Agent Memory。
+```text
+长期 Agent Memory。
+```
 
 Company B 也定义：
 
@@ -436,7 +472,9 @@ memory
 
 但它表示：
 
-> Server 内存统计信息。
+```text
+Server 内存统计信息。
+```
 
 如果都叫：
 
@@ -488,7 +526,9 @@ _meta
 
 `_meta` 更适合：
 
-> 附加信息。
+```text
+附加信息。
+```
 
 比如某个自己的 Host 和 Server 都理解：
 
@@ -509,11 +549,15 @@ Result Shape
 
 那么它实际上已经不是：
 
-> “附带一个字段”。
+```text
+“附带一个字段”。
+```
 
 而是在定义：
 
-> **一套双方共同理解的协议。**
+```text
+一套双方共同理解的协议。
+```
 
 这时候就更适合使用正式 Extension。
 
@@ -544,7 +588,9 @@ tools/call
 
 问题是：
 
-> 如果 Client 根本不知道 Tasks Extension 怎么办？
+```text
+如果 Client 根本不知道 Tasks Extension 怎么办？
+```
 
 它原来可能只实现：
 
@@ -606,15 +652,21 @@ io.modelcontextprotocol/clientCapabilities
 
 意思是：
 
-> 当前这一条 Request，如果你需要使用 Tasks Extension，我能够理解。
+```text
+当前这一条 Request，如果你需要使用 Tasks Extension，我能够理解。
+```
 
 注意：
 
-> **是当前 Request。**
+```text
+是当前 Request。
+```
 
 而不是：
 
-> 我连接的时候说过一次，以后你永远记住。
+```text
+我连接的时候说过一次，以后你永远记住。
+```
 
 这和现代 MCP Stateless（无状态）的设计完全一致。
 
@@ -648,7 +700,9 @@ server/discover
 
 告诉 Client：
 
-> 我可能会使用 Tasks。
+```text
+我可能会使用 Tasks。
+```
 
 于是：
 
@@ -698,7 +752,9 @@ Request B
 
 Server 不能说：
 
-> 我记得这个 Client 以前支持，所以这次继续返回 Task。
+```text
+我记得这个 Client 以前支持，所以这次继续返回 Task。
+```
 
 因为现代 MCP 不应该把：
 
@@ -722,7 +778,9 @@ Stateless Deployment
 
 Tasks Extension 明确要求：
 
-> 如果当前 Client Request 没声明 Tasks，Server 就不能返回 `CreateTaskResult`。
+```text
+如果当前 Client Request 没声明 Tasks，Server 就不能返回 CreateTaskResult。
+```
 
 如果 Server 当前操作必须使用 Task 才能完成，就应该明确返回：
 
@@ -734,7 +792,9 @@ Missing Required Client Capability
 
 这就是 Extension Negotiation（扩展协商）的真正作用：
 
-> **不是问双方“喜不喜欢”这个能力，而是防止协议双方对同一条消息产生不同理解。**
+```text
+不是问双方“喜不喜欢”这个能力，而是防止协议双方对同一条消息产生不同理解。
+```
 
 ## 一方不支持 Extension 时，为什么优雅降级比报错更重要？
 
@@ -756,7 +816,9 @@ Client 不支持
 
 如果每一个 Extension 都设计成：
 
-> 不支持就彻底不能工作。
+```text
+不支持就彻底不能工作。
+```
 
 那么 Extension 很快会形成新的生态碎片。
 
@@ -784,7 +846,9 @@ Server X
 
 最终 Optional Extension 实际上就变成：
 
-> 隐式 Core。
+```text
+隐式 Core。
+```
 
 所以一个好的 Extension 必须非常认真地考虑：
 
@@ -792,7 +856,9 @@ Server X
 
 也就是：
 
-> 对方不支持时，有没有 Core Behavior 可以退回？
+```text
+对方不支持时，有没有 Core Behavior 可以退回？
+```
 
 ### MCP Apps 是一个直观例子
 
@@ -808,7 +874,9 @@ Server X
 
 如果 Server 因此直接说：
 
-> 你不支持 Apps，所以整个 Tool 不能调用。
+```text
+你不支持 Apps，所以整个 Tool 不能调用。
+```
 
 很多情况下并不合理。
 
@@ -834,7 +902,9 @@ Extension 只是提供更丰富体验。
 
 这才真正符合：
 
-> Optional。
+```text
+Optional。
+```
 
 ```mermaid
 flowchart TD
@@ -849,7 +919,9 @@ flowchart TD
 
 例如一个企业 MCP Server 明确规定：
 
-> 所有访问必须经过 Enterprise Authorization Extension。
+```text
+所有访问必须经过 Enterprise Authorization Extension。
+```
 
 那一个不支持这个 Extension 的 Client 根本无法安全访问。
 
@@ -857,7 +929,9 @@ flowchart TD
 
 所以 Extension Framework 的原则不是：
 
-> 永远必须降级。
+```text
+永远必须降级。
+```
 
 而是：
 
@@ -871,15 +945,21 @@ Extension 是正确执行的必要条件
 
 关键是：
 
-> **Extension Spec 必须把不支持时的行为也设计清楚。**
+```text
+Extension Spec 必须把不支持时的行为也设计清楚。
+```
 
 不能只写：
 
-> 支持时怎么运行。
+```text
+支持时怎么运行。
+```
 
 却完全不说明：
 
-> 不支持会发生什么。
+```text
+不支持会发生什么。
+```
 
 否则所谓 Extension 兼容性只存在于纸面上。
 
@@ -925,7 +1005,9 @@ Method A 根本不需要
 
 如果每一次实验都要：
 
-> 发布一个新的 MCP Core Version。
+```text
+发布一个新的 MCP Core Version。
+```
 
 整个生态会被快速拖垮。
 
@@ -960,7 +1042,9 @@ Skills
 
 这就是：
 
-> **Extension Version 和 Core Protocol Version 是两个不同维度。**
+```text
+Extension Version 和 Core Protocol Version 是两个不同维度。
+```
 
 ### 独立演进不等于可以随便 Breaking
 
@@ -1030,13 +1114,17 @@ io.modelcontextprotocol/example-v2
 
 就等于：
 
-> 所有官方 SDK 必须实现。
+```text
+所有官方 SDK 必须实现。
+```
 
 那实际上它依然和 Core 没什么区别。
 
 所以当前 Extension Framework 明确允许：
 
-> SDK 自己决定支持哪些 Extension。
+```text
+SDK 自己决定支持哪些 Extension。
+```
 
 而且 Extension：
 
@@ -1048,7 +1136,9 @@ io.modelcontextprotocol/example-v2
 
 这保证：
 
-> Extension 的存在本身不会改变一个普通 MCP 实现的行为。
+```text
+Extension 的存在本身不会改变一个普通 MCP 实现的行为。
+```
 
 也就是说，Extension 真正做到的是：
 
@@ -1063,7 +1153,9 @@ io.modelcontextprotocol/example-v2
 
 如果只看 Extension Framework 的定义，很容易觉得：
 
-> 不就是 Plugin System 吗？
+```text
+不就是 Plugin System 吗？
+```
 
 Tasks 的演进过程更能说明为什么 MCP 真正需要它。
 
@@ -1073,7 +1165,9 @@ Tasks 并不是一开始就作为 Extension 出现的。
 
 它试图解决的问题很合理：
 
-> Tool 调用可能执行几分钟甚至几小时，不能永远把普通 Request 挂着。
+```text
+Tool 调用可能执行几分钟甚至几小时，不能永远把普通 Request 挂着。
+```
 
 例如：
 
@@ -1099,13 +1193,17 @@ CallToolResult
 
 所以 Task 的基本想法是：
 
-> 先返回一个 Handle，再异步获取结果。
+```text
+先返回一个 Handle，再异步获取结果。
+```
 
 问题并不在这个想法。
 
 而在：
 
-> **第一版具体怎么实现。**
+```text
+第一版具体怎么实现。
+```
 
 ### 第一版 Tasks 的协商太复杂了
 
@@ -1121,11 +1219,15 @@ Request 上的 task 参数
 
 Client 想调用一个支持 Task 的 Tool，可能首先需要知道：
 
-> Method 支不支持？
+```text
+Method 支不支持？
+```
 
 然后还要知道：
 
-> 当前具体 Tool 支不支持？
+```text
+当前具体 Tool 支不支持？
+```
 
 所以 Client 可能必须先：
 
@@ -1143,11 +1245,15 @@ execution.taskSupport
 
 然后决定：
 
-> 这次 Request 能不能带 `task`。
+```text
+这次 Request 能不能带 task。
+```
 
 这意味着：
 
-> 一次 Tool Call 开始依赖之前的 Discovery State。
+```text
+一次 Tool Call 开始依赖之前的 Discovery State。
+```
 
 对应用开发者来说很复杂，对后来的 Stateless MCP 也越来越不协调。
 
@@ -1161,7 +1267,9 @@ io.modelcontextprotocol/tasks
 
 Server 就知道：
 
-> 如果这次操作适合异步化，我可以返回 Task。
+```text
+如果这次操作适合异步化，我可以返回 Task。
+```
 
 不需要 Client 提前判断：
 
@@ -1191,7 +1299,9 @@ Client Capability
 
 Task 本来是为了：
 
-> 不要让 Request 长时间挂着。
+```text
+不要让 Request 长时间挂着。
+```
 
 但如果 Task 中途需要用户输入：
 
@@ -1300,11 +1410,15 @@ tasks/list
 
 Client 说：
 
-> 把我的所有 Task 给我。
+```text
+把我的所有 Task 给我。
+```
 
 问题是：
 
-> **“我的”到底是谁？**
+```text
+“我的”到底是谁？
+```
 
 以前可以想象绑定：
 
@@ -1345,7 +1459,9 @@ tasks/list
 
 更糟糕的是：
 
-> 如果 Scope 定义错了，就可能把别人的 Task 暴露出去。
+```text
+如果 Scope 定义错了，就可能把别人的 Task 暴露出去。
+```
 
 所以新版 Tasks 更倾向于：
 
@@ -1377,7 +1493,9 @@ tasks/cancel
 
 这里体现的其实也是现代 MCP 的一个重要趋势：
 
-> **尽量减少隐含 Connection State，把关联关系变成显式 Handle。**
+```text
+尽量减少隐含 Connection State，把关联关系变成显式 Handle。
+```
 
 ### Task 和 Progress 到底有什么区别？
 
@@ -1500,7 +1618,9 @@ notifications/tasks
 
 Subscription 只是：
 
-> **Task 状态怎么更及时地通知 Client。**
+```text
+Task 状态怎么更及时地通知 Client。
+```
 
 Task 自己的存在并不依赖这条 Subscription。
 
@@ -1536,19 +1656,27 @@ Task
 
 Tasks 从 Core 移入 Extension，不要误解成：
 
-> MCP 官方觉得 Tasks 不重要了。
+```text
+MCP 官方觉得 Tasks 不重要了。
+```
 
 官方 SEP 对它的定位是：
 
-> Tasks 很可能成为 MCP 的基础 Building Block。
+```text
+Tasks 很可能成为 MCP 的基础 Building Block。
+```
 
 甚至未来可能：
 
-> 在足够稳定和广泛采用后重新进入 Core。
+```text
+在足够稳定和广泛采用后重新进入 Core。
+```
 
 现在把它放进 Extension，真正原因是：
 
-> **它仍然需要根据真实实现继续调整，而 Core 的发布节奏和兼容要求太重。**
+```text
+它仍然需要根据真实实现继续调整，而 Core 的发布节奏和兼容要求太重。
+```
 
 也就是说，Extension 在这里承担的是：
 
@@ -1566,7 +1694,9 @@ Tasks 从 Core 移入 Extension，不要误解成：
 
 这其实是一个比：
 
-> 新功能直接进 Core。
+```text
+新功能直接进 Core。
+```
 
 更加健康的协议演进路径。
 
@@ -1574,11 +1704,15 @@ Extension 不是 Core 的垃圾桶。
 
 也不是：
 
-> 永远不够格进入 Core 的二等能力。
+```text
+永远不够格进入 Core 的二等能力。
+```
 
 它更像：
 
-> **稳定协议和快速创新之间的一层缓冲区。**
+```text
+稳定协议和快速创新之间的一层缓冲区。
+```
 
 现在 MCP 的官方 Extension 已经覆盖：
 
@@ -1606,16 +1740,22 @@ Authorization Extensions
 
 它解决的是一个协议生态发展到一定规模以后必然出现的问题：
 
-> **怎样允许生态继续变复杂，而不让 Core 本身也无限变复杂。**
+```text
+怎样允许生态继续变复杂，而不让 Core 本身也无限变复杂。
+```
 
 MCP Core 最重要的价值不是功能越多越好。
 
 而是：
 
-> **尽量稳定、通用，并让不同实现之间仍然能够可靠通信。**
+```text
+尽量稳定、通用，并让不同实现之间仍然能够可靠通信。
+```
 
 Extension 则承担另一种责任：
 
-> **允许新的能力独立试验、独立发布、独立演进，并只让真正选择它的 Client 和 Server 承担复杂度。**
+```text
+允许新的能力独立试验、独立发布、独立演进，并只让真正选择它的 Client 和 Server 承担复杂度。
+```
 
 这就是 Core 和 Extension 真正需要被拆开的原因。
