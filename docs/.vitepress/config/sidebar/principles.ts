@@ -17,7 +17,7 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
       { text: 'MCP 三类核心能力', link: '/principles/deep-mcp-capabilities' },
       { text: 'MCP Tool 调用链', link: '/principles/deep-mcp-tool-model' },
       { text: 'MCP 多轮交互', link: '/principles/deep-mcp-mrtr' },
-      { text: 'MCP 怎么处理长时间运行的请求和持续通知？', link: '/principles/deep-mcp-long-running' },
+      { text: 'MCP 长请求与持续通知', link: '/principles/deep-mcp-long-running' },
       { text: 'Remote MCP 的 Authorization 到底是怎么工作的？', link: '/principles/deep-mcp-authorization' },
       { text: 'MCP 的安全边界到底在哪里？', link: '/principles/deep-mcp-security' },
       { text: '为什么 MCP 要把能力拆成 Core 和 Extension？', link: '/principles/deep-mcp-core-extension' },
