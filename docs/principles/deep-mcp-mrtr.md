@@ -12,13 +12,13 @@ tags:
   - 原理
   - MCP
 author: 布吉岛
-lastUpdated: 2026-09-14
-status: draft
-draft: true
+lastUpdated: 2026-09-17
+status: published
+draft: false
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-noindex: true
+noindex: false
 
 ---
 
@@ -30,9 +30,11 @@ noindex: true
 
 问题就出现了：
 
-> Server 已经进入一次 `tools/call`，现在却还需要 Client 帮它获取额外输入，这个请求应该怎么继续？
+```text
+Server 已经进入一次 tools/call，现在却还需要 Client 帮它获取额外输入，这个请求应该怎么继续？
+```
 
-当前 `2026-07-28` MCP 使用 **MRTR（Multi Round-Trip Requests，多轮往返请求）**解决这个问题。
+当前 `2026-07-28` MCP 使用 **MRTR**（Multi Round-Trip Requests，多轮往返请求）解决这个问题。
 
 它没有让 Server 把原来的 Request 一直挂在那里，也没有继续采用旧版的 Server → Client 反向 Request，而是把一次复杂操作拆成多个彼此独立的 Client Request。
 
@@ -108,21 +110,29 @@ Client 返回结果以后，又必须恢复刚才被暂停的处理过程。
 
 MCP 在真正移除反向 Request 之前，其实已经经历过一次收紧。
 
-SEP-2260 明确要求 Sampling、Elicitation、Roots 这类 Server→Client Request 必须和某条原始 Client Request 关联，不能让 Server 在后台突然主动要求：
+SEP-2260提案明确要求 Sampling、Elicitation、Roots 这类 Server→Client Request 必须和某条原始 Client Request 关联，不能让 Server 在后台突然主动要求：
 
-> 帮我调用一下模型。
+```text
+帮我调用一下模型。
+```
 
 或者：
 
-> 让用户填一个表单。
+```text
+让用户填一个表单。
+```
 
 原因除了 Transport 简化，还有一个很重要的安全问题：
 
-> **Client 必须知道 Server 为什么突然需要这些信息。**
+```text
+Client 必须知道 Server 为什么突然需要这些信息。
+```
 
 如果 `elicitation/create` 是由用户刚刚执行的`deploy_production`引起的，Client 至少知道：
 
-> 这次确认属于哪个操作。
+```text
+这次确认属于哪个操作。
+```
 
 如果 Server 可以完全脱离用户动作主动索要信息，Host 就很难判断这次输入究竟会被拿去做什么。
 
@@ -156,7 +166,9 @@ sequenceDiagram
 
 这样整个协议重新恢复成一个非常清晰的方向：
 
-> **Request 永远由 Client 发起，Server 只负责返回 Result。**
+```text
+Request 永远由 Client 发起，Server 只负责返回 Result。
+```
 
 ## `InputRequiredResult` 为什么被设计成一种正常 Result？
 
@@ -203,9 +215,8 @@ resultType = input_required
 }
 ```
 
-这里最值得注意的是：
+`input_required `不是 Error。
 
-> **`input_required` 不是 Error。**
 
 因为 Server 没有执行失败。
 
@@ -233,7 +244,9 @@ resultType = complete
 
 表示：
 
-> 这已经是最终结果。
+```text
+这已经是最终结果。
+```
 
 而：
 
@@ -243,11 +256,15 @@ resultType = input_required
 
 表示：
 
-> 这一轮结束了，但 Client 还需要再发下一轮 Request。
+```text
+这一轮结束了，但 Client 还需要再发下一轮 Request。
+```
 
 注意这里的：
 
-> **这一轮结束了。**
+```text
+这一轮结束了。
+```
 
 这是理解 MRTR 最关键的一点。
 
@@ -259,13 +276,7 @@ Request id = 1
 
 对应的 JSON-RPC 调用已经彻底结束。
 
-Server 并没有把：
-
-```text
-id = 1
-```
-
-挂在那里等用户回来。
+Server 并没有把 `id = 1`挂在那里等用户回来。
 
 Client 获取完额外输入以后，需要创建一条**新的 Request**。
 
@@ -291,7 +302,9 @@ tools/list
 
 本质上是在列出 Tool，没有理由突然进入：
 
-> 请用户回答一个问题以后我再告诉你有哪些 Tool。
+```text
+请用户回答一个问题以后我再告诉你有哪些 Tool。
+```
 
 所以协议没有简单粗暴地让所有 Request 都支持 `input_required`。
 
@@ -443,49 +456,11 @@ flowchart TD
     I --> J[Retry 原始 Request]
 ```
 
-这里还有一个很容易出错的地方。
-
-下一轮收到：
-
-```text
-inputResponses
-```
-
-以后，Server 不能直接相信里面的内容。
-
-它们本质上仍然是 Client 发来的输入。
-
-比如 Server 要求：
-
-```text
-confirm: boolean
-```
-
-Client 却返回：
-
-```text
-confirm: "yes"
-```
-
-Server 仍然应该重新验证。
-
-也就是说：
-
-> **Schema 不只是生成用户表单时使用一次，输入真正回到 Handler 时还要再次校验。**
-
-同样，用户也可能：
-
-```text
-accept
-decline
-cancel
-```
-
-如果用户明确拒绝一个危险操作，Server 再无限重复询问显然是不合理的。
-
 还有一个重要细节：
 
-> **每一轮 `inputResponses` 只代表这一轮新收集到的 Response。**
+```text
+每一轮 inputResponses 只代表这一轮新收集到的 Response。
+```
 
 假设整个流程必须分三轮：
 
@@ -527,19 +502,21 @@ requestState
 
 如果 MRTR 每一次都是全新的 Request，那么新的 Server Instance 怎么知道：
 
-> 上一轮已经做到了哪里？
+```text
+上一轮已经做到了哪里？
+```
 
 这就是：`requestState`存在的原因。
 
 规范把它定义成一个 **Opaque String（对 Client 不透明的字符串）**。
 
-所谓“不透明”，意思不是：
-
-> 它一定经过加密，所以 Client 技术上绝对看不到里面是什么。
+所谓“不透明”，意思不是：它一定经过加密，所以 Client 技术上绝对看不到里面是什么。
 
 而是协议层规定：
 
-> **Client 不应该理解它。**
+```text
+Client 不应该理解它。
+```
 
 Client 不应该：
 
@@ -549,7 +526,9 @@ Client 不应该：
 
 Client 唯一需要做的是：
 
-> **下一轮原样带回。**
+```text
+下一轮原样带回。
+```
 
 例如 Server 第一轮已经：
 
@@ -586,7 +565,9 @@ Server B
 
 这里最大的价值是：
 
-> **Server B 不一定非得是 Server A。**
+```text
+Server B 不一定非得是 Server A。
+```
 
 也就是说，一个 HTTP Request 落到实例 A，下一轮 Retry 完全可能被负载均衡到实例 B。
 
@@ -598,7 +579,9 @@ Server B
 
 也不需要：
 
-> 第一轮一定命中这台机器，第二轮还必须继续命中这台机器。
+```text
+第一轮一定命中这台机器，第二轮还必须继续命中这台机器。
+```
 
 这就是 MRTR 和 Stateless Server 非常契合的地方。
 
@@ -608,7 +591,9 @@ Server B
 
 所以从 Server 的角度看，它回来时本质上已经属于：
 
-> **不可信输入。**
+```text
+不可信输入。
+```
 
 假设 Server 直接生成：
 
@@ -648,43 +633,23 @@ createRequestStateCodec
 
 但是这个 Codec 有一个特别需要注意的地方：
 
-> **它是签名，不是加密。**
+```text
+它是签名，不是加密。
+```
 
 所以它可以证明：
 
-> 这段内容没有被 Client 修改。
+```text
+这段内容没有被 Client 修改。
+```
 
 却不能保证：
 
-> Client 看不到这段内容。
+```text
+Client 看不到这段内容。
+```
 
 因此密码、Access Token、数据库凭证之类的秘密数据，不应该直接放进这种 `requestState`。
-
-另外注意：
-
-> **只把已经被前一轮真正证明过的事实写进 State。**
-
-例如：
-
-```text
-step = confirmed
-```
-
-只能在用户真的完成确认以后生成。
-
-如果 Server 在用户回答之前就生成：
-
-```text
-confirmed = true
-```
-
-然后把它作为下一轮凭证发出去，那么这个 Token 本身就等价于：
-
-> 持有者已经完成确认。
-
-官方 SDK 文档专门强调了这一点：
-
-**State 应该只记录之前轮次已经证明的事实。**
 
 <PlainExplanation title="用 wipe-cache 看懂 requestState">
 
@@ -847,7 +812,9 @@ Response id = 102
 
 它只负责：
 
-> **把当前这一条 Response 和当前这一条 Request 关联起来。**
+```text
+把当前这一条 Response 和当前这一条 Request 关联起来。
+```
 
 实际上流程是：
 
@@ -1028,7 +995,9 @@ maxTotalTimeout
 
 每进入下一轮，SDK 都会计算：
 
-> 整体还剩多少时间？
+```text
+整体还剩多少时间？
+```
 
 这样不会因为每次 Retry 都重新获得一份完整 Timeout，导致总执行时间不断延长。
 
@@ -1048,7 +1017,9 @@ requestState
 
 这种模式可以让 Server 表达：
 
-> 当前还不能继续，请稍后带着状态再试。
+```text
+当前还不能继续，请稍后带着状态再试。
+```
 
 如果 Client 完全没有等待，马上：
 
@@ -1078,13 +1049,17 @@ input_required
 
 这说明 SDK 做的其实是：
 
-> **在协议允许的基础上，为 Host 提供一个默认执行策略。**
+```text
+在协议允许的基础上，为 Host 提供一个默认执行策略。
+```
 
 MRTR 真正有价值的地方，也并不是让 MCP “支持多问用户几个问题”。
 
 它完成了一次更深的协议重构：
 
-> **把原本依赖反向 RPC、挂起连接和连接级执行状态的交互过程，重新表示成多个独立的 Client Request，再通过显式输入和可验证的 `requestState` 把这些 Request 连接成一个完整流程。**
+```text
+把原本依赖反向 RPC、挂起连接和连接级执行状态的交互过程，重新表示成多个独立的 Client Request，再通过显式输入和可验证的 requestState 把这些 Request 连接成一个完整流程。
+```
 
 每一轮 RPC 都可以独立结束。
 
@@ -1095,3 +1070,54 @@ MRTR 真正有价值的地方，也并不是让 MCP “支持多问用户几个�
 但整个业务过程仍然能够继续。
 
 这才是 MRTR 在新版 MCP 中真正解决的问题。
+
+## 总结
+
+MCP 中并不是所有 Request 都能够一次完成。一个 Tool、Resource 或 Prompt 在处理过程中，可能还需要用户输入、模型生成结果或者 Client 提供 Roots 等额外信息。`2026-07-28` 引入的 MRTR（Multi Round-Trip Requests，多轮往返请求），就是为这种场景设计的。
+
+旧版 MCP 允许 Server 在处理 Client Request 的过程中，再反向向 Client 发起 `elicitation/create`、`sampling/createMessage`、`roots/list` 等 Request。这样会形成嵌套的双向 RPC，不仅让 Transport 和请求生命周期更加复杂，也意味着原来的 Request 可能需要长时间保持未完成状态。
+
+MRTR 改变了这种模型。Server 如果发现当前信息不足，不再向 Client 发起一条独立 Request，而是结束当前 Request，返回：
+
+`InputRequiredResult`
+
+并通过：
+
+`resultType = input_required`
+
+告诉 Client：
+
+**这一轮已经正常结束，但整个操作还需要更多输入。**
+
+Client 收集完这些信息以后，再重新发送原来的 Method。新的 Request 与上一轮完全独立，因此必须使用新的 JSON-RPC Request ID。
+
+`InputRequiredResult` 可以携带 `inputRequests`。它是一个由 Server 分配 Key 的 Map，每一个 Key 对应一项需要 Client 完成的输入请求。Client 完成以后，再使用相同 Key 将结果放入 `inputResponses`。这种设计既解决了 Request 与 Response 的关联，也允许多个互相独立的输入在同一轮中被处理。
+
+如果一次操作需要跨多轮保存上下文，Server 还可以返回 `requestState`。它是一个只对 Server 有意义的 Opaque String（不透明字符串）。Client 不应该解析、修改或依赖其中的内容，只需要在下一轮 Retry 时原样带回。
+
+这种设计让 MRTR 不必依赖原来的 Server Instance。第一轮可以由 Server A 处理，下一轮完全可以被负载均衡到 Server B；只要新的实例能够验证并恢复 `requestState`，就可以继续处理。因此 MRTR 很适合 MCP 当前的 Stateless（无状态）协议模型，也不要求为了多轮交互强制使用 Sticky Session。
+
+但 `requestState` 会经过 Client 再返回 Server，因此 Server 必须把它当成不可信输入。如果其中的数据会影响授权、资源访问或者业务行为，就必须保护其完整性，并根据实际场景考虑用户身份、过期时间、原始请求绑定以及 Replay（重放）等问题。
+
+从 Wire 层来看，一次 MRTR 实际可能包含多条独立 Request：
+
+**Request → InputRequiredResult → 收集输入 → Retry → InputRequiredResult → Retry → Complete Result**
+
+而官方 SDK 可以通过 Input Required Driver 把这套循环封装起来。应用代码仍然可能只是一次 `callTool()`，SDK 在内部负责处理 `inputRequests`、收集 `inputResponses`、回传 `requestState`、生成新的 Request ID 并继续 Retry，直到获得最终结果或达到最大轮数。
+
+因此，MRTR 最核心的设计思想可以概括成一句话：
+
+**不要把一个 Request 挂起来等待额外输入，而是结束当前 Request，把需要的信息显式返回给 Client，再通过一条新的自包含 Request 继续执行。**
+
+## 相关面试题
+
+- **MCP 中一次 Request 需要多轮交互时是怎么处理的？什么是 MRTR？**
+- **为什么新版 MCP 要用 MRTR 替代旧版的 Server → Client Request？**
+- **`InputRequiredResult` 是什么？为什么 `input_required` 被设计成正常 Result 而不是 Error？**
+- **哪些 MCP Request 可以返回 `InputRequiredResult`？**
+- **`inputRequests` 和 `inputResponses` 为什么设计成 Map？它们是怎么关联的？**
+- **`requestState` 是什么？为什么 Client 必须把它当成不透明字符串？**
+- **为什么 MRTR 每一轮 Retry 都必须使用新的 JSON-RPC Request ID？**
+- **MRTR 为什么能够支持 Stateless Server，而不依赖 Sticky Session？**
+- **`requestState` 有哪些安全风险？Server 为什么必须对它进行完整性校验？**
+- **官方 SDK 是怎么把多轮 MRTR 封装成看起来像一次普通调用的？**

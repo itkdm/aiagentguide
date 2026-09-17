@@ -11,13 +11,13 @@ tags:
   - 原理
   - MCP
 author: 布吉岛
-lastUpdated: 2026-09-14
-status: draft
-draft: true
+lastUpdated: 2026-09-17
+status: published
+draft: false
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-noindex: true
+noindex: false
 ---
 
 # 深入 MCP：MCP Server 是怎么描述自己能力的？
@@ -28,9 +28,9 @@ MCP Server 最核心的三类能力是：
 
 **Tools、Resources 和 Prompts。**
 
-官方把它们称为 Primitive（协议原语），这里可以简单理解为：**MCP 协议预先定义好的三种基础能力模型。**
+官方把它们称为 Primitive（协议原语），可以简单理解为：**MCP 协议预先定义好的三种基础能力模型。**
 
-它们表面上看区别很大，但如果只从“能不能实现”的角度考虑，其实很多东西都可以全部做成 Tool。
+它们表面上看区别很大，但其实很多东西都可以全部做成 Tool。
 
 比如读取一个项目文件，可以定义：
 
@@ -48,11 +48,15 @@ MCP Server 最核心的三类能力是：
 
 因为协议真正需要表达的不只是：
 
-> Server 能不能返回这段数据？
+```text
+Server 能不能返回这段数据？
+```
 
 还需要告诉 Client：
 
-> **这段能力应该以什么方式被发现、被选择和被使用。**
+```text
+这段能力应该以什么方式被发现、被选择和被使用。
+```
 
 官方给三种 Primitive 定义了不同的控制模型：
 
@@ -62,7 +66,9 @@ MCP Server 最核心的三类能力是：
 
 这里的“控制”不是强制 UI 规则，而是在表达：
 
-> **谁通常负责决定什么时候使用这项能力。**
+```text
+谁通常负责决定什么时候使用这项能力。
+```
 
 ```mermaid
 flowchart LR
@@ -86,7 +92,9 @@ Tool 更适合让模型自己决定什么时候调用。
 
 比如模型发现用户问：
 
-> 帮我查一下这个仓库最近有没有新的 Issue。
+```text
+帮我查一下这个仓库最近有没有新的 Issue。
+```
 
 它可以根据当前上下文选择：
 
@@ -108,7 +116,9 @@ Host 可以把这些资源做成文件树、上下文选择器，也可以根据
 
 决定：
 
-> 哪些 Resource 应该进入当前上下文？
+```text
+哪些 Resource 应该进入当前上下文？
+```
 
 通常不完全交给模型，而是由应用自己管理。
 
@@ -120,7 +130,9 @@ Prompt 又不同。
 
 Prompt，通常是希望用户主动选择：
 
-> 我要执行“代码审查”这个预定义工作流。
+```text
+我要执行“代码审查”这个预定义工作流。
+```
 
 它可能最终在界面里表现成：
 
@@ -146,18 +158,6 @@ Capability
 
 然后所有东西都塞进去。
 
-因为一旦这样做，Client 就必须自己猜：
-
-> 这个 Capability 应该让模型调用吗？
-
-> 应该展示给用户吗？
-
-> 能不能订阅变化？
-
-> 是不是存在一个稳定地址？
-
-> 返回的是执行结果，还是上下文数据？
-
 MCP 选择在协议层直接把这些语义拆开。
 
 这不仅让 Server 更清楚自己在暴露什么，也让 Host 能够针对不同类型采用完全不同的处理方式。
@@ -168,25 +168,23 @@ MCP 选择在协议层直接把这些语义拆开。
 
 > “读取 GitHub Issue”
 
-既可以设计成：
+既可以设计成：`get_issue`
 
-`get_issue`
-
-Tool，也可以把某个 Issue 暴露成：
-
-`github://issues/123`
-
-Resource。
+Tool，也可以把某个 Issue 暴露成：`github://issues/123` Resource。
 
 两种方式都能返回 Issue 内容，但它们表达的协议意图不同。
 
 Tool 在表达：
 
-> **执行一次“获取 Issue”操作。**
+```text
+执行一次“获取 Issue”操作。
+```
 
 Resource 在表达：
 
-> **这里存在一份可以被定位和读取的 Issue 资源。**
+```text
+这里存在一份可以被定位和读取的 Issue 资源。
+```
 
 ## `tools/list` 返回的到底是什么？
 
@@ -212,7 +210,9 @@ Client 接下来可以通过：
 
 它返回的是：
 
-> **Tool Definition（工具定义）。**
+```text
+Tool Definition（工具定义）。
+```
 
 例如：
 
@@ -256,13 +256,12 @@ Client 接下来可以通过：
 
 这些字段共同回答的是：
 
-> 这是什么能力？
-
-> 怎样调用？
-
-> 应该传什么？
-
-> 可能返回什么？
+```text
+这是什么能力？
+怎样调用？
+应该传什么？
+可能返回什么？
+```
 
 Tool 的 `name` 是协议调用时真正使用的标识。
 
@@ -278,7 +277,9 @@ Tool Name 应该在**单个 Server 内保持唯一**。
 
 注意是：
 
-> 单个 Server 内。
+```text
+单个 Server 内。
+```
 
 不是整个 Host 全局唯一。
 
@@ -309,7 +310,9 @@ GoogleDrive.search
 
 这其实再次对应了我们第一篇讲过的架构边界：
 
-> **Server 只需要保证自己的能力空间内部一致，多 Server 聚合问题属于 Host。**
+```text
+Server 只需要保证自己的能力空间内部一致，多 Server 聚合问题属于 Host。
+```
 
 `title` 和 `name` 也不是一个东西。
 
@@ -327,47 +330,41 @@ create_issue
 
 `description` 也非常关键。
 
-它不只是给开发者看的 API 文档。
-
 当 Host 后面把 MCP Tool 转换成模型真正能够看到的 Tool Schema 时，这段 Description 很可能直接成为模型判断 “什么时候应该使用这个 Tool？”的重要依据。
 
 所以 Tool Definition 实际上同时服务了两个消费者：
 
 一边是程序：
 
-> `name`、Schema、协议字段。
+```text
+name、Schema、协议字段。
+```
 
 另一边是模型：
 
-> `description`、参数说明以及能力语义。
+```text
+description、参数说明以及能力语义。
+```
 
 这也是为什么 Tool Description 写得差，会直接影响模型的 Tool Selection（工具选择）。
 
-Tool 还有一组：
-
-`annotations`
+Tool 还有一组：`annotations`
 
 可以描述一些行为特征，例如：
 
-`readOnlyHint`
+`readOnlyHint` 表示它是否只是读取数据；
 
-表示它是否只是读取数据；
+`destructiveHint` 表示修改操作是否可能具有破坏性；
 
-`destructiveHint`
+`idempotentHint` 表示同样参数重复执行是否具有幂等性，也就是重复执行是否产生相同效果；
 
-表示修改操作是否可能具有破坏性；
-
-`idempotentHint`
-
-表示同样参数重复执行是否具有幂等性，也就是重复执行是否产生相同效果；
-
-`openWorldHint`
-
-则帮助 Client 判断这个 Tool 是否可能和开放的外部世界发生交互。
+`openWorldHint` 则帮助 Client 判断这个 Tool 是否可能和开放的外部世界发生交互。
 
 但这里一定要注意：
 
-> **Annotation 是 Hint（提示），不是安全保证。**
+```text
+Annotation 是 Hint（提示），不是安全保证。
+```
 
 官方 Schema 明确强调这些字段不能被认为一定真实。
 
@@ -385,7 +382,9 @@ readOnlyHint = true
 
 这和前面讲 `serverInfo` 时的原则其实一样：
 
-> **自我声明的信息可以辅助理解，但不能自动升级成可信安全事实。**
+```text
+自我声明的信息可以辅助理解，但不能自动升级成可信安全事实。
+```
 
 ## 为什么 Tool 的输入和输出都要用 JSON Schema？
 
@@ -398,7 +397,9 @@ description
 
 模型可能知道“这个工具是干什么的”，但仍然不知道：
 
-> 到底应该怎样构造参数？
+```text
+到底应该怎样构造参数？
+```
 
 例如：
 
@@ -417,7 +418,9 @@ description
 
 但如果协议只是告诉模型：
 
-> 请传几个 JSON 参数。
+```text
+请传几个 JSON 参数。
+```
 
 问题马上就来了：
 
@@ -466,7 +469,9 @@ MCP 没有重新发明一套参数类型描述语言，而是直接采用 **JSON
 
 这已经不仅仅是在告诉模型：
 
-> 有 `query` 和 `limit` 两个参数。
+```text
+有 query 和 limit 两个参数。
+```
 
 它同时给出了：
 
@@ -476,11 +481,13 @@ MCP 没有重新发明一套参数类型描述语言，而是直接采用 **JSON
 
 这就是 JSON Schema 最大的价值：
 
-> **它既可以作为机器能够理解的类型契约，又足够通用，不需要 MCP 自己维护一套类型系统。**
+```text
+它既可以作为机器能够理解的类型契约，又足够通用，不需要 MCP 自己维护一套类型系统。
+```
 
 当前 `2026-07-28` 还进一步放宽了 Tool Schema。
 
-早期实现更容易把 `inputSchema` / `outputSchema` 理解成比较简单的 Object Schema，但新版明确允许使用 JSON Schema 2020-12 中更加完整的关键字，包括 `$ref`、组合 Schema 等能力。
+早期实现容易把 `inputSchema` / `outputSchema` 理解成比较简单的 Object Schema，但新版明确允许使用 JSON Schema 2020-12 中更加完整的关键字，包括 `$ref`、组合 Schema 等能力。
 
 也就是说，一个复杂 Tool 不必把所有结构重复展开：
 
@@ -497,7 +504,9 @@ Permission
 
 因为 Tool Definition 仍然需要明确表达：
 
-> 这个 Tool 接受怎样的参数结构。
+```text
+这个 Tool 接受怎样的参数结构。
+```
 
 官方推荐的无参数形式是：
 
@@ -510,7 +519,9 @@ Permission
 
 它明确表达：
 
-> 参数是一个空对象，而且不能随便再塞其他字段。
+```text
+参数是一个空对象，而且不能随便再塞其他字段。
+```
 
 相比：
 
@@ -522,11 +533,7 @@ Permission
 
 前者约束更加准确。
 
-Tool 的输出同样可以通过：
-
-`outputSchema`
-
-描述。
+Tool 的输出同样可以通过：`outputSchema` 描述。
 
 为什么结果也需要 Schema？
 
@@ -562,34 +569,30 @@ Tool 的输出同样可以通过：
 
 约束：
 
-> 调用者应该传什么。
+```text
+调用者应该传什么。
+```
 
 `outputSchema`
 
 描述：
 
-> Server 应该返回什么结构化结果。
+```text
+Server 应该返回什么结构化结果。
+```
 
 ```mermaid
 flowchart TD
-    A[Client 构造 Tool Call] --> B[提交 inputSchema]
+    A[Client 构造 Tool Call<br/>name + arguments] --> B[Server 按 inputSchema<br/>校验 arguments]
     B --> C{输入校验通过？}
-    C -->|否| D[返回参数错误<br/>Handler 不执行]
+    C -->|否| D[Invalid Params<br/>Handler 不执行]
     C -->|是| E[执行 Tool Handler]
-    E --> F[生成 structuredContent]
-    F --> G{声明了 outputSchema？}
-    G -->|否| H[返回 Tool Result]
-    G -->|是| I{输出校验通过？}
-    I -->|否| J[返回输出结构错误]
-    I -->|是| H
-
-    classDef request fill:#e8f3ff,stroke:#3b82f6,color:#172554
-    classDef decision fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
-    classDef success fill:#ecfdf5,stroke:#10b981,color:#064e3b
-    classDef error fill:#fff4e5,stroke:#f59e0b,color:#78350f
-    class A,B,E,F,H request
-    class C,G,I decision
-    class D,J error
+    E --> F{是否声明 outputSchema？}
+    F -->|否| G[返回 Tool Result]
+    F -->|是| H[生成 structuredContent]
+    H --> I{符合 outputSchema？}
+    I -->|否| J[输出结果不符合契约]
+    I -->|是| G
 ```
 
 ## 为什么 Tool Result 同时需要 `content` 和 `structuredContent`？
@@ -613,11 +616,13 @@ flowchart TD
 
 Text、Image、Audio、Resource Link、Embedded Resource
 
-等不同 Content Block（内容块）。
+等不同内容块。
 
 也就是说，`content` 的目标更偏向：
 
-> **给模型或者用户直接消费。**
+```text
+给模型或者用户直接消费。
+```
 
 例如一个图片分析工具可以直接返回图片；
 
@@ -627,13 +632,11 @@ Text、Image、Audio、Resource Link、Embedded Resource
 
 但如果 Tool Result 还要被程序继续处理，只返回自然语言就会很麻烦。
 
-假设：
+假设 `get_weather` 返回：
 
-`get_weather`
-
-返回：
-
-> 东京现在 26°C，天气晴朗，湿度 62%。
+```text
+东京现在 26°C，天气晴朗，湿度 62%。
+```
 
 对于 LLM 来说完全够用。
 
@@ -648,9 +651,7 @@ humidity
 
 这显然不可靠。
 
-所以 MCP 同时支持：
-
-`structuredContent`
+所以 MCP 同时支持：`structuredContent`
 
 也就是**结构化结果**。
 
@@ -674,21 +675,11 @@ humidity
 
 这两个字段并不是重复设计。
 
-`content`
+`content` 更适合人和模型理解。
 
-更适合：
+`structuredContent` 更适合程序继续处理。
 
-> 人和模型理解。
-
-`structuredContent`
-
-更适合：
-
-> 程序继续处理。
-
-如果 Tool 定义了：
-
-`outputSchema`
+如果 Tool 定义了 `outputSchema`，
 
 那么 `structuredContent` 就应该符合这份 Schema。
 
@@ -717,15 +708,19 @@ humidity
 
 需要注意一点：
 
-> MCP 的 `structuredContent` 和我们平时说的大模型 Structured Output（结构化生成）不是一个东西。
+MCP 的 structuredContent 和我们平时说的大模型 Structured Output（结构化生成）不是一个东西。
 
 Structured Output 通常是：
 
-> 约束 LLM 必须按照某个 Schema 生成结果。
+```text
+约束 LLM 必须按照某个 Schema 生成结果。
+```
 
 MCP `structuredContent` 则是：
 
-> **Tool Server 已经执行完成以后，返回给 Client 的结构化数据。**
+```text
+Tool Server 已经执行完成以后，返回给 Client 的结构化数据。
+```
 
 数据生产者不同。
 
@@ -761,7 +756,9 @@ list_users
 
 目前规范建议：
 
-> 如果 Tool 返回了 `structuredContent`，同时最好把序列化后的 JSON 也放进 Text Content。
+```text
+如果 Tool 返回了 structuredContent，同时最好把序列化后的 JSON 也放进 Text Content。
+```
 
 原因是旧版 Client 或者一些只认识 `content` 的上层集成，可能根本不会读取：
 
@@ -805,7 +802,9 @@ name = project_main_file
 
 它更重要的是：
 
-> **这里存在一个可以被稳定定位的数据对象。**
+```text
+这里存在一个可以被稳定定位的数据对象。
+```
 
 这和函数调用完全不同。
 
@@ -815,7 +814,9 @@ name = project_main_file
 
 Tool 表达的是操作：
 
-> 给我一个 path，我帮你执行读取。
+```text
+给我一个 path，我帮你执行读取。
+```
 
 而：
 
@@ -825,21 +826,15 @@ file:///project/src/main.ts
 
 表达的是身份：
 
-> 这是一个具体资源。
+```text
+这是一个具体资源。
+```
 
 一旦数据具有稳定身份，很多能力就自然出现了。
 
-Client 可以：
+Client 可以 `resources/list` 发现它；
 
-`resources/list`
-
-发现它；
-
-通过：
-
-`resources/read`
-
-读取它；
+通过 `resources/read` 读取它；
 
 可以把这个 URI 存下来；
 
@@ -849,17 +844,17 @@ Client 可以：
 
 所以 URI 其实给 Resource 建立了一种统一的：
 
-> **寻址模型。**
+```text
+寻址模型。
+```
 
 这也是为什么 Resource 不要求一定对应真实文件。
 
-规范里的：
+规范里的 `file://` 只是在表达：
 
-`file://`
-
-只是在表达：
-
-> 这份 Resource 的行为类似文件系统资源。
+```text
+这份 Resource 的行为类似文件系统资源。
+```
 
 它并不要求背后真的存在一块物理磁盘。
 
@@ -911,7 +906,9 @@ https://example.com/report.pdf
 
 Client 会自然认为：
 
-> 这个 URI 本身就是一个可以直接访问的 Web 资源。
+```text
+这个 URI 本身就是一个可以直接访问的 Web 资源。
+```
 
 URI Scheme 不只是字符串前缀，它实际上会影响 Client 对资源寻址方式的理解。
 
@@ -947,7 +944,9 @@ Binary Resource（二进制资源）则可以使用 Base64 编码后的：
 
 所以 Resource 真正建立的是：
 
-> **身份 → 寻址 → 读取 → 内容类型 → 更新**
+```text
+身份 → 寻址 → 读取 → 内容类型 → 更新
+```
 
 ```mermaid
 flowchart TD
@@ -976,6 +975,32 @@ flowchart TD
 这样一条完整的数据模型。
 
 如果数据根本没有必要被 Host 独立发现、选择、引用或者订阅，那么专门设计 Resource 反而会增加复杂度。
+
+<PlainExplanation title="用一个真实案例理解 Resource">
+
+即使看完上面的介绍，Resource 仍然可能比较抽象。相比之下，Tools 和 Prompts 已经能解决很多常见问题，而 Resource 在实际项目中的使用场景相对少一些。下面用一个真实案例，再具体说明 Resource 到底解决什么问题。
+
+Mapbox MCP Server 将地点分类字典暴露为一个 Resource：
+
+`mapbox://categories`
+
+假设用户说：“帮我找附近的餐厅。”Host 可以先通过 `resources/list` 发现这份 Resource，再通过 `resources/read` 读取其中的分类字典，确认餐厅对应的分类 ID 是 `restaurant`。之后，Host 才把这个 ID 作为参数传给 Mapbox 的地点搜索 Tool。
+
+```text
+resources/list
+    ↓
+发现 mapbox://categories
+    ↓
+resources/read
+    ↓
+读取分类字典，得到 restaurant
+    ↓
+调用地点搜索 Tool，传入 category = restaurant
+```
+
+这里的 Resource 不是“执行一次搜索”，读取它也不会产生搜索副作用。它提供的是一份由 Server 维护的、可被重复读取的参考数据；Tool 负责执行动作，Resource 负责提供搜索所需要的数据。
+
+</PlainExplanation>
 
 ## Resource Template 为什么还要单独存在？
 
@@ -1021,7 +1046,9 @@ github://repos/{owner}/{repo}/issues/{issueNumber}
 
 它表达的是：
 
-> **符合这个 URI 规则的一整类 Resource。**
+```text
+符合这个 URI 规则的一整类 Resource。
+```
 
 客户端可以通过：
 
@@ -1057,7 +1084,9 @@ Resource Template 使用的是标准的 **URI Template** 机制，而不是 MCP 
 
 Resource Template 真正解决的是：
 
-> **Resource Space（资源空间）太大，无法枚举。**
+```text
+Resource Space（资源空间）太大，无法枚举。
+```
 
 例如：
 
@@ -1117,17 +1146,23 @@ Host 可以让 Server帮助补全 Repo Name。
 
 很多人第一反应都会是：
 
-> Prompt 不就是一段字符串吗？
+```text
+Prompt 不就是一段字符串吗？
+```
 
 如果只是固定写一句：
 
-> 请帮我审查下面这段代码。
+```text
+请帮我审查下面这段代码。
+```
 
 确实没有必要专门设计一套协议。
 
 但 MCP Prompt 真正表达的不是一段静态文字，而是：
 
-> **Server 可以向 Host 提供的一组可发现、可参数化、结构化的对话模板。**
+```text
+Server 可以向 Host 提供的一组可发现、可参数化、结构化的对话模板。
+```
 
 例如 Server 可以声明：
 
@@ -1207,7 +1242,9 @@ messages
 
 这里最大的区别就在于：
 
-> **Prompt 是对话结构，而不只是文本。**
+```text
+Prompt 是对话结构，而不只是文本。
+```
 
 Prompt Message 可以有：
 
@@ -1231,7 +1268,9 @@ Image、Audio、Resource Link、Embedded Resource
 
 例如：
 
-> 先给模型一段用户问题，再附带一个 Resource，再附带图片。
+```text
+先给模型一段用户问题，再附带一个 Resource，再附带图片。
+```
 
 如果 Prompt 只是一个字符串字段，这些结构都会丢失。
 
@@ -1247,11 +1286,15 @@ Tool。
 
 但这样以后，从协议层看，它只是一个：
 
-> 模型可以调用的函数。
+```text
+模型可以调用的函数。
+```
 
 Host 不知道：
 
-> 这是一个更适合展示给用户主动选择的 Prompt Template（提示词模板）。
+```text
+这是一个更适合展示给用户主动选择的 Prompt Template（提示词模板）。
+```
 
 所以 Prompt 成为独立 Primitive 的价值并不主要是：
 
@@ -1259,7 +1302,9 @@ Host 不知道：
 
 真正的价值是：
 
-> **MCP 给预定义交互模板建立了一个标准发现和调用协议。**
+```text
+MCP 给预定义交互模板建立了一个标准发现和调用协议。
+```
 
 Host 可以把它做成：
 
@@ -1275,15 +1320,21 @@ Slash Command（斜杠命令）
 
 官方把 Prompt 定义为 User-controlled，也是这个原因：
 
-> 用户通常主动决定什么时候使用这个模板。
+```text
+用户通常主动决定什么时候使用这个模板。
+```
 
 这里要注意，User-controlled 指的是：
 
-> 谁决定使用它。
+```text
+谁决定使用它。
+```
 
 不是：
 
-> 谁编写 Prompt 内容。
+```text
+谁编写 Prompt 内容。
+```
 
 真正的 Prompt 内容仍然由 Server 定义。
 
@@ -1297,7 +1348,9 @@ Prompt。
 
 用户只是主动选择：
 
-> 我要使用这个 Prompt。
+```text
+我要使用这个 Prompt。
+```
 
 具体里面如何组织消息、引用哪些 Resource，仍然由 Server 决定。
 
@@ -1309,26 +1362,39 @@ Prompt。
 
 **Prompt 定义“可以怎样开始一次预定义交互”。**
 
-## 补充
+## 总结
 
-即使看完上面的介绍，Resource 仍然可能比较抽象。相比之下，Tools 和 Prompts 已经能解决很多常见问题，而 Resource 在实际项目中的使用场景相对少一些。下面用一个真实案例，再具体说明 Resource 到底解决什么问题。
+MCP Server 描述自己的能力，并不是简单返回一张“接口列表”，而是把能力拆成 **Tools、Resources 和 Prompts** 三种不同的 Primitive。三者解决的问题不同，也对应不同的控制模型：
 
-Mapbox MCP Server 将地点分类字典暴露为一个 Resource：
+- **Tools：Model-controlled**，更适合让模型根据当前上下文决定是否调用。
+- **Resources：Application-controlled**，更适合作为 Host 可以发现、读取、引用和管理的上下文数据。
+- **Prompts：User-controlled**，更适合作为用户主动选择的预定义交互模板。
 
-`mapbox://categories`
+Tool 的核心是 **Tool Definition**。`tools/list` 返回的不是 Server 内部函数本身，而是 `name`、`description`、`inputSchema`、可选的 `outputSchema`、`annotations` 等描述信息。`name` 用于协议调用，`description` 和参数说明会影响模型对 Tool 的理解，而 `annotations` 只是行为提示，不能被当作可信的安全保证。
 
-假设用户说：“帮我找附近的餐厅。”Host 可以先通过 `resources/list` 发现这份 Resource，再通过 `resources/read` 读取其中的分类字典，确认餐厅对应的分类 ID 是 `restaurant`。之后，Host 才把这个 ID 作为参数传给 Mapbox 的地点搜索 Tool。
+Tool 使用 JSON Schema 描述参数和结构化结果，使调用双方能够共享一份机器可理解的类型契约。`inputSchema` 用来约束调用参数，`outputSchema` 可以描述结构化结果。Tool 执行完成以后，`content` 更适合模型和用户直接理解，而 `structuredContent` 更适合程序继续消费；它和大模型的 Structured Output 并不是同一个概念。
 
-```text
-resources/list
-    ↓
-发现 mapbox://categories
-    ↓
-resources/read
-    ↓
-读取分类字典，得到 restaurant
-    ↓
-调用地点搜索 Tool，传入 category = restaurant
-```
+Resource 和 Tool 最大的区别在于：**Tool 的核心身份是操作，Resource 的核心身份是 URI。** Resource 通过 URI 建立稳定的寻址模型，Client 可以发现、读取、引用甚至监听它的变化。对于无法枚举的大规模资源空间，MCP 又提供 Resource Template，通过 RFC 6570 URI Template 描述“一类资源”，而不是提前列出所有具体 URI。
 
-这里的 Resource 不是“执行一次搜索”，读取它也不会产生搜索副作用。它提供的是一份由 Server 维护的、可被重复读取的参考数据；Tool 负责执行动作，Resource 负责提供搜索所需要的数据。
+Prompt 则解决另一类问题。它不是简单保存一段字符串，而是让 Server 向 Client 暴露 **可发现、可参数化、结构化的对话模板**。Client 可以通过 `prompts/list` 发现 Prompt，再通过 `prompts/get` 获得真正的 Prompt Messages。Prompt Message 还可以包含文本、图片、音频、Resource Link 或 Embedded Resource，因此它表达的是完整的对话结构，而不仅仅是一段文本。
+
+所以理解这三种 Primitive 时，可以抓住三个最核心的区别：
+
+- **Tool 定义“可以做什么”。**
+- **Resource 定义“有什么数据可以访问”。**
+- **Prompt 定义“可以怎样开始一次预定义交互”。**
+
+它们并不是三种互相替代的实现方式，而是 MCP 为不同交互语义设计的三种标准能力模型。
+
+## 相关面试题
+
+- **MCP Server 是怎么描述自己能力的？Tools、Resources 和 Prompts 有什么区别？**
+- **为什么 MCP 不把所有能力都统一设计成 Tool？**
+- **`tools/list` 返回的到底是什么？Tool Definition 中哪些字段最重要？**
+- **Tool 的 `name`、`title`、`description` 和 `annotations` 分别有什么作用？**
+- **为什么 MCP Tool 要使用 JSON Schema？`inputSchema` 和 `outputSchema` 分别解决什么问题？**
+- **Tool Result 中 `content` 和 `structuredContent` 有什么区别？**
+- **MCP Resource 为什么使用 URI，而不是像 Tool 一样只使用 `name`？**
+- **Resource Template 是什么？它为什么需要使用 URI Template？**
+- **MCP Prompt 为什么要成为独立的一等能力？它和普通 Prompt 字符串、Tool 有什么区别？**
+- **MCP 中 Model-controlled、Application-controlled 和 User-controlled 分别是什么意思？**

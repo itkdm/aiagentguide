@@ -11,22 +11,20 @@ tags:
   - 原理
   - MCP
 author: 布吉岛
-lastUpdated: 2026-09-14
-status: draft
-draft: true
+lastUpdated: 2026-09-17
+status: published
+draft: false
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-noindex: true
+noindex: false
 ---
 
 # 深入 MCP：MCP 是怎么协商协议版本和能力的？
 
 ## `server/discover` 到底发现了什么？
 
-在 `2026-07-28` 版本中，MCP 新增了一个很重要的方法：
-
-`server/discover`
+在 `2026-07-28` 版本中，MCP 新增了一个很重要的方法：`server/discover`
 
 它的作用并不是列出 Server 具体提供了哪些 Tool，而是让 Client 在真正使用 Server 之前，一次性知道几个基础的信息：
 
@@ -52,15 +50,17 @@ Server 支持哪些 MCP Protocol Version、Server 支持哪些协议能力，以
 }
 ```
 
-这里有一个很有意思的地方：
+在上面这个请求中，你有没有发现：
 
-> `server/discover` 明明是用来查询 Server 支持哪些 Protocol Version 的，为什么 Client 在发送 Discovery Request 时，自己已经要携带一个 `protocolVersion`？
+```text
+server/discover 明明是用来查询 Server 支持哪些 Protocol Version 的，为什么 Client 在发送 Discovery Request 时，自己已经要携带一个 protocolVersion？
+```
 
 因为 `server/discover` 并不是脱离 MCP 之外的“前置探测协议”。
 
 它自己就是 **modern MCP 的一个 RPC**。
 
-Client 必须先按照自己支持的一种 modern MCP 版本构造请求，Server 才能够按照这套 Wire Protocol 理解它。
+Client 必须先按照自己支持的一种 modern MCP 版本构造请求，Server 才能够按照这套协议理解它。
 
 如果 Server 支持这个版本，就正常返回 `DiscoverResult`；如果 Server 确实是 modern Server，但不支持 Client 请求的这个具体版本，则应该返回 `UnsupportedProtocolVersionError`，同时告诉 Client 自己支持哪些版本。
 
@@ -68,7 +68,7 @@ Client 必须先按照自己支持的一种 modern MCP 版本构造请求，Serv
 
 > **“双方已经能够进行 modern MCP 通信以后，Client 怎样提前知道 Server 支持哪些 MCP Revision 和能力。”**
 
-当前规范要求 Server **MUST** 实现 `server/discover`，但是 Client **MAY** 调用，也就是说 Client 并不必须先 Discover 才能调用其他 RPC。Client 完全可以直接发送 `tools/list` 或其他请求，如果版本不被支持，再根据 Server 返回的版本信息重新选择。
+当前规范要求 Server **必须** 实现 `server/discover`，但是 Client **可能** 调用，也就是说 Client 并不必须先 Discover 才能调用其他 RPC。Client 完全可以直接发送 `tools/list` 或其他请求，如果版本不被支持，再根据 Server 返回的版本信息重新选择。
 
 Server 返回的 `DiscoverResult` 大致会包含：
 
@@ -96,7 +96,7 @@ Server 返回的 `DiscoverResult` 大致会包含：
 
 这里最重要的是 `supportedVersions` 和 `capabilities`。
 
-`serverInfo` 只是 Server 自己报告的实现信息，可以用于展示、日志和调试，但规范明确要求 Client 不应该根据这个字段做安全决策。
+`serverInfo` 只是 Server 自己报告的实现信息，可以用于展示、日志和调试，但是 Client 不应该根据这个字段做安全决策。
 
 `instructions` 则是给 Client 的自然语言说明，可以进一步帮助上层 LLM 理解这个 Server 应该怎样使用。不过它同样不等于 Tool Description，也不应该重复每个 Tool 已经描述过的信息。
 
@@ -110,11 +110,15 @@ Server 返回的 `DiscoverResult` 大致会包含：
 
 `server/discover` 可以告诉你：
 
-> 这个 Server 支持 Tools。
+```text
+这个 Server 支持 Tools。
+```
 
 但它不会直接告诉你：
 
-> 这个 Server 具体有 `search_issue`、`create_issue`、`get_pull_request` 这三个 Tool。
+```text
+这个 Server 具体有 search_issue、create_issue、get_pull_request 这三个 Tool。
+```
 
 具体有哪些 Tool，仍然要通过后面我们会详细讲的：
 
@@ -158,11 +162,13 @@ MCP 的 Protocol Version 使用日期形式：
 
 `2026-07-28`
 
-它并不是 `1.0.0`、`1.1.0` 这种 Semantic Version。
+它并不是 `1.0.0`、`1.1.0` 这种 Semantic Version（语义化版本）。
 
 而且 Protocol Version 不是：
 
-> Client 和 Server 建立连接时决定一次，以后永远不再出现。
+```text
+Client 和 Server 建立连接时决定一次，以后永远不再出现。
+```
 
 在 modern MCP 中，每一条 Request 都会明确携带当前使用的 Protocol Version。
 
@@ -174,7 +180,9 @@ io.modelcontextprotocol/protocolVersion = 2026-07-28
 
 Server 收到 Request 以后，第一件事情之一就是判断：
 
-> 我能不能按照这个 Revision 理解当前消息？
+```text
+我能不能按照这个 Revision 理解当前消息？
+```
 
 如果支持，就正常处理。
 
@@ -182,9 +190,7 @@ Server 收到 Request 以后，第一件事情之一就是判断：
 
 `UnsupportedProtocolVersionError`
 
-当前 Schema 给这个错误分配的 MCP Error Code 是：
-
-`-32022`
+当前 Schema 给这个错误分配的 MCP Error Code 是 `-32022`
 
 同时 Error Data 里必须告诉 Client两个关键信息：
 
@@ -199,11 +205,15 @@ Server 收到 Request 以后，第一件事情之一就是判断：
 
 意思非常明确：
 
-> 你刚才要求我用 `1900-01-01` 解释这个 Request，但我不支持；我真正支持的是这些版本。
+```text
+你刚才要求我用 1900-01-01 解释这个 Request，但我不支持；我真正支持的是这些版本。
+```
 
 Client 收到以后，再检查：
 
-> Server 给出的版本集合里，有没有我自己也支持的版本？
+```text
+Server 给出的版本集合里，有没有我自己也支持的版本？
+```
 
 如果存在交集，就选择一个双方都支持的版本，重新发送 Request。
 
@@ -237,7 +247,9 @@ flowchart TD
 
 这里还有一个问题：
 
-> 如果双方同时支持多个版本，到底应该选哪个？
+```text
+如果双方同时支持多个版本，到底应该选哪个？
+```
 
 它先得到 Client 自己支持的 modern versions，再按照 Client 的本地优先顺序，从 `DiscoverResult.supportedVersions` 中寻找第一个共同版本：
 
@@ -252,15 +264,17 @@ B → C
 B
 ```
 
-源码本质上就是从 Client 版本集合中寻找第一个也存在于 Server `supportedVersions` 里的版本，而不是简单对日期字符串排序。
-
 所以 Protocol Version Negotiation 真正表达的是：
 
-> **双方找到一个都能正确实现的 Wire Contract。**
+```text
+双方找到一个都能正确实现的 Wire Contract。
+```
 
 而不是：
 
-> 谁版本号最大就听谁的。
+```text
+谁版本号最大就听谁的。
+```
 
 这也是为什么 Server 遇到自己认识但选择不支持的实验版本时，同样应该返回 `UnsupportedProtocolVersionError`。
 
@@ -268,7 +282,9 @@ B
 
 看到这里，你会不会有这个疑问：
 
-> 旧版有 `initialize`，新版把它删了，然后换成 `server/discover`，那 `server/discover` 不就是换了个名字的 initialize 吗？
+
+旧版有 initialize，新版把它删了，然后换成 server/discover，那 server/discover 不就是换了个名字的 initialize 吗？
+
 
 不是。
 
@@ -288,7 +304,9 @@ Server 返回初始化结果，再由 Client：
 
 也就是说：
 
-> **没有完成 initialize，就不存在后面的正常协议生命周期。**
+```text
+没有完成 initialize，就不存在后面的正常协议生命周期。
+```
 
 `server/discover` 没有这种语义。
 
@@ -324,13 +342,17 @@ tools/list
 
 调用完 `server/discover` 之后，Server 也不会因为这次调用建立一段隐藏的 Negotiated State，然后认为：
 
-> 从此以后这个 Client 永远使用 2026-07-28，而且永远支持这些 Capabilities。
+```text
+从此以后这个 Client 永远使用 2026-07-28，而且永远支持这些 Capabilities。
+```
 
 后面的 Request 仍然必须自己携带 Protocol Version 和 Client Capabilities。
 
 换句话说：
 
-> **Discover Result 不会替代下一条 Request 自己应该声明的信息。**
+```text
+Discover Result 不会替代下一条 Request 自己应该声明的信息。
+```
 
 这正是两者最根本的区别。
 
@@ -342,7 +364,9 @@ tools/list
 
 Capabilities 真正表达的是：
 
-> **当前这一方实现了哪些 MCP 协议能力。**
+```text
+当前这一方实现了哪些 MCP 协议能力。
+```
 
 Server Capabilities 描述的是 Server 能够向 Client 提供什么类型的 MCP 能力。
 
@@ -374,11 +398,15 @@ Server Capabilities 描述的是 Server 能够向 Client 提供什么类型的 M
 
 这并不是说：
 
-> Server 有一个叫 `tools` 的 Tool。
+```text
+Server 有一个叫 tools 的 Tool。
+```
 
 它表达的是：
 
-> Server 支持 MCP Tools 这套协议能力，而且它还支持 Tool List 发生变化时的相关通知能力。
+```text
+Server 支持 MCP Tools 这套协议能力，而且它还支持 Tool List 发生变化时的相关通知能力。
+```
 
 Resources 同样如此。
 
@@ -397,7 +425,9 @@ Resources 同样如此。
 
 Client Capabilities 则从另外一个方向描述：
 
-> **如果 Server 在完成请求时需要 Client 配合，Client 能提供哪些 MCP 协议能力？**
+```text
+如果 Server 在完成请求时需要 Client 配合，Client 能提供哪些 MCP 协议能力？
+```
 
 当前 Schema 中包括 Elicitation（向用户请求补充信息）、Extensions（协议扩展），以及仍在弃用窗口中的 Roots（工作区根目录）和 Sampling（请求 Client 代为调用模型）等能力。
 
@@ -437,7 +467,9 @@ Client Capability更偏：
 
 不是为了询问 Client：
 
-> 你也支持 tools 吗？
+```text
+你也支持 tools 吗？
+```
 
 Client 并不需要自己提供 MCP Tools，才能调用 Server 的 Tool。
 
@@ -459,7 +491,9 @@ Client 并不需要自己提供 MCP Tools，才能调用 Server 的 Tool。
 
 即使 Client 上一次 Request 声明了 Elicitation，这一次没声明，Server 也不能说：
 
-> 你刚才明明支持，我这次继续按支持处理就行。
+```text
+你刚才明明支持，我这次继续按支持处理就行。
+```
 
 不可以。
 
@@ -475,7 +509,9 @@ Client 并不需要自己提供 MCP Tools，才能调用 Server 的 Tool。
 
 对于 Server 来说：
 
-> 当前 Request 没有 Elicitation Capability。
+```text
+当前 Request 没有 Elicitation Capability。
+```
 
 它就不能在完成这个请求时依赖“向用户弹一个表单”这种能力。
 
@@ -491,7 +527,9 @@ elicitation
 
 它同时把：
 
-> **能力声明变成了请求级契约。**
+```text
+能力声明变成了请求级契约。
+```
 
 如果 Server 在处理当前请求时确实需要某项 Client Capability，而 Client 没有声明，当前协议也没有让 Server自己猜或者随便失败。
 
@@ -519,7 +557,9 @@ elicitation
 
 那么这是：
 
-> 当前请求缺少 Server 完成操作所需要的 Client 协议能力。
+```text
+当前请求缺少 Server 完成操作所需要的 Client 协议能力。
+```
 
 它不应该伪装成：
 
@@ -533,8 +573,6 @@ elicitation
 
 ## 新旧 MCP Client 和 Server 是怎么兼容的？
 
-到这里，还有一个实际工程问题没有解决：
-
 现在生态里不可能所有 Client 和 Server 在同一天全部升级到 `2026-07-28`。
 
 大量 Server 仍然运行：
@@ -545,7 +583,9 @@ elicitation
 
 这些协议和 `2026-07-28` 最大的困难并不只是：
 
-> “Protocol Version 字符串不同。”
+```text
+“Protocol Version 字符串不同。”
+````
 
 而是它们的**整个连接行为都不同**。
 
@@ -571,9 +611,7 @@ elicitation
 
 per-request `_meta` + `server/discover` + Stateless Core。
 
-这意味着：
-
-> **判断一个 Server 是 Legacy 还是 Modern，和在 Modern Era 内选择具体 Protocol Version，其实是两个问题。**
+这意味着判断一个 Server 是 Legacy 还是 Modern，和在 Modern Era 内选择具体 Protocol Version，其实是两个问题。
 
 Modern Server 收到一个它不支持的 Modern Protocol Version，可以返回：
 
@@ -593,7 +631,9 @@ Client 再选择共同支持版本。
 
 它甚至可能要求：
 
-> 在收到任何其他正常 RPC 之前，你必须先 initialize。
+```text
+在收到任何其他正常 RPC 之前，你必须先 initialize。
+```
 
 所以此时不能简单期待它返回一份规范的：
 
@@ -603,7 +643,9 @@ Client 再选择共同支持版本。
 
 因此一个同时支持新旧协议的 Client，还需要先判断：
 
-> **对面到底属于哪个 Era？**
+```text
+对面到底属于哪个 Era？
+```
 
 当前规范为 stdio 和 Streamable HTTP 分别定义了兼容探测方式。
 
@@ -636,15 +678,21 @@ HTTP 的判断方式又略有不同。
 
 因为 HTTP 本身还有 Status Code，Client 可以先发送 Modern Request，然后结合 HTTP Response 和 JSON-RPC Body 判断：
 
-> 这是一个 Modern MCP Error？
+```text
+这是一个 Modern MCP Error？
+```
 
 还是：
 
-> 这个 Server 根本不理解 Modern Protocol？
+```text
+这个 Server 根本不理解 Modern Protocol？
+```
 
 这里的关键原则是：
 
-> **一个明确的 Modern Error 不能被误认为 Legacy Server。**
+```text
+一个明确的 Modern Error 不能被误认为 Legacy Server。
+```
 
 例如 Server 返回：
 
@@ -654,11 +702,15 @@ HTTP 的判断方式又略有不同。
 
 正确处理方式应该是：
 
-> 继续走 Modern Version Negotiation。
+```text
+继续走 Modern Version Negotiation。
+```
 
 而不是：
 
-> “出错了，那我退回 initialize 试试。”
+```text
+“出错了，那我退回 initialize 试试。”
+```
 
 否则一次普通的 Protocol Version mismatch，就会被错误降级成整个协议时代切换。
 
@@ -700,44 +752,94 @@ pin: "2026-07-28"
 
 也正因为如此，`server/discover` 不能简单理解成“新版 initialize”。
 
-真正理解这一点以后，Protocol Version、Capabilities、Discovery 和 Backward Compatibility（向后兼容） 就不再是四个互相独立的功能。
-
-它们共同解决的是一个协议长期演进时绕不开的问题：
-
-> **当 Client 和 Server 由不同团队、不同语言、不同 SDK、不同发布时间实现时，双方怎样在不依赖隐式连接状态的前提下，确认彼此能说什么、能做什么，以及还能不能继续通信。**
-
 ```mermaid
 flowchart TD
-    A[Client 准备连接 Server] --> B{先判断协议时代}
+    A[Client 准备与 Server 通信] --> B{Client 使用哪种兼容模式？}
 
-    B -->|Legacy| L1[发送 initialize]
+    %% Legacy
+    B -->|Legacy-only<br/>或已知是 Legacy| L1[发送 initialize]
     L1 --> L2[Server 返回初始化结果]
     L2 --> L3[Client 发送 notifications/initialized]
-    L3 --> L4[进入 Legacy 生命周期<br/>连接级或会话级状态]
+    L3 --> L4[进入 Legacy 生命周期<br/>连接级 / 会话级协议上下文]
     L4 --> L5[继续调用其他 RPC]
 
-    B -->|Modern| M1[发送 Modern Request<br/>携带 Protocol Version<br/>和当前 Client Capabilities]
-    M1 --> M2{Server 能理解这个 Version？}
-    M2 -->|否| M3[返回 UnsupportedProtocolVersionError<br/>附带 supported 版本列表]
-    M3 --> M4[Client 选择双方共同支持的版本]
-    M4 --> M1
-    M2 -->|是| M5[正常处理 Request]
+    %% Modern
+    B -->|Modern-only<br/>或已知是 Modern| M0[进入 Modern MCP]
 
-    M5 -.可选的信息查询.-> D1[server/discover]
-    D1 --> D2[返回 supportedVersions<br/>Server Capabilities<br/>Server Info 等声明]
-    D2 -.用于提前了解和缓存.-> M6[Client 决定后续请求怎么发]
-    M5 --> M6
-    M6 --> M7[每条后续 Request<br/>继续携带自己的版本和能力声明]
-    M7 --> M8[Capability 粗粒度判断<br/>再用 tools/list 等发现具体对象]
+    %% Dual-era
+    B -->|Dual-era / Auto| P1[发送 Modern server/discover Request<br/>按 Transport 探测 Server Era]
+    P1 -->|确认 Modern| M0
+    P1 -->|无法按 Modern 识别<br/>且符合回退规则| L1
 
-    B -.双时代 Client 的自动探测.-> P1[stdio / Streamable HTTP Probe]
-    P1 -->|确认 Modern| M1
-    P1 -->|确认不是 Modern| L1
+    %% Modern discovery
+    M0 --> M1{是否先调用 server/discover？}
+
+    M1 -->|可选调用| D1[server/discover<br/>本身也是 Modern Request]
+    D1 --> D2[返回 supportedVersions<br/>Server Capabilities<br/>Server Info / instructions]
+    D2 --> D3[Client 可缓存发现结果<br/>并选择支持的 Protocol Version]
+    D3 --> R1
+
+    M1 -->|直接调用业务 RPC| R1[发送 Modern Request<br/>携带 Protocol Version<br/>和当前 Client Capabilities]
+
+    %% Version negotiation
+    R1 --> R2{Server 支持当前 Version？}
+    R2 -->|否| R3[UnsupportedProtocolVersionError<br/>返回 supported 版本列表]
+    R3 --> R4{存在双方共同支持的版本？}
+    R4 -->|是| R5[Client 选择兼容版本]
+    R5 --> R1
+    R4 -->|否| R6[协议版本不兼容]
+
+    R2 -->|是| R7[正常处理 Request]
+
+    %% Subsequent requests
+    R7 --> R8[后续每条 Request<br/>仍然携带自己的 Version<br/>和 Client Capabilities]
+
+    R8 --> S1{Server 声明了哪些能力？}
+    S1 -->|Tools| S2[tools/list<br/>发现具体 Tool]
+    S1 -->|Resources| S3[resources/list<br/>发现具体 Resource]
+    S1 -->|Prompts| S4[prompts/list<br/>发现具体 Prompt]
 
     classDef modern fill:#e8f3ff,stroke:#3b82f6,color:#172554
     classDef legacy fill:#fff4e5,stroke:#f59e0b,color:#78350f
     classDef decision fill:#f3e8ff,stroke:#8b5cf6,color:#3b0764
-    class M1,M3,M4,M5,M6,M7,M8,D1,D2 modern
+    classDef discovery fill:#ecfdf5,stroke:#10b981,color:#064e3b
+
+    class M0,M1,R1,R3,R4,R5,R6,R7,R8 modern
     class L1,L2,L3,L4,L5 legacy
-    class B,M2 decision
+    class B,R2 decision
+    class D1,D2,D3,P1,S1,S2,S3,S4 discovery
 ```
+
+## 总结
+
+MCP 的协议版本和能力协商，并不是通过一次固定的握手把结果永久绑定到连接上。到了 `2026-07-28`，MCP 已经转向以 **每条 Request 自描述** 为基础的协议模型：Request 自己携带 Protocol Version 和当前可用的 Client Capabilities，Server 根据当前 Request 独立判断自己能否正确处理。
+
+`server/discover` 为现代 MCP 提供了一种提前发现 Server 信息的方式。Client 可以通过它一次性获得 Server 支持的 Protocol Version、Server Capabilities、Server Info 和 instructions 等信息。但 `server/discover` 并不是新版的 `initialize`：Server 必须实现它，Client 却可以选择不调用，直接发送正常 RPC。调用 `server/discover` 也不会建立一段隐藏的协商状态，后续 Request 仍然必须携带自己的版本和能力声明。
+
+协议版本不匹配时，Server 会返回 `UnsupportedProtocolVersionError`，并告诉 Client 自己支持哪些版本。Client 再从双方共同支持的版本中选择合适的版本并重新发送 Request。因此现代 MCP 的版本协商不是“握手一次，以后固定”，而是：
+
+**Request 声明版本 → Server 接受或拒绝 → 不兼容时返回支持列表 → Client 选择共同版本并重试。**
+
+Capabilities 则描述协议双方分别具备什么能力。Server Capabilities 更关注“Server 能提供什么”，例如 Tools、Resources、Prompts；Client Capabilities 更关注“处理当前 Request 时，Client 能配合什么”，例如 Elicitation、Sampling 等。尤其是在现代 MCP 中，Client Capabilities 是**请求级契约**：Server 不能根据之前的 Request 推断当前 Request 仍然具备相同能力。
+
+最后，MCP 还必须解决新旧协议共存的问题。`2025-11-25` 及以前属于依赖 `initialize` 的 Legacy Era，而 `2026-07-28` 开始进入基于 per-request `_meta` 的 Modern Era。一个同时兼容两种协议的 Client，需要先根据 Transport 判断 Server 属于哪个 Era；如果确认是 Modern，再进行具体的 Protocol Version 选择。
+
+因此，理解 MCP 的版本与能力协商，可以抓住几个核心点：
+
+- **`server/discover`** 用于发现 Server 支持的版本和能力，但不是强制握手。
+- **现代 MCP 的 Protocol Version 跟随每条 Request，而不是绑定在一次 Connection 上。**
+- **版本不兼容时，通过 `UnsupportedProtocolVersionError` 返回支持列表，再由 Client 选择共同版本。**
+- **Server Capabilities 描述 Server 能提供什么，Client Capabilities 描述当前 Request 中 Client 能配合什么。**
+- **Client Capabilities 不能从历史 Request 推断，必须以当前 Request 的声明为准。**
+- **Legacy / Modern Era Detection 和 Modern Era 内部的 Version Negotiation 是两个不同的问题。**
+
+## 相关面试题
+
+- **MCP 是怎么协商协议版本和能力的？**
+- **`server/discover` 有什么作用？它和 `tools/list`、`resources/list` 有什么区别？**
+- **为什么 `server/discover` 不能理解成新版的 `initialize`？**
+- **现代 MCP 是怎么选择 Client 和 Server 都支持的 Protocol Version 的？**
+- **为什么 MCP 版本协商不能简单选择双方支持的“最高版本”？**
+- **Client Capabilities 和 Server Capabilities 有什么区别？**
+- **为什么新版 MCP 要让 Client Capabilities 跟随每一次 Request 发送？**
+- **Legacy、Modern 和 Dual-era 分别是什么？新旧 MCP Client 和 Server 是怎么兼容的？**

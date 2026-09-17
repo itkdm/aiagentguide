@@ -12,7 +12,12 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
     items: [
       { text: 'MCP 架构', link: '/principles/deep-mcp-architecture' },
       { text: 'MCP 消息模型', link: '/principles/deep-mcp-message-model' },
-      { text: 'MCP 传输方式', link: '/principles/deep-mcp-transport' }
+      { text: 'MCP 传输方式', link: '/principles/deep-mcp-transport' },
+      { text: 'MCP 版本与能力协商', link: '/principles/deep-mcp-negotiation' },
+      { text: 'MCP 三类核心能力', link: '/principles/deep-mcp-capabilities' },
+      { text: 'MCP Tool 调用链', link: '/principles/deep-mcp-tool-model' },
+      { text: 'MCP 多轮交互', link: '/principles/deep-mcp-mrtr' },
+      { text: 'MCP 长请求与持续通知', link: '/principles/deep-mcp-long-running' },
     ]
   }
 ],

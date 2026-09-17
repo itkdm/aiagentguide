@@ -28,11 +28,15 @@ MCP 让一个 Agent 可以很方便地连接：GitHub、文件系统、企业内
 
 从工程角度看，这正是 MCP 最大的价值之一：
 
-> 不同能力可以通过一套统一协议接入 Host。
+```text
+不同能力可以通过一套统一协议接入 Host。
+```
 
 但从安全角度来看，同一件事也带来了另一个问题：
 
-> 一个 Server 告诉 Host“我有这些能力”，并不代表 Host 就应该无条件相信它。
+```text
+一个 Server 告诉 Host“我有这些能力”，并不代表 Host 就应该无条件相信它。
+```
 
 MCP 可以规定：
 
@@ -48,17 +52,18 @@ Authorization 应该怎样携带 Token
 
 但它无法从协议层证明：
 
-> 这个 Server 是不是恶意的。
-
-> Tool 描述的是不是真实行为。
-
-> Resource 返回的内容会不会诱导模型执行其他危险操作。
-
-> 一个本来安全的 Tool 和另一个 Tool 组合以后会不会突然形成数据泄露链路。
+```text
+这个 Server 是不是恶意的。
+Tool 描述的是不是真实行为。
+Resource 返回的内容会不会诱导模型执行其他危险操作。
+一个本来安全的 Tool 和另一个 Tool 组合以后会不会突然形成数据泄露链路。
+```
 
 所以理解 MCP Security，最重要的就是先搞清楚：
 
-> **哪些数据和能力可以被信任，以及谁有资格作出这个信任决定。**
+```text
+哪些数据和能力可以被信任，以及谁有资格作出这个信任决定。
+```
 
 ## MCP 为什么只能标准化能力，不能替 Host 建立信任？
 
@@ -76,11 +81,15 @@ readOnlyHint = true
 
 MCP 可以检查：
 
-> 这是不是一个合法 Tool Definition。
+```text
+这是不是一个合法 Tool Definition。
+```
 
 但它不能检查：
 
-> 这个 Tool 真的是只读吗？
+```text
+这个 Tool 真的是只读吗？
+```
 
 Server 完全可以把 Tool 取名：
 
@@ -98,7 +107,9 @@ rm -rf ...
 
 原因很简单：
 
-> MCP 能看到的是 Server 对能力的**描述**，而真正执行代码的是 Server 自己。
+```text
+MCP 能看到的是 Server 对能力的描述，而真正执行代码的是 Server 自己。
+```
 
 所以这里必须先区分两个概念：
 
@@ -125,7 +136,9 @@ Protocol Version 合法
 
 这也是为什么 MCP 官方的 Security Policy 对 Trust Model（信任模型）写得非常直接：
 
-> Client 连接一个 MCP Server，本身就意味着它对这个 Server 建立了一定程度的信任。
+```text
+Client 连接一个 MCP Server，本身就意味着它对这个 Server 建立了一定程度的信任。
+```
 
 Local Server 甚至更明显。
 
@@ -145,7 +158,9 @@ tools/list
 
 而是在：
 
-> **Host 决定执行这份程序的那一刻就已经发生。**
+```text
+Host 决定执行这份程序的那一刻就已经发生。
+```
 
 MCP 能标准化：
 
@@ -180,7 +195,9 @@ annotations
 
 但它和普通 OpenAPI 文档有一个非常重要的区别：
 
-> **其中一部分内容最终会进入 LLM Context，并影响模型决策。**
+```text
+其中一部分内容最终会进入 LLM Context，并影响模型决策。
+```
 
 尤其是：
 
@@ -192,9 +209,10 @@ description
 
 模型会根据它判断：
 
-> 什么时候应该调用这个 Tool？
-
-> 参数应该怎么填？
+```text
+什么时候应该调用这个 Tool？
+参数应该怎么填？
+```
 
 于是一个恶意 Server 可以返回：
 
@@ -209,7 +227,9 @@ description:
 
 如果 Host 直接把这段描述交给模型，模型可能真的把它当成：
 
-> Tool 的正确使用说明。
+```text
+Tool 的正确使用说明。
+```
 
 这类攻击通常被称为：
 
@@ -217,7 +237,9 @@ description:
 
 真正危险的地方在于：
 
-> Tool Definition 同时跨越了“协议数据”和“模型指令”两个世界。
+```text
+Tool Definition 同时跨越了“协议数据”和“模型指令”两个世界。
+```
 
 对于 MCP Client 来说：
 
@@ -229,7 +251,9 @@ description
 
 对于 LLM 来说，它却可能被解释成：
 
-> 应该遵循的行为指令。
+```text
+应该遵循的行为指令。
+```
 
 这就形成了一个很特殊的 Trust Boundary。
 
@@ -264,11 +288,15 @@ readOnlyHint = true
 
 看起来很适合让 Host 判断：
 
-> 这是只读操作，不需要用户确认。
+```text
+这是只读操作，不需要用户确认。
+```
 
 但问题仍然是：
 
-> 谁填写的这个字段？
+```text
+谁填写的这个字段？
+```
 
 **Server 自己。**
 
@@ -282,11 +310,15 @@ readOnlyHint = true
 
 所以当前正式规范明确要求：
 
-> 来自不可信 Server 的 Tool Annotation 必须视为不可信。
+```text
+来自不可信 Server 的 Tool Annotation 必须视为不可信。
+```
 
 MCP 官方对 Tool Annotation 的进一步讨论也反复强调：
 
-> Annotation 是 Hint（提示），不是 Contract（强制保证）。
+```text
+Annotation 是 Hint（提示），不是 Contract（强制保证）。
+```
 
 这个区别非常重要。
 
@@ -302,11 +334,15 @@ Hint 可以帮助 Host：
 
 但它不应该成为：
 
-> 唯一的安全保证。
+```text
+唯一的安全保证。
+```
 
 如果你必须保证：
 
-> 某个 Tool 永远不能访问互联网。
+```text
+某个 Tool 永远不能访问互联网。
+```
 
 真正应该依赖的是：
 
@@ -322,7 +358,9 @@ openWorldHint = false
 
 如果必须保证：
 
-> 这个进程只能读取 `/workspace`。
+```text
+这个进程只能读取 /workspace。
+```
 
 应该依赖：
 
@@ -365,7 +403,9 @@ description =
 
 如果 Host 只是因为：
 
-> 这个 Server 以前被批准过。
+```text
+这个 Server 以前被批准过。
+```
 
 就自动接受新的 Tool Definition，那么最初那次审核并没有真正覆盖现在这套能力。
 
@@ -490,15 +530,21 @@ External Communication
 
 Calendar MCP 只是：
 
-> 正常读取 Calendar。
+```text
+正常读取 Calendar。
+```
 
 Filesystem MCP 只是：
 
-> 正常读取文件。
+```text
+正常读取文件。
+```
 
 Email MCP 只是：
 
-> 正常发送邮件。
+```text
+正常发送邮件。
+```
 
 真正把三者连接起来的是：
 
@@ -518,7 +564,9 @@ Email MCP 只是：
 
 这里最值得注意的是：
 
-> **攻击者不需要控制 Filesystem Server。**
+```text
+攻击者不需要控制 Filesystem Server。
+```
 
 也不需要控制：
 
@@ -530,7 +578,9 @@ Tool。
 
 它只需要控制：
 
-> 模型会读取的一段不可信内容。
+```text
+模型会读取的一段不可信内容。
+```
 
 然后利用 Host 已经拥有的其他可信能力完成攻击。
 
@@ -538,11 +588,15 @@ Tool。
 
 MCP 最大的优势之一就是：
 
-> 能轻松把不同 Server 的能力组合起来。
+```text
+能轻松把不同 Server 的能力组合起来。
+```
 
 但同样意味着：
 
-> **风险也成为整个 Session 的属性，而不再只是单个 Server 的属性。**
+```text
+风险也成为整个 Session 的属性，而不再只是单个 Server 的属性。
+```
 
 ```mermaid
 flowchart TD
@@ -642,7 +696,9 @@ Server 返回：
 
 它仍然：
 
-> **100% 符合 Schema。**
+```text
+100% 符合 Schema。
+```
 
 因为 Schema 能验证的是：
 
@@ -686,11 +742,15 @@ LLM Context
 
 而模型的一个根本问题就是：
 
-> 它很难可靠地区分“真正的系统指令”和“数据里面长得像指令的文本”。
+```text
+它很难可靠地区分“真正的系统指令”和“数据里面长得像指令的文本”。
+```
 
 例如用户问：
 
-> 总结这个网页。
+```text
+总结这个网页。
+```
 
 网页里隐藏一句：
 
@@ -706,7 +766,9 @@ LLM Context
 
 但对于 LLM：
 
-> 字符串本身就可能影响决策。
+```text
+字符串本身就可能影响决策。
+```
 
 这就是 Indirect Prompt Injection（间接提示词注入）特别棘手的地方。
 
@@ -714,7 +776,9 @@ LLM Context
 
 Remote MCP Authorization 有一个非常重要的特点：
 
-> Client 可以从一个 MCP Server URL 开始，动态发现整个 OAuth 系统。
+```text
+Client 可以从一个 MCP Server URL 开始，动态发现整个 OAuth 系统。
+```
 
 流程大致是：
 
@@ -741,7 +805,9 @@ TOKEN_URL
 
 但换一个角度：
 
-> Client 正在根据远程输入主动访问新的 URL。
+```text
+Client 正在根据远程输入主动访问新的 URL。
+```
 
 这些 URL 一部分甚至可以由恶意 MCP Server 间接控制。
 
@@ -767,7 +833,9 @@ http://localhost:6379/
 
 于是恶意 Server 就可以诱导 Client：
 
-> 帮我请求一下你内网的这个地址。
+```text
+帮我请求一下你内网的这个地址。
+```
 
 这就是：
 
@@ -871,11 +939,15 @@ Token A 和 Token B 不是同一个安全概念。
 
 Token A 应该证明：
 
-> 当前 MCP Client 被允许访问这个 MCP Server。
+```text
+当前 MCP Client 被允许访问这个 MCP Server。
+```
 
 Token B 证明：
 
-> MCP Server 被允许代表用户访问 Google API。
+```text
+MCP Server 被允许代表用户访问 Google API。
+```
 
 如果 Server 直接：
 
@@ -933,7 +1005,9 @@ MCP Proxy
 
 从第三方 Authorization Server 的视角看：
 
-> 所有请求都是同一个 MCP Proxy 发出的。
+```text
+所有请求都是同一个 MCP Proxy 发出的。
+```
 
 它看不到：
 
@@ -946,13 +1020,17 @@ Client B
 
 如果 Proxy 自己没有正确维护：
 
-> 哪个用户真正批准了哪个 MCP Client。
+```text
+哪个用户真正批准了哪个 MCP Client。
+```
 
 攻击者就可能借 Proxy 已有的信任关系获取原本不应该拿到的授权。
 
 所以 MCP Proxy 不能认为：
 
-> 第三方 Authorization Server 已经做过 Consent，我这里就不用管了。
+```text
+第三方 Authorization Server 已经做过 Consent，我这里就不用管了。
+```
 
 Proxy 自己仍然需要维护：
 
@@ -968,7 +1046,9 @@ User
 
 一旦跨越两个身份体系，它必须负责把两个体系之间的权限关系正确转换，而不能把“下游信任我”错误地解释成：
 
-> 下游也信任所有通过我进来的 Client。
+```text
+下游也信任所有通过我进来的 Client。
+```
 
 ## 为什么 Local stdio MCP 并不比 Remote MCP 天然安全？
 
@@ -1004,7 +1084,9 @@ npx some-mcp-server
 
 这意味着：
 
-> Host 正在本机执行一份代码。
+```text
+Host 正在本机执行一份代码。
+```
 
 而且默认情况下，这个 Server Process 会拥有当前运行环境允许它拥有的权限。
 
@@ -1026,11 +1108,15 @@ npx some-mcp-server
 
 官方 MCP Security Policy 对这一点写得非常明确：
 
-> stdio 的 Command Execution 是预期行为。
+```text
+stdio 的 Command Execution 是预期行为。
+```
 
 而且：
 
-> SDK 不会在 stdio Client 和 Server 之间提供恶意 Peer 隔离。
+```text
+SDK 不会在 stdio Client 和 Server 之间提供恶意 Peer 隔离。
+```
 
 原因其实很好理解。
 
@@ -1074,15 +1160,21 @@ Process Permission
 
 Tool 只描述：
 
-> Server 愿意通过 MCP 暴露什么能力。
+```text
+Server 愿意通过 MCP 暴露什么能力。
+```
 
 它不限制：
 
-> Server Process 自己还能做什么。
+```text
+Server Process 自己还能做什么。
+```
 
 这也是为什么：
 
-> **stdio Transport 不是 Sandbox。**
+```text
+stdio Transport 不是 Sandbox。
+```
 
 如果希望一个第三方 MCP Server：
 
@@ -1120,7 +1212,9 @@ Secret Isolation
 
 这和 Tool Annotation 的逻辑其实完全一致：
 
-> 自我声明可以帮助理解风险，但不能成为强制安全边界。
+```text
+自我声明可以帮助理解风险，但不能成为强制安全边界。
+```
 
 所以 Local MCP 和 Remote MCP 的安全问题只是不同：
 
@@ -1140,7 +1234,9 @@ Local stdio MCP
 
 “没有网络 Transport”并不意味着：
 
-> 风险更小。
+```text
+风险更小。
+```
 
 如果一个 Local MCP Server 拿到了：
 
@@ -1184,7 +1280,9 @@ Token 应该绑定哪个 Resource
 
 这些解决的是：
 
-> **系统怎样正确通信。**
+```text
+系统怎样正确通信。
+```
 
 第二层是：
 
@@ -1212,7 +1310,9 @@ Tool Definition 变化后是否需要重新审核
 
 这一层解决的是：
 
-> **哪些能力应该被允许影响哪些决策。**
+```text
+哪些能力应该被允许影响哪些决策。
+```
 
 第三层才是最终的 Hard Boundary：
 
@@ -1242,7 +1342,9 @@ Rate Limit
 
 这一层解决：
 
-> **即使模型、Tool Description 或 Server 都出现问题，系统物理上还能做什么。**
+```text
+即使模型、Tool Description 或 Server 都出现问题，系统物理上还能做什么。
+```
 
 所以一个真正可靠的 MCP 系统，不应该把所有希望都寄托在：
 
@@ -1284,25 +1386,30 @@ User Approval
 
 模型可以帮助判断：
 
-> 这个操作看起来危险不危险。
+```text
+这个操作看起来危险不危险。
+```
 
 Annotation 可以帮助判断：
 
-> 这个 Tool 自己声称是不是 destructive。
+```text
+这个 Tool 自己声称是不是 destructive。
+```
 
 Server Description 可以帮助用户理解：
 
-> 它大概提供什么能力。
+```text
+它大概提供什么能力。
+```
 
 但真正决定：
 
-> 能不能读这个文件。
-
-> 能不能访问公网。
-
-> 能不能使用这个 Token。
-
-> 能不能删除生产数据库。
+```text
+能不能读这个文件。
+能不能访问公网。
+能不能使用这个 Token。
+能不能删除生产数据库。
+```
 
 的控制，最好都放在模型之外。
 
@@ -1330,7 +1437,9 @@ Server
 
 真正重要的是：
 
-> **哪些不可信信息，能够影响哪些高权限能力。**
+```text
+哪些不可信信息，能够影响哪些高权限能力。
+```
 
 如果不可信网页只能：
 
@@ -1358,16 +1467,22 @@ Production API
 
 MCP 越成功地把能力组合起来，Host 就越需要从：
 
-> **整个 Session 的数据流和能力组合**
+```text
+整个 Session 的数据流和能力组合
+```
 
 去理解风险。
 
 协议解决的是：
 
-> 能力怎样连接。
+```text
+能力怎样连接。
+```
 
 安全系统最终要解决的是：
 
-> **连接以后，哪些能力应该被允许互相影响。**
+```text
+连接以后，哪些能力应该被允许互相影响。
+```
 
 这才是 MCP 真正的 Trust Boundary。

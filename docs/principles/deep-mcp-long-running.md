@@ -13,13 +13,13 @@ tags:
   - 原理
   - MCP
 author: 布吉岛
-lastUpdated: 2026-09-14
-status: draft
-draft: true
+lastUpdated: 2026-09-17
+status: published
+draft: false
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-noindex: true
+noindex: false
 
 ---
 
@@ -40,21 +40,24 @@ resources/read
 
 这时候问题就不再只是：
 
-> Request 发出去以后什么时候收到 Response？
+```text
+Request 发出去以后什么时候收到 Response？
+```
 
 而会变成：
 
-> Client 怎么知道 Server 还在工作？
-
-> 多久没有完成应该认为超时？
-
-> 用户点击停止以后，怎样取消当前操作？
-
-> 如果 Server 需要在很久以后主动告诉 Client “资源发生变化了”，还应该继续借用这条 Request 吗？
+```text
+Client 怎么知道 Server 还在工作？
+多久没有完成应该认为超时？
+用户点击停止以后，怎样取消当前操作？
+如果 Server 需要在很久以后主动告诉 Client “资源发生变化了”，还应该继续借用这条 Request 吗？
+```
 
 MCP 分别用 Progress、Cancellation 和 Subscription 解决这些问题，但它们其实都围绕同一个核心展开：
 
-> **一段通信到底应该活多久，以及结束时应该具有什么语义。**
+```text
+一段通信到底应该活多久，以及结束时应该具有什么语义。
+```
 
 ## Progress、Timeout 和 Cancellation 为什么必须围绕同一条 Request 来设计？
 
@@ -68,7 +71,7 @@ Response
 
 Client 发出 Request，Server 执行，最后返回 Response。
 
-如果 Server 需要执行一分钟，那么这一分钟里 Request 依然处于**In-flight（正在执行中）**状态。
+如果 Server 需要执行一分钟，那么这一分钟里 Request 依然处于正在执行中状态。
 
 这时候 Client 最少需要区分三件事：
 
@@ -86,19 +89,25 @@ Client 已经不想继续等待
 
 告诉 Client：
 
-> 当前请求还在执行，而且已经进行到某个阶段。
+```text
+当前请求还在执行，而且已经进行到某个阶段。
+```
 
 **Timeout**
 
 表示：
 
-> Client 已经等待超过允许的时间，不准备继续等待。
+```text
+Client 已经等待超过允许的时间，不准备继续等待。
+```
 
 **Cancellation**
 
 则表示：
 
-> 这条 Request 还没有正常完成，但发起方主动要求停止。
+```text
+这条 Request 还没有正常完成，但发起方主动要求停止。
+```
 
 如果一个长时间 Request 完全没有任何中间信号，Client 实际上无法区分：
 
@@ -120,11 +129,11 @@ Server 不需要固定每五秒报告一次，也不保证一定发送 Progress�
 
 当前规范只允许 Client表达：
 
-> 如果你有进度，可以通过这个 Token 告诉我。
+```text
+如果你有进度，可以通过这个 Token 告诉我。
+```
 
 至于 Server 是否发送、多久发送一次，仍然由 Server 决定。
-
-因此准确的关系应该是：
 
 ```text
 Request
@@ -196,7 +205,9 @@ Server 后面就可以发送：
 
 JSON-RPC Request ID 是：
 
-> **Request 和最终 Response 之间的关联标识。**
+```text
+Request 和最终 Response 之间的关联标识。
+```
 
 无论 Client 是否需要 Progress，这个 ID 都存在。
 
@@ -208,7 +219,9 @@ progressToken
 
 首先表达的是：
 
-> **Client 希望当前 Request 可以发送 Progress。**
+```text
+Client 希望当前 Request 可以发送 Progress。
+```
 
 也就是说，它同时承担了一层 Opt-in（主动启用）语义。
 
@@ -247,7 +260,9 @@ Progress 本身的数值也不能简单理解成百分比。
 
 可以理解为：
 
-> 当前完成了 3 / 10。
+```text
+当前完成了 3 / 10。
+```
 
 但如果：
 
@@ -263,7 +278,9 @@ Progress 本身的数值也不能简单理解成百分比。
 
 规范只要求：
 
-> 每一次 Progress 的 `progress` 值都必须比上一条增加。
+```text
+每一次 Progress 的 progress 值都必须比上一条增加。
+```
 
 Server 甚至可以：
 
@@ -316,7 +333,9 @@ Server 每隔 10 秒返回一次 Progress。
 
 那么 Client 就可以认为：
 
-> Server 没有卡死。
+```text
+Server 没有卡死。
+```
 
 继续等待。
 
@@ -357,7 +376,9 @@ progress = progress + 1
 
 但是：
 
-> 整个 Request 最长只能运行 10 分钟。
+```text
+整个 Request 最长只能运行 10 分钟。
+```
 
 ```text
 Request 开始
@@ -370,7 +391,7 @@ Request 开始
     └── 10min → 即使仍有 Progress，也必须结束等待
 ```
 
-这和 MRTR 那篇里看到的：
+这和 MRTR 中的：
 
 ```text
 timeout
@@ -381,11 +402,15 @@ maxTotalTimeout
 
 前者控制：
 
-> 当前这一段通信多久没有有效进展算异常。
+```text
+当前这一段通信多久没有有效进展算异常。
+```
 
 后者控制：
 
-> 整个业务流程最长允许持续多久。
+```text
+整个业务流程最长允许持续多久。
+```
 
 这两者并不一样。
 
@@ -409,9 +434,11 @@ notifications/progress
 
 Cancellation 表面上很简单：
 
-> Client 不想继续等了，让 Server 停止。
+```text
+Client 不想继续等了，让 Server 停止。
+```
 
-但实际落到不同 Transport 上以后，取消信号并不一样。
+但实际上，不同 Transport 取消信号并不一样。
 
 ### stdio 为什么需要 `notifications/cancelled`？
 
@@ -442,7 +469,9 @@ Request 102
 
 显然不能直接：
 
-> 关闭 stdout。
+```text
+关闭 stdout。
+```
 
 因为这样会把整个 MCP Connection 一起关掉，另外两条 Request 也会全部受到影响。
 
@@ -475,9 +504,11 @@ requestId = 102
 
 这里的关键词是：
 
-> **尝试。**
+```text
+尝试。
+```
 
-Cancellation 不是事务回滚保证。
+Server 收到 notifications/cancelled 后，应该尽快停止对应 Request 的后续工作，但 MCP 不保证这个 Request 一定能被立即、完整、无副作用地终止。
 
 ### 为什么 HTTP 不需要再发送取消 Notification？
 
@@ -525,7 +556,9 @@ Streamable HTTP
 
 这说明：
 
-> **协议语义可以一致，但具体控制信号往往取决于 Transport 怎样表示并发。**
+```text
+协议语义可以一致，但具体控制信号往往取决于 Transport 怎样表示并发。
+```
 
 ```mermaid
 flowchart TD
@@ -570,7 +603,9 @@ Response ←───────────
 
 所以：
 
-> **“我发送了取消”不等于“操作一定没有发生”。**
+```text
+“我发送了取消”不等于“操作一定没有发生”。
+```
 
 这就是 Cancellation Race（取消竞态）。
 
@@ -596,7 +631,9 @@ charge_credit_card
 
 MCP Cancellation 只解决：
 
-> **这条正在运行的协议请求应该尽快停止。**
+```text
+这条正在运行的协议请求应该尽快停止。
+```
 
 它不替业务系统提供分布式事务。
 
@@ -648,7 +685,9 @@ tools/call
 
 如果为了等这些事件而一直挂着某条普通 Request，就重新回到了：
 
-> 拿业务 Request 当长期 Server Push 通道。
+```text
+拿业务 Request 当长期 Server Push 通道。
+```
 
 这正是新版想避免的。
 
@@ -660,7 +699,9 @@ subscriptions/listen
 
 它的语义非常明确：
 
-> **Client 主动建立一条长期 Notification Stream。**
+```text
+Client 主动建立一条长期 Notification Stream。
+```
 
 例如 Client 可以声明：
 
@@ -681,7 +722,9 @@ subscriptions/listen
 
 也就是说：
 
-> 我只想听这些事件。
+```text
+我只想听这些事件。
+```
 
 Server 不能因为已经建立了一条长期 Stream，就开始随意推送其他消息。
 
@@ -689,11 +732,15 @@ Server 不能因为已经建立了一条长期 Stream，就开始随意推送其
 
 因为一条长期连接如果没有明确订阅边界，很容易重新演变成：
 
-> Server 想推什么就推什么。
+```text
+Server 想推什么就推什么。
+```
 
 而现代 MCP 仍然坚持：
 
-> **Client 决定自己愿意接收哪些长期通知。**
+```text
+Client 决定自己愿意接收哪些长期通知。
+```
 
 所以：
 
@@ -711,11 +758,15 @@ subscriptions/listen
 
 普通 Request：
 
-> 我正在等待某项操作完成。
+```text
+我正在等待某项操作完成。
+```
 
 Subscription：
 
-> 我现在主动监听未来可能发生的某类事件。
+```text
+我现在主动监听未来可能发生的某类事件。
+```
 
 ```text
 Request-scoped SSE
@@ -768,7 +819,9 @@ resourceSubscriptions = [A, B]
 
 Acknowledgment（确认通知）就是告诉 Client：
 
-> 你要求的 Subscription 我真正接受了哪些部分。
+```text
+你要求的 Subscription 我真正接受了哪些部分。
+```
 
 所以：
 
@@ -778,13 +831,7 @@ Request Filter
 
 只是 Client 希望建立什么 Subscription。
 
-而：
-
-```text
-Acknowledgment
-```
-
-才是 Server 最终同意的 Subscription。
+而 `Acknowledgment` 才是 Server 最终同意的 Subscription。
 
 这实际上形成了一次非常轻量的 Negotiation（协商）。
 
@@ -895,7 +942,9 @@ sequenceDiagram
 
 Client 不能假设：
 
-> Server 还记得我刚才监听了哪些 Resource。
+```text
+Server 还记得我刚才监听了哪些 Resource。
+```
 
 当前规范明确要求重新发送：
 
@@ -907,7 +956,9 @@ subscriptions/listen
 
 Subscription 本质上属于：
 
-> **当前 Communication Channel（通信通道）上的长期监听关系。**
+```text
+当前 Communication Channel（通信通道）上的长期监听关系。
+```
 
 它不是 Durable State（可持久化状态）。
 
@@ -917,19 +968,23 @@ Subscription 本质上属于：
 
 如果某项工作要求：
 
-> Client 断线一天以后回来，仍然能找到它。
+```text
+Client 断线一天以后回来，仍然能找到它。
+```
 
 那就不应该依赖 Subscription 或一条一直挂着的 Request。
 
 因为 Progress、Cancellation、Subscription 解决的都是：
 
-> **当前通信关系还存在时，怎样管理正在运行的工作和通知。**
+```text
+当前通信关系还存在时，怎样管理正在运行的工作和通知。
+```
 
 它们都依赖一个仍然活着的 Request 或 Connection。
 
 而真正能够脱离当前 Connection 长期存在的工作，需要另外一种模型：
 
-**Task。**
+**Task。**（后文介绍）
 
 所以这一篇里真正应该理解的是三个不同生命周期：
 
@@ -949,10 +1004,62 @@ Task
 
 MCP 把它们拆开，是因为：
 
-> **“执行时间很长”并不等于“它们应该拥有同一种生命周期”。**
+```text
+“执行时间很长”并不等于“它们应该拥有同一种生命周期”。
+```
 
 一个 Tool 运行 40 秒，可以继续保持普通 Request，并通过 Progress 报告状态。
 
 一个 Resource 未来可能发生变化，应该建立 Subscription。
 
 一个可能运行几个小时、Client 中途可以断线再回来查看的任务，则不应该靠前两种机制硬撑。
+
+## 总结
+
+MCP 中“执行时间很长”并不对应一种统一的处理方式。关键要先判断：当前工作仍然属于一条正在执行的 Request，还是需要在 Request 结束以后继续接收未来发生的事件。
+
+如果一条 Request 本身需要运行较长时间，MCP 可以通过 Progress 向 Client 报告执行状态。Client 如果希望接收进度，会在 Request 的 `_meta` 中携带 `progressToken`。Server 随后可以通过 `notifications/progress` 返回当前 `progress`、可选的 `total` 和 `message`。
+
+`progressToken` 和 JSON-RPC Request ID 的职责并不相同。Request ID 用来关联 Request 和最终 Response，而 `progressToken` 用来表明 Client 愿意接收这条 Request 的 Progress，并负责关联后续 Progress Notification。它只需要在当前 Active Requests 中唯一，不应该被当成长期的 Task ID、Run ID 或 Trace ID。
+
+Progress 也不能代替最终 Response。即使 Server 已经报告 `100 / 100`，只要最终 Response 还没有返回，这条 Request 就仍然没有完成。
+
+对于长时间请求，Timeout 和 Progress 通常需要配合使用。实现可以在收到有效 Progress 后重置普通 Timeout，因为这表明 Server 仍然在工作；但仍然应该设置 Maximum Total Timeout，限制整条 Request 或整个调用流程能够存活的最长时间，避免异常 Server 通过不断发送 Progress 无限延长 Request 生命周期。
+
+Cancellation 则解决“发起方已经不想继续执行当前 Request”的问题。具体取消信号取决于 Transport：
+
+- **stdio** 中，多条 Request 共享同一通信通道，因此 Client 需要发送 `notifications/cancelled`，通过 `requestId` 指明要取消哪条 Request。
+- **Streamable HTTP** 中，每条 Request 拥有独立的 Response Stream，因此 Client 关闭当前 SSE Response Stream，本身就是对这条 Request 的 Cancellation。
+
+Cancellation 是一种尽力而为的协议语义，而不是业务事务保证。取消信号到达 Server 以前，操作可能已经完成，因此“Client 发出了取消”并不等于“业务副作用一定没有发生”。对于支付、删除、部署等操作，如果需要真正的 Cancel、Rollback 或补偿机制，仍然需要业务系统自己实现。
+
+对于与某一条 Request 无关、可能在未来持续发生的事件，MCP 不应该一直占用普通 Request，而是使用 `subscriptions/listen` 建立长期 Notification Stream。
+
+Client 在建立 Subscription 时通过 Filter 指定自己愿意接收的通知，例如 Tool List Changed、Prompt List Changed、Resource List Changed 或某些具体 Resource 的更新。Server 不能借助这条长期 Stream 随意推送 Client 没有请求的通知。
+
+Subscription 建立以后，Server 必须首先发送 `notifications/subscriptions/acknowledged`，告诉 Client 实际接受了哪些订阅条件。随后这条 Subscription 上的通知都会携带：
+
+`io.modelcontextprotocol/subscriptionId`
+
+它直接使用最初 `subscriptions/listen` 的 JSON-RPC Request ID，使 Client 能够在多个并发 Subscription 共用通信通道时正确完成消息分流。
+
+Subscription 也不是 Durable State。底层 Transport 或 Connection 断开以后，原来的 Subscription 生命周期随之结束，重新连接后需要重新建立监听关系。
+
+因此，这篇文章最重要的不是记住几个 Method，而是区分不同的生命周期：
+
+**Progress 和 Cancellation 管理正在执行的 Request；Subscription 管理长期 Notification Stream；真正需要脱离当前 Request 和 Connection 独立存在的长期工作，则需要另外的 Task 模型。**
+
+## 相关面试题
+
+- **MCP 是怎么处理长时间运行的 Request 的？**
+- **MCP 的 `progressToken` 有什么作用？它和 JSON-RPC Request ID 有什么区别？**
+- **为什么收到 `notifications/progress` 不能认为 Request 已经完成？**
+- **MCP 中 Timeout、Progress 和 Cancellation 是什么关系？**
+- **为什么收到 Progress 后可以重置 Timeout，但仍然需要 Maximum Total Timeout？**
+- **MCP 在 stdio 和 Streamable HTTP 中分别是怎么取消 Request 的？为什么两种 Transport 的取消方式不同？**
+- **为什么说 MCP Cancellation 只能尽力取消，而不能保证业务操作一定没有发生？**
+- **`subscriptions/listen` 是什么？它和普通 Request-scoped SSE 有什么区别？**
+- **为什么 `subscriptions/listen` 建立后必须先收到 `notifications/subscriptions/acknowledged`？**
+- **`subscriptionId` 是什么？为什么 MCP 直接复用 `subscriptions/listen` 的 Request ID？**
+- **Connection 断开以后，MCP Subscription 为什么需要重新建立？**
+- **Progress、Subscription 和 Task 分别对应什么样的生命周期？**
