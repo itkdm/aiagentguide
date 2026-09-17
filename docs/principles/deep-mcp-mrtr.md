@@ -34,7 +34,7 @@ noindex: true
 Server 已经进入一次 tools/call，现在却还需要 Client 帮它获取额外输入，这个请求应该怎么继续？
 ```
 
-当前 `2026-07-28` MCP 使用 **MRTR（Multi Round-Trip Requests，多轮往返请求）**解决这个问题。
+当前 `2026-07-28` MCP 使用 **MRTR**（Multi Round-Trip Requests，多轮往返请求）解决这个问题。
 
 它没有让 Server 把原来的 Request 一直挂在那里，也没有继续采用旧版的 Server → Client 反向 Request，而是把一次复杂操作拆成多个彼此独立的 Client Request。
 
@@ -110,7 +110,7 @@ Client 返回结果以后，又必须恢复刚才被暂停的处理过程。
 
 MCP 在真正移除反向 Request 之前，其实已经经历过一次收紧。
 
-SEP-2260 明确要求 Sampling、Elicitation、Roots 这类 Server→Client Request 必须和某条原始 Client Request 关联，不能让 Server 在后台突然主动要求：
+SEP-2260提案明确要求 Sampling、Elicitation、Roots 这类 Server→Client Request 必须和某条原始 Client Request 关联，不能让 Server 在后台突然主动要求：
 
 ```text
 帮我调用一下模型。
@@ -215,11 +215,8 @@ resultType = input_required
 }
 ```
 
-这里最值得注意的是：
+`input_required `不是 Error。
 
-```text
-input_required 不是 Error。
-```
 
 因为 Server 没有执行失败。
 
@@ -279,13 +276,7 @@ Request id = 1
 
 对应的 JSON-RPC 调用已经彻底结束。
 
-Server 并没有把：
-
-```text
-id = 1
-```
-
-挂在那里等用户回来。
+Server 并没有把 `id = 1`挂在那里等用户回来。
 
 Client 获取完额外输入以后，需要创建一条**新的 Request**。
 
@@ -465,48 +456,6 @@ flowchart TD
     I --> J[Retry 原始 Request]
 ```
 
-这里还有一个很容易出错的地方。
-
-下一轮收到：
-
-```text
-inputResponses
-```
-
-以后，Server 不能直接相信里面的内容。
-
-它们本质上仍然是 Client 发来的输入。
-
-比如 Server 要求：
-
-```text
-confirm: boolean
-```
-
-Client 却返回：
-
-```text
-confirm: "yes"
-```
-
-Server 仍然应该重新验证。
-
-也就是说：
-
-```text
-Schema 不只是生成用户表单时使用一次，输入真正回到 Handler 时还要再次校验。
-```
-
-同样，用户也可能：
-
-```text
-accept
-decline
-cancel
-```
-
-如果用户明确拒绝一个危险操作，Server 再无限重复询问显然是不合理的。
-
 还有一个重要细节：
 
 ```text
@@ -561,11 +510,7 @@ requestState
 
 规范把它定义成一个 **Opaque String（对 Client 不透明的字符串）**。
 
-所谓“不透明”，意思不是：
-
-```text
-它一定经过加密，所以 Client 技术上绝对看不到里面是什么。
-```
+所谓“不透明”，意思不是：它一定经过加密，所以 Client 技术上绝对看不到里面是什么。
 
 而是协议层规定：
 
@@ -705,36 +650,6 @@ Client 看不到这段内容。
 ```
 
 因此密码、Access Token、数据库凭证之类的秘密数据，不应该直接放进这种 `requestState`。
-
-另外注意：
-
-```text
-只把已经被前一轮真正证明过的事实写进 State。
-```
-
-例如：
-
-```text
-step = confirmed
-```
-
-只能在用户真的完成确认以后生成。
-
-如果 Server 在用户回答之前就生成：
-
-```text
-confirmed = true
-```
-
-然后把它作为下一轮凭证发出去，那么这个 Token 本身就等价于：
-
-```text
-持有者已经完成确认。
-```
-
-官方 SDK 文档专门强调了这一点：
-
-**State 应该只记录之前轮次已经证明的事实。**
 
 <PlainExplanation title="用 wipe-cache 看懂 requestState">
 
