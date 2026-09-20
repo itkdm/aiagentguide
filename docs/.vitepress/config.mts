@@ -115,6 +115,10 @@ export default defineConfig({
     logo: siteLogo,
     nav: siteNav,
     footer: siteFooter,
-    sidebar: siteSidebar
+    sidebar: siteSidebar,
+    editLink: {
+      text: '在 GitHub 上编辑此页',
+      pattern: 'https://github.com/itkdm/aiagentguide/edit/main/docs/:path'
+    }
   }
 })
