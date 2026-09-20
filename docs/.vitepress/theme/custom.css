@@ -8,6 +8,33 @@
   --vp-nav-screen-bg-color: rgba(255, 255, 255, 0.96);
 }
 
+/* Keep the custom update label aligned with VitePress's native edit link. */
+@media (min-width: 640px) {
+  .VPDocFooter {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 16px;
+  }
+
+  .VPDocFooter > .edit-info {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .VPDocFooter > .last-updated {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: center;
+    justify-content: flex-end;
+    margin: 0 0 14px;
+  }
+
+  .VPDocFooter > .prev-next {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+
 /* Added only by the client-side article unlock flow; SSG HTML remains complete. */
 .content-lock-hidden {
   display: none !important;
