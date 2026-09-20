@@ -19,12 +19,13 @@
   .VPDocFooter > .edit-info {
     grid-column: 1;
     grid-row: 1;
+    align-self: end;
   }
 
   .VPDocFooter > .last-updated {
     grid-column: 2;
     grid-row: 1;
-    align-self: center;
+    align-self: end;
     justify-content: flex-end;
     margin: 0 0 14px;
   }
