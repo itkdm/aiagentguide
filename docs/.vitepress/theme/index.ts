@@ -17,6 +17,7 @@ import Breadcrumb from './components/Breadcrumb.vue'
 import ProjectList from './components/ProjectList.vue'
 import PromptBlock from './components/PromptBlock.vue'
 import PlainExplanation from './components/PlainExplanation.vue'
+import SupplementaryNote from './components/SupplementaryNote.vue'
 import './custom.css'
 import './styles/home.css'
 import './styles/mermaid-diagram.css'
@@ -47,5 +48,6 @@ export default {
     app.component('PromptBlock', PromptBlock)
     app.component('CodingAgentPrompt', PromptBlock)
     app.component('PlainExplanation', PlainExplanation)
+    app.component('SupplementaryNote', SupplementaryNote)
   }
 }

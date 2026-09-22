@@ -19,6 +19,13 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
       { text: 'MCP 多轮交互', link: '/principles/deep-mcp-mrtr' },
       { text: 'MCP 长请求与持续通知', link: '/principles/deep-mcp-long-running' },
     ]
+  },
+  {
+    text: '深入压缩机制',
+    collapsed: true,
+    items: [
+      { text: 'DeepSeek Harness 压缩机制', link: '/principles/deepseek-harness-context-compaction' }
+    ]
   }
 ],
 }
