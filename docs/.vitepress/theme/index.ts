@@ -14,6 +14,7 @@ import SingleImagePreview from './components/SingleImagePreview.vue'
 import ContentSwitcher from './components/ContentSwitcher.vue'
 import Breadcrumb from './components/Breadcrumb.vue'
 import PlainExplanation from './components/PlainExplanation.vue'
+import SupplementaryNote from './components/SupplementaryNote.vue'
 import './custom.css'
 import './styles/home.css'
 import './styles/mermaid-diagram.css'
@@ -39,5 +40,6 @@ export default {
     app.component('ContentSwitcher', ContentSwitcher)
     app.component('Breadcrumb', Breadcrumb)
     app.component('PlainExplanation', PlainExplanation)
+    app.component('SupplementaryNote', SupplementaryNote)
   }
 }

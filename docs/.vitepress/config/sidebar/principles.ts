@@ -23,6 +23,13 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
       { text: '为什么 MCP 要把能力拆成 Core 和 Extension？', link: '/principles/deep-mcp-core-extension' },
       { text: '一个 MCP 系统到了生产环境还要解决什么？', link: '/principles/deep-mcp-production' }
     ]
+  },
+  {
+    text: '深入压缩机制',
+    collapsed: true,
+    items: [
+      { text: 'DeepSeek Harness 压缩机制', link: '/principles/deepseek-harness-context-compaction' }
+    ]
   }
 ],
 }
