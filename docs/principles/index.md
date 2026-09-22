@@ -1,6 +1,6 @@
 ---
 title: AI Agent 原理
-description: "从底层机制、协议设计和工程实现出发，深入理解 AI Agent 为什么这样工作，以及技术背后的设计取舍。"
+description: "AI Agent 原理包括哪些内容？本栏目从 Agent Loop、工具调用、协议与运行时机制出发，解释系统为什么这样工作，以及不同设计的取舍。"
 summary: 原理栏目聚焦 Agent 的底层机制、协议设计与工程原理，以独立深度专题的形式展开。
 keywords:
   - AI Agent 原理
