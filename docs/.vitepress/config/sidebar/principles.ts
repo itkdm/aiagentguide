@@ -18,6 +18,7 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
       { text: 'MCP Tool 调用链', link: '/principles/deep-mcp-tool-model' },
       { text: 'MCP 多轮交互', link: '/principles/deep-mcp-mrtr' },
       { text: 'MCP 长请求与持续通知', link: '/principles/deep-mcp-long-running' },
+      { text: 'MCP 授权机制', link: '/principles/deep-mcp-authorization' },
     ]
   },
   {

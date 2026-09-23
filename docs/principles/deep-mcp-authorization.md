@@ -1,24 +1,28 @@
 ---
 
 title: 深入 MCP：Remote MCP 的 Authorization 到底是怎么工作的？
-description: "从 Authorization Server Discovery、Client Registration、PKCE、Resource Indicator 和 Step-up Authorization 出发，深入理解 Remote MCP 的授权机制。"
-summary: 深入拆解 Remote MCP 如何发现授权服务器、确认 Client 身份、获取绑定目标 MCP Server 的 Access Token，并在权限不足时按需提升 Scope。
+description: "深入解析 Remote MCP 授权机制：从授权服务器发现、Client 注册与 PKCE，到 resource 资源绑定、Access Token 验证和 Scope 按需提升。"
+summary: 梳理 Remote MCP 的 OAuth 授权流程，说明 Client 如何发现授权服务器、获取面向 MCP Server 的 Token，并处理 Scope 不足与 Step-up。
 keywords:
-- 深入 MCP
-- MCP Authorization
-- Remote MCP
+  - MCP 授权机制
+  - Remote MCP Authorization
+  - MCP OAuth 2.1
+  - PKCE
+  - Client ID Metadata Document
+  - Resource Indicator
+  - Scope Step-up Authorization
 tags:
   - AI Agent
   - 原理
   - MCP
 author: 布吉岛
-lastUpdated: 2026-09-14
-status: draft
-draft: true
+lastUpdated: 2026-09-23
+status: published
+draft: false
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-noindex: true
+noindex: false
 
 ---
 
@@ -36,28 +40,11 @@ Client 访问的可能是：
 https://mcp.example.com
 ```
 
-背后服务多个用户，而且 Server 还可能访问GitHub、Google Drive、Notion、企业内部系统等受保护数据。
+背后服务多个用户，而且 Server 还可能访问 GitHub、Google Drive、Notion、企业内部系统等受保护数据。
 
-这时候核心就不再是：
+这时候核心就要考虑认证和授权。
 
-```text
-Client 能不能访问这个 MCP Server？
-```
-
-而是：
-
-```text
-Client 代表的是谁？
-用户到底允许它访问哪些能力？
-这个 Access Token 是不是专门发给当前 MCP Server 的？
-Client 第一次看到一个完全陌生的 MCP Server，又怎么知道该去哪里登录？
-```
-
-MCP 没有自己重新设计一套账号和 Token 协议，而是建立在 OAuth 2.1 及相关标准之上。
-
-MCP Authorization 是可选能力，主要面向 HTTP Transport。
-
-对于 stdio，当前规范并不建议套用这套流程，而更适合从运行环境中获取凭证。
+MCP 并没有自己重新设计一套账号和 Token 协议，而是建立在 OAuth 2.1 及相关标准之上。
 
 ## 为什么 MCP Server 和 Authorization Server 要分成两个角色？
 
@@ -77,31 +64,38 @@ MCP Authorization 是可选能力，主要面向 HTTP Transport。
 一个服务既负责用户登录，又负责签发 Token，还负责真正执行 MCP Request。
 ```
 
-这当然能实现。
+这当然可以实现。
 
 但 MCP 并没有把这种部署方式写死。
 
-在当前 Authorization 模型里，有三个不同角色：
+在当前 Authorization 模型里，OAuth 视角下有三个主要角色：
 
 ```text id="yrn2vo"
-Resource Owner
-      ↓
+Resource Owner（用户）
+        ↕ 授权 / 登录
 Authorization Server
-      ↓ 发 Access Token
-MCP Client
-      ↓ 带 Token
-MCP Server
+        ↑        ↓
+   授权请求    Access Token
+        │        │
+        └── MCP Client
+                │
+                │ Authorization: Bearer <Access Token>
+                ↓
+          MCP Server
+       （Resource Server）
 ```
 
 其中：
 
 **MCP Client**
 
-对应 OAuth Client。
+通常对应 OAuth Client。它一般由 MCP Host 创建和管理，与某个 MCP Server 建立连接。
 
-它代表用户向 MCP Server 发 Request。
+它代表 Host 向 MCP Server 发 Request；在用户授权场景下，请求可以代表 Resource Owner，也可以在 `client_credentials` 等场景下代表客户端自身。
 
-**MCP Server**
+MCP Host 通常还负责管理多个 Client、发起浏览器授权、保存凭证以及执行整体安全策略。因此，Host 和 Client 在 MCP 架构中不是完全相同的角色。
+
+**启用 HTTP Authorization 保护的 MCP Server**
 
 对应 Resource Server（受保护资源服务器）。
 
@@ -131,19 +125,19 @@ MCP Server
 Authorization Server 知道这个用户是谁。
 ```
 
-并不能自动证明：
+并不能证明：
 
 ```text
 当前 Client 可以访问这个 MCP Server 的所有资源。
 ```
 
-身份和资源授权不是一回事。
+身份认证和资源授权不是一回事。
 
-例如用户已经登录了，但是并允许删除 GitHub Repository
+例如用户已经登录了，但是不一定允许删除 GitHub Repository。
 
 因此真正访问 MCP Server 时，仍然需要一个包含明确权限、并且面向当前 Resource Server 的 Access Token。
 
-这也是后面的：`scope`和`resource`存在的核心原因。
+这也是后面的：`scope` 和 `resource` 存在的核心原因。
 
 ## Client 第一次连接陌生 MCP Server，怎么知道应该去哪里登录？
 
@@ -173,11 +167,7 @@ Token Endpoint 是什么？
 每增加一个 MCP Server，都在 Client 代码里手动写一份 OAuth 配置。
 ```
 
-所以 Remote MCP Authorization 很重要的一部分其实不是：
-
-```text
-怎么登录。
-```
+所以 Remote MCP Authorization 很重要的一部分其实不是怎么登录。
 
 而是：
 
@@ -190,7 +180,7 @@ Token Endpoint 是什么？
 第一层：
 
 ```text id="rlm06u"
-MCP Server
+    MCP Server
         ↓
 Protected Resource Metadata
         ↓
@@ -211,10 +201,10 @@ Authorization Server Metadata
 
 因为这是两个不同主体在声明不同信息。
 
-MCP Server 声明的是：
+MCP Server 通过 Protected Resource Metadata 发布的是：
 
 ```text
-哪些 Authorization Server 有资格给我签发 Token？
+哪些 Authorization Server 可以用于访问这个受保护资源？
 ```
 
 Authorization Server 自己声明的是：
@@ -223,7 +213,7 @@ Authorization Server 自己声明的是：
 如果你要和我走 OAuth，我的 Endpoint 和能力是什么？
 ```
 
-### 第一步：发现 MCP Server 信任谁
+### 第一步：发现 MCP Server 发布的授权服务器信息
 
 Client 第一次不带 Token 请求：
 
@@ -259,7 +249,7 @@ resource_metadata
 也就是告诉 Client：
 
 ```text
-要访问我，请去这个 Authorization Server 获得凭证。
+要访问我，可以去这些 Authorization Server 获取面向当前资源的凭证。
 ```
 
 当前规范要求 Client 支持从 `WWW-Authenticate` 获取 Metadata 地址。
@@ -280,11 +270,7 @@ https://example.com/.well-known/oauth-protected-resource/public/mcp
 
 必要时再尝试 Root Metadata。
 
-所以：
-
-```text
-Client 并不需要提前知道授权系统地址。
-```
+所以 Client 并不需要提前知道授权系统地址。
 
 它可以从 Resource Server 自己开始发现。
 
@@ -292,7 +278,7 @@ Protected Resource Metadata 甚至可以列出多个 Authorization Server。
 
 不同 Authorization Server 是独立的安全边界。
 
-一个 Authorization Server 签发的 Client Credential 或 Token，不能因为“大家都能访问同一个 MCP Server”，就直接拿到另一个 Authorization Server 使用。
+一个 Authorization Server 签发的 Client Credential 不能跨 issuer （签发者）复用；Access Token 则必须针对目标 MCP Resource，并由 MCP Server 自己验证，不能因为“大家都能访问同一个 MCP Server”就直接接受来自其他边界的 Token。
 
 ### 第二步：发现 Authorization Server 自己怎么工作
 
@@ -316,7 +302,7 @@ Token Endpoint
 
 于是 Client 再做一次 Authorization Server Metadata Discovery（授权服务器元数据发现）。
 
-通常会读取类似：
+通常会读取类似下面的标准发现地址。实际实现还需要支持 OAuth Authorization Server Metadata 与 OIDC Discovery，并处理 issuer 带路径时对应的路径插入或路径追加规则：
 
 ```text id="d1qs8k"
 /.well-known/oauth-authorization-server
@@ -374,14 +360,6 @@ flowchart TD
     F --> I[Client 获取 Access Token]
 ```
 
-这就是为什么 MCP 不需要自己定义：
-
-```text id="njdn2z"
-/mcp/login
-```
-
-这种私有协议。
-
 ## 一个通用 MCP Client 没提前注册过，`client_id` 从哪里来？
 
 发现 Authorization Server 以后还有一个问题：
@@ -396,7 +374,7 @@ client_id
 
 双方之前根本没有见过。
 
-传统方案当然可以让开发者先登录 Authorization Server 后台：
+传统方案可以让开发者先登录 Authorization Server 后台：
 
 ```text id="q1wjev"
 创建 OAuth App
@@ -431,7 +409,7 @@ client_id = xxx
 
 ### 第一次见面：Client ID Metadata Documents
 
-如果双方没有预先关系，当前规范更推荐：
+如果双方没有预先关系，当前规范推荐：
 
 **Client ID Metadata Document（客户端身份元数据文档）**
 
@@ -483,19 +461,7 @@ GET https://agent.example.com/oauth/client.json
 }
 ```
 
-然后检查：
-
-```text id="7mzq1m"
-metadata.client_id
-```
-
-是不是和：
-
-```text id="66xm3q"
-文档 URL
-```
-
-完全一致。
+然后检查。除此之外，Authorization Server 还必须根据自身策略验证元数据、`redirect_uri` 等内容。
 
 这套设计实际上把 Client 身份从：
 
@@ -523,10 +489,10 @@ Client B × Server 3
 
 如果每一种组合都要求提前手动注册，很难形成真正开放的连接生态。
 
-Client ID Metadata Document 让：
+Client ID Metadata Document 让客户端可以提供一份可被 Authorization Server 获取和校验的元数据：
 
 ```text
-第一次见面也可以建立 Client Identity。
+第一次见面也可以完成客户端元数据发现。
 ```
 
 ### 为什么 Dynamic Client Registration 反而退居兼容方案？
@@ -549,9 +515,7 @@ client_id
 
 这同样可以解决“双方以前不认识”。
 
-但它意味着 Authorization Server 必须开放动态创建 OAuth Client 的接口，还需要处理Client 生命周期、注册滥用、Credential 存储等额外问题。
-
-因此当前规范已经把 Dynamic Client Registration 标记为 deprecated（弃用），主要保留给还不支持 Client ID Metadata Document 的旧 Authorization Server。
+但它意味着 Authorization Server 必须开放动态创建 OAuth Client 的接口，还需要处理 Client 生命周期、注册滥用、Credential 存储等额外问题。
 
 当前 Client 的选择逻辑大致是：
 
@@ -651,16 +615,6 @@ code_verifier
 
 也无法直接兑换 Token。
 
-当前 MCP 要求 Client 实现 PKCE，并检查 Authorization Server Metadata 是否声明支持 PKCE。
-
-不是：
-
-```text
-对方也许支持，我们先发过去试试。
-```
-
-如果无法确认支持，Client 不应该继续授权流程。
-
 ### `state` 解决的是“这次返回属于哪次授权”
 
 Host 同时连接多个 MCP Server 时，很可能同时存在多次 OAuth Flow。
@@ -710,13 +664,13 @@ B 的 Token Endpoint
 当前 Flow 期望的 issuer 是谁。
 ```
 
-Authorization Response 如果提供：
+Authorization Server 应该在 Authorization Response 中返回：
 
 ```text id="96r6i5"
 iss
 ```
 
-Client 必须按照规则验证它是否和之前记录的 Authorization Server 一致。
+如果响应包含 `iss`，Client 必须将它与此前从已验证的 Authorization Server Metadata 中记录的 `issuer` 做严格字符串比较；如果 Metadata 声明 `authorization_response_iss_parameter_supported=true`，但响应缺少 `iss`，Client 必须拒绝该响应。这里不能对 issuer 做大小写、默认端口或尾斜杠等 URL 归一化。
 
 所以整个 Authorization Code Flow 里，Client 实际维护着一组关联关系：
 
@@ -728,7 +682,7 @@ Client 必须按照规则验证它是否和之前记录的 Authorization Server 
         └── expected issuer
 ```
 
-这些值不能跨 Session 随意混用。
+这些值必须绑定到同一个授权事务，不能跨授权请求、客户端实例或资源服务器上下文随意混用。对错误响应也要执行相同的 `iss` 校验。
 
 因为通用 MCP Host 面对的不是：
 
@@ -753,7 +707,7 @@ sequenceDiagram
     C->>C: 生成 state、code_verifier、expected issuer
     C->>B: Authorization Request<br/>携带 state + code_challenge
     B->>A: 用户授权
-    A-->>B: Authorization Code + state + iss
+    A-->>B: Authorization Code<br/>可能包含 state、iss
     B-->>C: Callback
     C->>C: 校验 state 和 iss
     C->>A: Token Request<br/>携带 code + code_verifier
@@ -786,7 +740,7 @@ Authorization Server 发出的任意 Access Token 都应该被三个 MCP Server 
 
 第二个问题就是 Resource Binding（资源绑定）。
 
-当前 MCP 要求 Client 在 Authorization Request 和 Token Request 中包含：
+对于采用 MCP HTTP Authorization 流程的 Client，当前规范要求在 Authorization Request 和 Token Request 中都包含：
 
 ```text id="w6zh6g"
 resource
@@ -798,7 +752,7 @@ resource
 resource=https://mcp.example.com
 ```
 
-明确告诉 Authorization Server：
+这里的值应当是该部署为 MCP Server 定义的 canonical resource URI（规范资源 URI），不一定永远只是站点根域名。明确告诉 Authorization Server：
 
 ```text
 我现在申请的 Token 是准备用来访问这个 Resource Server。
@@ -810,25 +764,25 @@ resource=https://mcp.example.com
 Alice 已登录
 ```
 
-而应该类似：
+如果 Access Token 采用 JWT 表示，其中可能类似：
 
 ```text id="4ua7mz"
-Subject = Alice
+sub = Alice
 
-Audience =
+aud =
 https://mcp.example.com
 
-Scope =
+scope =
 files:read
 ```
 
-MCP Server 收到 Token 后必须验证：
+MCP Server 收到 Token 后必须先按 OAuth Resource Server 规则验证 Token 的有效性，例如签名或 introspection 结果、issuer、过期时间、Token 类型和权限；同时还必须验证：
 
 ```text
 这个 Token 是否真的以我为目标资源。
 ```
 
-如果 Token 的 Audience 是：
+例如 JWT 型 Token 的 `aud` 是：
 
 ```text id="7tlkv6"
 https://server-a.example.com
@@ -906,7 +860,7 @@ MCP Server
 GitHub API
 ```
 
-如果 MCP Server 还需要访问上游 GitHub API，它应该作为新的 OAuth Client，获取：
+如果 MCP Server 还需要访问上游 GitHub API，它必须使用面向上游服务、由上游服务认可的独立凭证或授权机制，例如作为新的 OAuth Client 获取：
 
 ```text
 专门面向 GitHub API 的另一份 Token。
@@ -1049,13 +1003,13 @@ files:read
 
 而不是自己猜一个最大权限集合。
 
-如果 Challenge 中没有提供 Scope，Client 才可以根据 Protected Resource Metadata 中的：
+如果 Challenge 中没有提供 Scope，通用 Client 可以按照当前规范的 fallback 策略，使用 Protected Resource Metadata 中的：
 
 ```text id="fk9smk"
 scopes_supported
 ```
 
-决定初始授权范围。
+作为初始授权范围。对于已经理解具体工具语义的专用 Client，也可以根据业务所需采用更小的权限集合；但不能把这种最小权限推断当成所有通用 Client 都能执行的规范要求。
 
 ### 真正需要写权限时，再升级
 
@@ -1077,7 +1031,8 @@ files:read
 HTTP/1.1 403 Forbidden
 WWW-Authenticate: Bearer
   error="insufficient_scope",
-  scope="files:write"
+  scope="files:write",
+  resource_metadata="https://mcp.example.com/.well-known/oauth-protected-resource"
 ```
 
 这里：
@@ -1094,19 +1049,19 @@ WWW-Authenticate: Bearer
 
 语义已经不同。
 
-401 更接近：
+401 是：
 
 ```text
-当前没有可接受的认证凭证。
+当前缺少或没有可接受的认证凭证，例如凭证缺失、无效、过期，或者 Token 并不是为当前 Resource Server 签发的。
 ```
 
-而 403 `insufficient_scope` 表示：
+而 403 `insufficient_scope` 通常表示：
 
 ```text
-我已经知道你是谁，而且 Token 本身也有效，但它没有执行当前操作需要的权限。
+Token 本身有效，而且已经通过了当前资源服务器的认证校验，但它没有执行当前操作需要的权限。这里的主体可以是具体用户，也可以是机器身份，不一定对应某个具体的人。
 ```
 
-Client 收到以后，再发起新的 Authorization Flow，请求：
+代表用户的 Client 收到以后，可以发起新的 Authorization Flow，请求：
 
 ```text id="v0qcwj"
 之前已有的权限
@@ -1114,7 +1069,7 @@ Client 收到以后，再发起新的 Authorization Flow，请求：
 files:write
 ```
 
-这就是 Step-up。
+这就是 Step-up （升级）。对于 `client_credentials` 等机器身份场景，Client 也可以直接失败；是否自动重新授权取决于客户端类型和安全策略。
 
 ```text id="9ian18"
 第一次
@@ -1159,15 +1114,13 @@ files:delete
 
 因此当新的 Scope 比原授权范围更大时，需要重新进入用户授权过程。
 
-官方 TypeScript SDK 在这一点上有专门处理：
-
-如果收到新的：
+实现通常会对新的：
 
 ```text id="ix5w3k"
 insufficient_scope
 ```
 
-Challenge，而且需要扩大 Scope，它不会简单 Refresh Token，而会要求一次新的 Authorization。
+Challenge 做出相应处理：如果需要的 Scope 超出了原始授权范围，就不能简单依赖 Refresh Token，而应要求一次新的 Authorization。具体 SDK 的行为应以对应版本的实现为准。
 
 否则结果只会是：
 
@@ -1183,7 +1136,7 @@ Refresh
 
 所以 Scope Challenge 不只是一个错误信息。
 
-它实际上参与了：
+在支持自动 Step-up 的客户端中，它实际上参与了：
 
 ```text
 权限逐步提升协议。
@@ -1197,7 +1150,7 @@ sequenceDiagram
 
     C->>S: 携带 files:read 调用写操作
     S-->>C: 403 insufficient_scope<br/>需要 files:write
-    C->>A: 发起新的授权<br/>files:read + files:write
+    C->>A: 可选：发起新的授权<br/>files:read + files:write
     A-->>C: 用户重新同意
     A-->>C: 新 Access Token
     C->>S: 携带新 Token 重试
@@ -1232,20 +1185,16 @@ PKCE + 用户授权
         └── 是
              ↓
         403 insufficient_scope
-             ↓
-        Step-up Authorization
+              ↓
+         可选 Step-up Authorization
              ↓
         获得新的授权范围
 ```
 
-所以 Remote MCP Authorization 真正解决的并不是：
-
-> **“给 MCP 加一个登录页面。”**
-
-而是：
+所以 Remote MCP Authorization 真正解决的是：
 
 ```text
-让一个事先不认识 MCP Server 的通用 Client，可以从一个 Server URL 开始，动态发现正确的身份系统、证明自己的 Client 身份、让用户安全完成授权，并拿到只针对当前 MCP Server、只拥有当前所需权限的凭证。
+让一个事先不认识 MCP Server 的通用 Client，可以从一个 Server URL 开始，动态发现正确的身份系统、证明自己的 Client 身份、让用户安全完成授权，并拿到面向当前 MCP Server、范围由授权服务器和用户授权共同决定的凭证。
 ```
 
 这也是为什么当前 MCP Authorization 看起来涉及很多标准：
@@ -1263,3 +1212,22 @@ MCP 自己真正新增的东西很少。
 ```text
 把已经存在的安全标准按照 MCP 的动态连接场景组合起来，而不是重新发明一套只属于 MCP 的账号和 Token 系统。
 ```
+
+## 总结
+
+- **适用范围与版本：** MCP Authorization 主要用于启用了 HTTP Authorization 的远程 MCP；stdio 通常从本地运行环境获取凭证。本文依据 `2026-07-28` Draft，DCR 等注册机制与已发布的 `2025-11-25` 版本有所差异。
+- **发现授权系统：** Client 先从 Protected Resource Metadata 找到可用于目标资源的 Authorization Server，再读取其 Metadata 获取授权端点和 Token 端点。发现信息提供连接线索，Client 仍需校验 issuer 和后续凭证。
+- **确认客户端并保护授权过程：** Client 可以使用预注册、CIMD，或在兼容场景下使用 DCR 确定 `client_id`。Authorization Code Flow 中，PKCE 保护授权码，`state` 关联回调与原请求，`iss` 用于核对响应来自预期的 Authorization Server。
+- **把 Token 限定到目标资源：**`resource` 同时放入 Authorization Request 和 Token Request，指向目标 MCP Server 的 canonical resource URI。Token 可以是 JWT 或不透明格式，Server 都必须验证其有效性及是否面向自身。
+- **守住服务间凭证边界：** 发给 MCP Server 的 Token 不能原样转发给 GitHub 等上游服务；MCP Server 访问上游时需要使用由上游认可的独立凭证或授权机制。
+- **按需授予操作权限：** Scope 描述 Token 可执行的操作。通用 Client 优先使用初始 Challenge 提供的 Scope；没有时按规范使用 `scopes_supported` 中列出的 Scope。权限不足时可通过 `403 insufficient_scope` 引导用户授权提升，Refresh Token 不能静默扩大原授权范围。
+- **区分认证失败与权限不足：**`401` 通常表示凭证缺失、无效、过期或不面向当前资源；`403 insufficient_scope` 表示凭证有效但权限不够。用户授权场景可以发起 Step-up，机器身份也可以选择直接失败。
+
+## 相关面试题
+
+- **MCP Client 如何发现并验证 Authorization Server？**
+- **MCP Client 可以通过哪些方式获得 `client_id`？预先注册、客户端元数据文档（CIMD）和动态客户端注册（DCR）分别适用于什么场景？**
+- **PKCE、`state` 和 `iss` 分别保护授权流程的哪一部分？**
+- **`resource` 如何限定 Token 的使用目标？为什么不能把 MCP Token 透传给上游 API？**
+- **通用 Client 如何选择初始 Scope？`scopes_supported` 在什么时候使用？**
+- **`401` 与 `403 insufficient_scope` 有什么区别？Refresh Token 为什么不能静默扩大 Scope？**
