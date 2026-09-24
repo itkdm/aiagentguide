@@ -25,9 +25,9 @@ hero:
   text: "从入门到实战，系统学习 Agent 开发"
   tagline: "系统学习 Agent，构建可靠的智能体"
   image:
-    light: /hero-visual.svg
-    dark: /hero-visual-dark.svg
-    alt: AI Agent 架构图
+    light: /hero-mascot.webp
+    dark: /hero-mascot.webp
+    alt: 布吉岛 Agent 的虚拟机器人向导
   actions:
     - theme: brand
       text: "开始学习"
