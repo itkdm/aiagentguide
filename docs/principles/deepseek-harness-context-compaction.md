@@ -15,7 +15,7 @@ tags:
   - 上下文管理
   - Context Engineering
 author: 布吉岛
-lastUpdated: 2026-09-22
+lastUpdated: 2026-09-26
 status: published
 draft: false
 assets: none
@@ -67,6 +67,14 @@ Compaction 是一种可替换的 Agent Capability。
 ```
 
 具体采用什么压缩算法，则交给不同的 Compaction Provider 实现。
+
+::: tip 版本说明
+本文正文基于 DeepSeek Harness `ddefc45f` 源码完成，是对该阶段 Context Compaction 机制的一次完整源码分析。
+
+为保留原始设计、分析过程以及后续架构演进，本文正文不再随每个版本重新改写。当后续版本出现实现变化时，会在对应章节增加「版本变化」提示。
+
+新版本差异分析将在公众号文章及时发布更新。新版本架构图、分析图等将在星球逐版本更新发布。
+:::
 
 ## 一、Compaction 不是 Agent Loop 的一部分：它是一个可替换能力
 
@@ -167,6 +175,10 @@ Surface Replace
 
 严格来说都属于 **`dsh-compaction-basic` 的策略**，而不是 `CompactionEngine` 接口强制规定的行为。
 
+::: tip 版本变化：v0.1.7-rc.2
+当前版本仍默认使用 `thresholdRatio = 0.8` 和 `retainRatio = 0.16`，但 80% 不再等同于固定的实际触发线。新版 Pressure 预算还会考虑模型输出预留和额外 Headroom，具体计算见第二节。
+:::
+
 ### Compaction 有哪几个入口？
 
 默认的 `BasicCompactionEngine` 主要面对三种场景：
@@ -260,6 +272,10 @@ contextWindow × retainRatio
 ```
 
 则代表正常 Pressure Compaction 希望给最近历史保留的预算。
+
+::: tip 版本变化：v0.1.7-rc.2
+以上公式和数值对应本文分析基线 `ddefc45f`。新版会先从 Context Window 中扣除当前请求预留的输出 Token，得到消息预算；Pressure 阈值还会受额外 Headroom 限制（默认 `65,536` Token），而 `retainRatio = 0.16` 是按扣除输出预留后的消息预算计算。因此，80% 是阈值比例上限之一，不是固定触发点；这里的 `128K` 示例也仅用于说明旧版实现。
+:::
 
 注意，这里只是为了帮助理解比例关系。真正的实现还要经过 Token Meter、Surface Node 定价以及 Range Selection，并不是简单按照 messages 数组切掉前 64%。
 
@@ -948,6 +964,10 @@ Compaction Instruction
 ```
 也就是提高缓存命中率。
 
+::: tip 版本变化：v0.1.7-rc.2
+Prefix Reuse 的核心思路没有变化。新版 Summary 请求还会携带从 Session 重建的 `toolHistory`，由运行时按模型路由投影工具定义和历史更新；同时，Summary 的默认 `maxTokens` 从 `8192` 调整为跟随 `headroomTokens`，当前默认值为 `65,536`。这些变化影响 Summary 请求预算和工具上下文恢复，不改变本节介绍的前缀复用机制。
+:::
+
 ## 六、Compaction Summary 并不是一段普通摘要
 
 如果只是：
@@ -1509,6 +1529,12 @@ compaction/end
 
 官方将这一组 start / summary / end 明确设计成可持久化的声明周期。
 
+::: tip 补充说明
+本节为突出主事务链路，省略了 Summary Error Recovery。Summary 请求失败时，`compaction/summary-error` 恢复钩子允许插件记录所选摘要输入的持久化调整；若恢复成功，Backend 会重新构建并计量输入，再尝试生成 Summary。
+
+官方 `compaction-image-offload` 插件会利用这一机制记录图片卸载决策并重试 Summary。该能力在本文分析基线 `ddefc45f` 中已经存在，并非 v0.1.7 新增。`compaction/summary-error` 是恢复钩子，不是 Session 事件。
+:::
+
 ## 十二、Summary 生成期间 Session 又变化了怎么办？（存疑）
 
 假设：
@@ -1622,6 +1648,10 @@ Context = 120K
 
 Threshold = 102K
 ```
+
+::: tip 版本变化：v0.1.7-rc.2
+上面的 `120K → 102K` 示例基于本文分析版本的旧 Pressure 公式。新版实际阈值还会受 Completion Reservation 与 `headroomTokens` 限制，因此可能明显低于 Context Window 的 80%。本节讨论的重试机制没有变化：默认 `compactionRetries = 1`，一次成功压缩后若 Pressure 仍未解除，还可以基于最新 Surface 再压缩一次。
+:::
 
 虽然已经减少很多，但依旧高于 Threshold。
 
