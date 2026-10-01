@@ -14,12 +14,12 @@ tags:
   - DeepSeek Harness
 author: 布吉岛
 lastUpdated: 2026-10-01
-status: draft
-draft: true
+status: published
+draft: false
 assets: none
-reviewed: false
+reviewed: true
 sourceType: original
-noindex: true
+noindex: false
 ---
 # 深入记忆系统：DeepSeek Harness 记忆系统
 
