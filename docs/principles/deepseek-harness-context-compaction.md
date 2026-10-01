@@ -2030,7 +2030,7 @@ Compaction 的另一个关键点是区分 Session Log 和 Session Surface。Sess
 - Checkpoint 的目标是保存可继续执行的工作状态，而不是生成一段看起来流畅但无法支撑后续工作的摘要。
 - 具体阈值、保留比例和 Summarizer 都可以更换，真正稳定的是 Compaction Engine 对这些能力定义的组合边界。
 
-## 相关问题
+## 相关面试题
 
 - **Compaction 和普通的聊天总结摘要有什么区别？**
 - **为什么必须先 Prune Tool Result，再重新测量 Token？**

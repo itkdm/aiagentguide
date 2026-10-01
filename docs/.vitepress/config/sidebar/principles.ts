@@ -27,6 +27,13 @@ export const principlesSidebar: DefaultTheme.Sidebar = {
     items: [
       { text: 'DeepSeek Harness 压缩机制', link: '/principles/deepseek-harness-context-compaction' }
     ]
+  },
+  {
+    text: '深入记忆系统',
+    collapsed: true,
+    items: [
+      { text: 'DeepSeek Harness 记忆系统', link: '/principles/deepseek-harness-memory-system' }
+    ]
   }
 ],
 }
