@@ -12,6 +12,7 @@ docs/.vitepress/dist/
 content-plans/
 .codex/
 .workbuddy/
+.workbuddy-ai/
 CONTENT_README.md
 AGENTS.md
 Agent.md
@@ -40,3 +41,6 @@ logo.png
 client_secret_482357350182-pvjkesu72nknesgvetbfvd00a3i9uk75.apps.googleusercontent.com.json
 credentials.json
 gsc-token.json
+
+# Locally collected interview-question research material
+/interview-question-corpus/

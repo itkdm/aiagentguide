@@ -51,7 +51,7 @@ onMounted(() => {
         </button>
       </div>
       <button class="community-qr-trigger" type="button" aria-label="放大查看微信群聊二维码" @click="openQrCode">
-        <img src="/assets/community/wechat-group.jpg" alt="布吉岛 Agent 交流群二维码" />
+        <img src="/assets/community/wechat-group-2026-10-25.jpg" alt="布吉岛 Agent 交流群 2 二维码" />
       </button>
     </div>
   </section>
@@ -69,7 +69,7 @@ onMounted(() => {
       <div class="community-modal-panel">
         <button class="community-modal-close" type="button" aria-label="关闭二维码" @click="closeQrCode">×</button>
         <h2>加入布吉岛 Agent 交流群</h2>
-        <img src="/assets/community/wechat-group.jpg" alt="布吉岛 Agent 交流群二维码" />
+        <img src="/assets/community/wechat-group-2026-10-25.jpg" alt="布吉岛 Agent 交流群 2 二维码" />
         <p>请使用微信扫码加入，二维码 7 天内有效。</p>
         <p class="community-modal-tip">手机端可长按二维码保存或识别。</p>
       </div>
