@@ -24,7 +24,7 @@ noindex: false
 
 如果你还不清楚 MCP 是什么、为什么会出现 MCP，或者 MCP 和 Tool Calling 到底是什么关系，可以先看前面的《[MCP 是什么](/getting-started/mcp)》和《[Tool Calling 是什么](/getting-started/tool-calling)》。
 
-这一章我们不再重复这些基础概念，而是深入了解一下 MCP 的架构。
+这一章我们不再重复这些基础概念，而是深入了解 MCP 的架构。
 
 ```mermaid
 flowchart LR
@@ -67,11 +67,11 @@ flowchart LR
 
 是大模型吗？
 
-不是。
+肯定不是。
 
 是 Agent 吗？
 
-也不够准确。
+也不准确。
 
 按照 MCP 当前的架构，一个完整系统至少要区分 **Host、Client 和 Server** 三个角色。
 
@@ -81,7 +81,7 @@ Host 内部可以运行多个 MCP Client，每个 Client 面向一个特定的 M
 
 ## 为什么 MCP 要分成 Host、Client 和 Server？
 
-我们平时已经很熟悉 C/S、B/S 这类架构了，Client 和 Server 各司其职并不难理解。
+我们之前已经很熟悉 C/S、B/S 这类架构了，Client 和 Server 各司其职并不难理解。
 
 那么到了 MCP，为什么只有 Client 和 Server 还不够，还要再单独引入一个 Host？
 
@@ -99,7 +99,7 @@ Host 是整个系统真正的**控制中心**。
 
 Host 的职责包括创建和管理 MCP Client、控制连接权限和生命周期、执行安全策略和用户授权、协调 LLM 集成，以及聚合来自不同 Client 的上下文。
 
-换句话说，Host（宿主）并不是一个单纯的网络容器，它才是“这个 AI 应用本身”。Claude Desktop、IDE、Agent Runtime 或者我们自己开发的 Agent 应用，都可以处在 Host 这一层。
+换句话说，Host（宿主）并不是一个单纯的网络容器，它才是“这个 AI 应用本身”。Claude Code、Codex、各种IDE或者我们自己开发的 Agent 应用，都可以处在 Host 这一层。
 
 MCP Client 是 Host 内部的一块**协议适配器**。
 
@@ -142,11 +142,9 @@ flowchart LR
 查看项目最近的 Issue，找到 Google Drive 里的需求文档，再检查对应域名的 Cloudflare 配置。
 ```
 
-真正知道“整个任务要完成什么、下一步该调用哪个能力”的，是作为 Host 的 Codex。
+真正知道“整个任务要完成什么、下一步该调用哪个能力”的，是作为 Host 的 Codex，再细化一点可以说是 Codex 里面的 Agent Runtime。
 
 GitHub Server 只需要处理 GitHub 相关操作，Google Drive Server 只负责文件相关能力，Cloudflare Server 只处理自己的云服务能力。它们没有必要知道另外两个 Server 做了什么，也不需要知道整个任务最终想达到什么目的。
-
-换句话说，**Server 负责把自己的能力做好，Host 负责把这些能力组合起来。**
 
 ## 一个 Host 为什么可以有多个 Client？
 
@@ -159,10 +157,6 @@ GitHub Server 只需要处理 GitHub 相关操作，Google Drive Server 只负�
 **Host → Google Drive Client → Google Drive Server**
 
 **Host → Cloudflare Client → Cloudflare Server**
-
-当前 MCP 官方架构规范就是这样定义的：
-
-> **Host 创建并管理多个 Client，而每个 Client 与一个特定 Server 建立对应关系。**
 
 那为什么不把所有 Server 都放到同一个 Client 呢？
 
@@ -198,8 +192,6 @@ Google Drive Server 崩溃，不应该导致 Cloudflare Client 一起失效；Gi
 
 ## 为什么一个 Client 只连接一个 Server？
 
-MCP 规范所说的 1:1，指的是：
-
 **一个 MCP Client 实例面向一个特定的 MCP Server。**
 
 但并不意味着：
@@ -233,7 +225,7 @@ Client 就必须自己再解决：
 
 MCP Server 根本不会直接和 LLM 通信。
 
-假设用户对一个 Agent 说：
+假设用户对 Agent 说：
 
 ```text
 帮我看一下这个项目最近有没有新的 Bug Issue。
