@@ -99,7 +99,7 @@ Host 是整个系统真正的**控制中心**。
 
 Host 的职责包括创建和管理 MCP Client、控制连接权限和生命周期、执行安全策略和用户授权、协调 LLM 集成，以及聚合来自不同 Client 的上下文。
 
-换句话说，Host（宿主）并不是一个单纯的网络容器，它才是“这个 AI 应用本身”。Claude Code、Codex、各种IDE或者我们自己开发的 Agent 应用，都可以处在 Host 这一层。
+换句话说，Host 并不是一个单纯的网络容器，它才是“这个 AI 应用本身”。Claude Code、Codex、各种IDE或者我们自己开发的 Agent 应用，都可以处在 Host 这一层。
 
 MCP Client 是 Host 内部的一块**协议适配器**。
 
@@ -465,17 +465,15 @@ Workflow 到达某一步 → 调 MCP Tool
 
 ## 总结
 
-MCP 本质上采用 Client-Server（客户端—服务器）架构。真正通过 MCP Protocol 进行通信的是 MCP Client 和 MCP Server，而在 Client 一侧，MCP 又进一步引入了 Host 这个上层应用角色，用来承载和管理一个或多个 MCP Client。
+MCP 本质上采用 **Client-Server 架构**，并在 Client 一侧引入 Host（宿主应用），形成三个角色的职责分工：**Host 是控制中心**，负责模型集成、任务编排、权限控制及 Client 管理；**Client 是协议通信组件**，负责按照 MCP 协议与 Server 交互；**Server 是能力提供方**，负责暴露和执行 Tools、Resources、Prompts 等外部能力。
 
-其中，**Host 是整个系统的控制中心**，负责模型集成、任务编排、权限控制以及多个 MCP Server 之间的能力组合；**MCP Client 是 Host 内部的协议适配器**，负责按照 MCP 协议与具体 Server 通信；**MCP Server 则专注于暴露和执行自己的 Tools、Resources、Prompts 等能力**。
+一个 Host 可以管理多个 MCP Client，而**一个 Client 实例通常对应一个特定的 Server**。这种设计能够隔离不同 Server 的能力空间、协议上下文、连接生命周期和安全边界。需要注意，这只是逻辑连接关系，并不意味着每个 Client 都是独立进程。多个 Server 之间的工具聚合、调用路由和任务编排仍由 Host 统一负责。
 
-一个 Host 可以同时管理多个 MCP Client，而一个 Client 实例通常面向一个特定的 MCP Server。这样不同 Server 的能力空间、生命周期、协议上下文和安全边界都能够彼此隔离，而真正的多 Server 编排仍然留在 Host 中完成。
+在 Agent 系统中，**LLM 不会直接调用 MCP Server**。Host 首先通过 Client 获取 Server 的工具定义（`tools/list`），转换成模型支持的 Tool Schema；模型生成 Tool Call 后，Agent Runtime 将其路由到对应 Client，由 Client 发送 `tools/call` 请求；Server 执行后返回 Tool Result，再经 Host 转换并交给模型继续推理。
 
-同时，LLM 并不会直接向 MCP Server 发送请求。模型只负责理解任务并产生 Tool Call 意图，Host / Agent Runtime 再把这个调用映射到对应的 MCP Client，由 Client 发出真正的 MCP `tools/call`。Tool Result 返回以后，也需要经过 Host 转换成模型能够继续理解的上下文。
+因此，完整调用过程跨越两个独立的通信边界：**Host ↔ LLM 使用模型 Provider 的 Tool Calling 机制，Client ↔ Server 使用 MCP 协议**，Host / Agent Runtime 负责两者之间的转换与协调。
 
-因此，理解 MCP 架构最重要的一点就是：
-
-**Host 负责“我要完成什么”，Client 负责“怎么用 MCP 表达”，Server 负责“这个具体能力怎么执行”。**
+**MCP 与 Tool Calling 并不相互依赖**。MCP 只负责外部能力的标准化发现与调用，不要求必须使用 LLM，工具也可以由按钮、工作流或定时任务触发。MCP 解决的是能力接入问题，而模型决策、跨工具编排和安全控制仍属于 Host 的职责。
 
 ## 相关面试题
 
