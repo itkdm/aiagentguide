@@ -4,7 +4,7 @@ export const contentAccessConfig = {
   codeHash: '94edf28c6d6da38fd35d7ad53e485307f89fbeaf120485c8d17a43f323deee71',
   wechatName: '布吉岛 Agent',
   keyword: '验证码',
-  qrCodeSrc: 'https://oss.aiagentguide.cn/shared/codex-clipboard-e7152a3a-07ca-4e8f-9e38-a8ef3dec0b07.jpg'
+  qrCodeSrc: '/shared/wechat-qrcode.jpg'
 } as const
 
 const storageKey = 'bujidao-content-access'
