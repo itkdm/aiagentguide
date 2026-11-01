@@ -47,8 +47,6 @@ aside: false
 
 <CommunityGroup />
 
-<PlanetMembership />
-
 <HomeJourney />
 
 <HomeFaq />
